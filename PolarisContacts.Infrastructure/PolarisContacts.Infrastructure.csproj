@@ -15,4 +15,8 @@
     <ProjectReference Include="..\PolarisContacts.Domain\PolarisContacts.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>
