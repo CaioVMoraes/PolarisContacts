@@ -3,52 +3,39 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Polaris Contacts</title>
+    <title>@ViewData["Title"] - PolarisContacts</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PolarisContacts.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PolarisContacts</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
 
-    <link href="~/css/main-polaris.css" rel="stylesheet" />
-
-    <link href="~/dist/desktop/css/main.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/jquery.inputmask/jquery.inputmask.min.js"></script>
-    @RenderSection("Scripts", required: false)
-</head>
-<body>
-    <nav class="menu">
-        <div class="menu-content">
-            <a href="/pessoa/home" class="menu-link" style="visibility:hidden" >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1218.2 195.1">
-                    <path style="fill:#29F4D5;stroke:#29F4D5" d="M206.2,1.5h14.4v193.7h-14.4V1.5z" />
-                    <path style="fill:#29F4D5;stroke:#29F4D5" d="M53.7,94.2h70.2v13.3H53.7V94.2z" />
-                    <path style="fill:#29F4D5;stroke:#29F4D5" d="M0,1.5v193.6h14.4V14.8h149.2V1.5H0z" />
-                    <path style="fill:#29F4D5;stroke:#29F4D5" d="M653.3,0.7H538.6v193.7H553V14h99.1c34.9,0,58.7,16,58.7,46.8v0.6c0,28.8-24.3,47.6-60.3,47.6h-45.4v13.3h44.5c40.4,0,75.5-21,75.5-61.7V60C725.2,22.6,695.9,0.7,653.3,0.7" />
-                    <path style="fill:#29F4D5;stroke:#29F4D5" d="M455,108.9L387.8,0H374L254.3,195h15L380.6,15.8l58,93.1H455z" />
-                    <path style="fill:#29F4D5;stroke:#29F4D5" d="M477,144.7h-16l31.3,50.3h15.8L477,144.7z" />
-
-                    <path style="fill:#485156" d="M817.7,58.3h400.5v78.5H817.7V58.3z" />
-                    <path style="fill:#FFFFFF" d="M892.3,94.3c8.7,2.1,13.2,5.2,13.2,12.1c0,7.7-6,12.3-14.6,12.3c-6.3,0-12.2-2.2-17.1-6.6l4.3-5.2c3.9,3.4,7.9,5.3,12.9,5.3c4.5,0,7.3-2.1,7.3-5.2c0-3-1.6-4.6-9.3-6.3c-8.7-2.1-13.7-4.7-13.7-12.3c0-7.1,5.9-12,14-12c6,0,10.7,1.8,14.9,5.2l-3.9,5.4c-3.7-2.8-7.4-4.2-11.1-4.2c-4.2,0-6.7,2.2-6.7,4.9C882.6,91.1,884.4,92.5,892.3,94.3z" />
-                    <path style="fill:#FFFFFF" d="M940.5,118.8c-12,0-20.9-9.3-20.9-21.2c0-11.7,8.7-21.3,21.2-21.3c7.6,0,12.1,2.6,16.1,6.4l-4.6,5.3c-3.3-3-6.8-5.1-11.5-5.1c-7.9,0-13.5,6.4-13.5,14.5S933,112,940.8,112c5,0,8.3-2.1,11.8-5.3l4.6,4.7C952.9,116,948.2,118.8,940.5,118.8z" />
-                    <path style="fill:#FFFFFF" d="M979.8,100.8v17.3h-7.2v-41h7.2v17.1h19.6V77.1h7.2v41h-7.2v-17.3H979.8z" />
-                    <path style="fill:#FFFFFF" d="M1044.9,118.8c-12.6,0-21.4-9.6-21.4-21.2s8.9-21.3,21.5-21.3s21.4,9.6,21.4,21.2S1057.5,118.8,1044.9,118.8z M1044.9,83c-8.1,0-13.8,6.5-13.8,14.5s5.8,14.6,13.9,14.6s13.8-6.5,13.8-14.5S1053.1,83,1044.9,83z" />
-                    <path style="fill:#FFFFFF" d="M1102.6,118.8c-12.6,0-21.4-9.6-21.4-21.2s8.9-21.3,21.5-21.3s21.4,9.6,21.4,21.2S1115.2,118.8,1102.6,118.8z M1102.6,83c-8.1,0-13.8,6.5-13.8,14.5s5.8,14.6,13.9,14.6s13.8-6.5,13.8-14.5S1110.8,83,1102.6,83z" />
-                    <path style="fill:#FFFFFF" d="M1141.1,77.1h7.2v34.5h21.6v6.6h-28.8L1141.1,77.1L1141.1,77.1z" />
-                </svg>
-            </a>
-            <div class="menu-title">
-                Completando Dados Cadastrais
-            </div>
-        </div>
-    </nav>
-    <div class="l-content">
-        <div class="l-content-wrapper">
-            <div class="l-content-left">
-                <div class="container">
-                    @RenderBody()
-                </div>
-            </div>
-        </div>
-    </div>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

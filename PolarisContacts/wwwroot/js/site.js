@@ -1,12 +1,4 @@
-﻿function AcionandoMascaras() {
-    $(".datemask").inputmask({ "mask": "99/99/9999" });
-    $(".cepmask").inputmask({ "mask": "99999-999", autoUnmask: true });
-    $(".dddmask").inputmask({ "mask": "(99)", autoUnmask: true });
-    $(".telefonemask").inputmask({ "mask": "9999-9999", autoUnmask: true });
-    $(".celularmask").inputmask({ "mask": "99999-9999", autoUnmask: true });
-}
+﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+// for details on configuring this project to bundle and minify static web assets.
 
-function SelecionarOpcaoPorTexto(selector,valor) {
-    $("#" + selector.attr('id') + " option").filter(function () { return $(this).text() == valor }).prop("selected", true)
-    $("#" + selector.attr('id')).trigger("change");
-}
+// Write your JavaScript code.

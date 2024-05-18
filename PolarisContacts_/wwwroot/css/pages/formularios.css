@@ -1,0 +1,382 @@
+/*Colors*/
+/*Fonts*/
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+@font-face {
+  font-family: "Gotham Book";
+  src: url("/dist/desktop/fonts/gothamhtf-book-webfont.ttf");
+}
+@font-face {
+  font-family: "Gotham Medium";
+  src: url("/dist/desktop/fonts/gothamhtf-medium-webfont.ttf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Regular";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Regular.otf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Light";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Light.otf");
+}
+.title-form {
+  font: 24px/26px "Metronic Slab Pro Light";
+  color: #29F4D5;
+  padding: 20px 0 30px 0;
+}
+
+.card-section {
+  font: 32px/34px "Metronic Slab Pro Regular";
+  color: #91A3AD;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+.card-section:first-child {
+  margin-right: 80px;
+}
+
+.card-section-active {
+  color: #29F4D5;
+  border-bottom: 3px solid #29F4D5;
+}
+
+.label-informativa-etapas {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.section-group {
+  box-sizing: border-box;
+  margin-top: 4em;
+}
+
+.label-form {
+  font: 16px/20px "Gotham Medium";
+  color: #91A3AD;
+  text-transform: uppercase;
+  padding-left: 10px;
+}
+
+.i-form-input {
+  margin-top: 10px;
+  padding: 5px 15px !important;
+  font: 18px "Roboto" !important;
+  color: #616D72 !important;
+}
+
+.block-question,
+.block-expl,
+.block-expl2,
+.block-expl3 {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.svg-question {
+  width: 20px;
+  height: 20px;
+  border: solid 1px #29F4D5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.svg-question svg {
+  fill: #29F4D5;
+}
+
+.text-question,
+.text-expl,
+.text-expl2,
+.text-expl3 {
+  font: 14px "Gotham Medium";
+  color: #29F4D5;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.answer-question,
+.answer-expl,
+.answer-expl2,
+.answer-expl3 {
+  font: 16px "Roboto";
+  color: #91A3AD;
+  opacity: 1;
+  position: absolute;
+  top: 35px;
+  display: none;
+}
+
+.etapa-dados .title-etapa-dados {
+  font: 15px "Gotham Medium";
+  color: #91A3AD;
+  text-align: center;
+  text-transform: uppercase;
+  padding-bottom: 45px;
+}
+
+.block-forms {
+  border: solid 1px #485156;
+  padding: 25px 35px;
+}
+
+.name-details h2 {
+  font: 26px/30px "Metronic Slab Pro Light";
+  color: #E4E4E4;
+}
+
+.secFinan-info {
+  padding-top: 50px;
+}
+
+.menu-title--details {
+  font: 16px/20px "Gotham Medium";
+  color: #29F4D5;
+  text-transform: uppercase;
+  position: relative;
+  cursor: pointer;
+}
+.menu-title--details span {
+  width: 168px;
+  position: absolute;
+  right: 0;
+  display: block;
+  transition: opacity 0.4s ease;
+  cursor: pointer;
+}
+.menu-title--details .close-details {
+  opacity: 0;
+}
+.menu-title--details .close-details.show {
+  opacity: 1;
+}
+.menu-title--details .close-details.hide {
+  opacity: 0;
+}
+.menu-title--details .open-details.show {
+  opacity: 1;
+}
+.menu-title--details .open-details.hide {
+  opacity: 0;
+}
+
+.text-danger {
+  font: 14px/18px "Gotham Medium";
+}
+
+.secFinan-info--label {
+  font: 16px/20px "Gotham Medium";
+  color: #91A3AD;
+  text-transform: uppercase;
+}
+
+.group-margin {
+  margin-bottom: 2rem;
+}
+
+.form-error {
+  border: 1px solid red !important;
+}
+
+.i-form-checkbox-bullet, .i-form-radio-bullet {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #616D72 !important;
+  border-radius: 50%;
+}
+
+.i-form-checkbox-bullet:after, .i-form-radio-bullet:after {
+  background-color: #616D72 !important;
+  border-radius: 50%;
+}
+
+.i-form-checkbox .option-title {
+  font: 18px "Metronic Slab Pro Light";
+  color: #E4E4E4;
+  text-transform: capitalize;
+}
+
+.title-infos-mg {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.i-form-input {
+  color: #616D72 !important;
+  background-color: transparent !important;
+  width: 100% !important;
+  margin-bottom: 15px !important;
+  box-sizing: border-box !important;
+  padding-top: 5px !important;
+  border-radius: 0 !important;
+  border: 1px solid #485156 !important;
+}
+
+.link-centraldocumentos {
+  color: #29F4D5;
+}
+
+.link-centraldocumentos:hover {
+  color: #ffffff;
+}
+
+.i-form-label {
+  font-family: Gotham HTF !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 11px !important;
+  line-height: 20px !important;
+  text-transform: uppercase !important;
+  color: #91A3AD !important;
+}
+
+.form-error {
+  border: solid 1px #ca374f !important;
+}
+
+@media (max-width: 768px) {
+  .label-form {
+    font: 12px/16px "Gotham Medium";
+  }
+
+  .inserir-btn {
+    padding: 8px 14px;
+  }
+
+  .secFinan-info--label {
+    font: 12px/16px "Gotham Medium";
+  }
+
+  .i-form-checkbox .option-title {
+    font: 16px "Metronic Slab Pro Light";
+  }
+
+  .answer-question, .answer-expl, .answer-expl2, .answer-expl3 {
+    font: 14px "Roboto";
+    top: 50px;
+  }
+}
+@media (max-width: 500px) {
+  .card-section {
+    font: 24px/24px "Metronic Slab Pro Regular";
+  }
+
+  .card-section:first-child {
+    margin-right: 20px;
+  }
+
+  .title-form {
+    font: 20px "Metronic Slab Pro Light";
+    padding: 0 0 20px 0;
+  }
+
+  .group-margin {
+    margin-bottom: 0;
+  }
+
+  .label-form {
+    font: 14px/18px "Gotham Medium";
+  }
+
+  .answer-question,
+.answer-expl,
+.answer-expl2,
+.answer-expl3 {
+    font: 14px "Roboto";
+    position: relative;
+    top: 10px;
+  }
+
+  .text-question,
+.text-expl,
+.text-expl2,
+.text-expl3 {
+    font: 14px "Gotham Medium";
+    margin-top: 20px;
+    text-transform: none;
+  }
+
+  .block-question,
+.block-expl,
+.block-expl2,
+.block-expl3 {
+    margin-top: 0;
+  }
+
+  .block-expl .svg-question,
+.block-expl2 .svg-question,
+.block-expl3 .svg-question {
+    width: 20px;
+    height: 15px;
+    margin-top: 20px;
+  }
+
+  .block-question .svg-question {
+    margin-top: 20px;
+  }
+
+  .space-question {
+    width: 100%;
+    height: 40px;
+  }
+
+  .block-forms {
+    padding: 35px 25px 15px 25px;
+  }
+
+  .menu-title--details {
+    font: 11px "Gotham Medium";
+    top: -5px;
+    right: -15px;
+  }
+
+  .menu-title--details span.close-details {
+    right: -35px;
+  }
+
+  .section-group {
+    margin-top: 3rem;
+  }
+
+  .i-form-checkbox .option-title {
+    font: 14px "Metronic Slab Pro Light";
+  }
+
+  .secFinan-info--label {
+    font: 12px/12px "Gotham Medium";
+  }
+
+  .secFinan-info {
+    padding-top: 30px;
+  }
+
+  .name-details h2 {
+    font: 24px/28px "Metronic Slab Pro Light";
+  }
+
+  .menu-title--details span {
+    width: 138px;
+  }
+
+  .options-grau {
+    width: 70%;
+  }
+
+  .margin-title {
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 440px) {
+  .menu-title--details {
+    top: -5px;
+    right: -15px;
+  }
+}
+@media (max-width: 375px) {
+  .secFinan-info--label {
+    font: 11px/12px "Gotham Medium";
+  }
+}

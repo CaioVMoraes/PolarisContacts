@@ -1,65 +1,59 @@
-﻿@{
-    ViewData["Title"] = "Index";
-    ViewData["Etapa"] = "";
+﻿@model PolarisContacts.Models.PessoaListViewModel
+
+@{
+    ViewData["Title"] = "Lista de Pessoas";
 }
 
-@*//////////////////////Mensagens de Tela///////////////////////////////////*@
-<div class="row-alert" id="NotificacaoErroConfirmar" style="display:none;">
-    <div class="alert alert-danger">
-        OPS, OCORREU UM ERRO NA CONFIRMAÇÃO DOS DADOS. <strong>TENTE NOVAMENTE</strong>
-    </div>
-</div>
+<h2>@ViewData["Title"]</h2>
 
-<div id="erroInfo" style="display:none;">
-    <br />
-    <center>
-        <div class="menu-title" style="font-size:18px !important;">
-            Revisar as informações, preenchidas no formulário!
-        </div>
-    </center>
-    <br />
-</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Gênero</th>
+            <th>Data de Nascimento</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pessoa in Model.Pessoas)
+        {
+            <tr>
+                <td>@pessoa.Nome</td>
+                <td>@pessoa.Genero</td>
+                <td>@pessoa.DataNascimento?.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Pessoa", new { id = pessoa.Id })" class="btn btn-primary">Editar</a>
+                    <a href="@Url.Action("Delete", "Pessoa", new { id = pessoa.Id })" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar esta pessoa?');">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-@*////////////////////////////Apresentação/////////////////////////*@
-<div id="sectionApresentacao">
-    <header class="apresentacao">
-        <h2>Dados de Matrícula</h2>
-    </header>
-    <main class="content-apresentacao">
-        <p>Olá,</p>
-        <p class="text-space"><b>Esperamos que você e sua família estejam bem.</b></p>
-        <div class="apresentacao-text">
-            <p>
-                Pensando na sua facilidade, inicialmente realizamos a matrícula apenas com os dados principais.
-                Agora, para finalizar este processo, é <b>muito importante</b> completar as informações e dados de cadastro restantes.
-            </p>
-
-            <p class="text-bottom">Para completar a matrícula, é só seguir as etapas abaixo:</p>
-        </div>
-        <ul class="list-item-central">
-            <li>
-                <span class="number first">1</span>
-                <p class="list-title">
-                    <span>Completar dados</span><br />
-                    Pessoa(A) e responsáveis
-                </p>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @if (Model.PageNumber > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize })" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
             </li>
-
-            <li>
-                <span class="number">2</span>
-                <p class="list-title">
-                    <span>Upload de documentos</span><br />
-                    Pessoa(A) e responsável financeiro
-                </p>
+        }
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = i, pageSize = Model.PageSize })">@i</a>
             </li>
-        </ul>
-        <p class="text-button">
-            Veja os
-            <span class="link-upload" onclick="ConsultarDocumentosNecessarios()">documentos necessários</span>
-            para completar a matrícula.
-        </p>
-        <div class="footer">
-            <center><input type="button" class="btn-iniciaApp i-form-btn" value="Iniciar" id="btnIniciar" /></center>
-        </div>
-    </main>
-</div>
+        }
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize })" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

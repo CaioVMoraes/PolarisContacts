@@ -1,54 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using PolarisContacts.Domain;
+using PolarisContacts.Models;
+using System.Diagnostics;
 
 namespace PolarisContacts.Controllers
 {
     public class HomeController : Controller
     {
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
-            try
+            IEnumerable<Pessoa> pessoas = new List<Pessoa>
             {
-                return View();
-            }
-            catch (System.Exception ex)
-            {
+                new Pessoa { Nome = "Mario", DataNascimento = new DateTime(2002, 7, 1), Genero = "Masculino" },
+                new Pessoa { Nome = "Jose", DataNascimento = new DateTime(2001, 6, 2), Genero = "Masculino" },
+                new Pessoa { Nome = "Maria", DataNascimento = new DateTime(2000, 5, 3), Genero = "Feminino" },
+                new Pessoa { Nome = "Fulano", DataNascimento = new DateTime(1999, 4, 4), Genero = "Masculino" },
+                new Pessoa { Nome = "Ciclano", DataNascimento = new DateTime(1998, 3, 5), Genero = "Masculino" }
+            };
+            var totalPessoas = 5;
 
-                throw ex;
-            }
+            var viewModel = new PessoaListViewModel
+            {
+                Pessoas = pessoas,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPessoas = totalPessoas
+            };
+
+            return View(viewModel);
         }
 
-        #region CONSULTAS
-        //[HttpGet]
-        //public ActionResult ValidarCEP(string cep)
-        //{
-        //    var ret = false;
-
-        //    var dado = iinformacoescomplementaresbll.ConsultarCEP(cep).Result;
-
-        //    if (dado != null)
-        //    {
-        //        ret = true;
-        //    }
-
-        //    return Json(ret);
-        //}
-        //#endregion
-
-        //#region CADASTRAMENTO
-        //[HttpPost]
-        //public async Task<IActionResult> Inserir(Pessoa pessoa)
-        //{
-        //    try
-        //    {
-        //        return Json(await ipessoabll.Inserir(pessoa));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-
-        //}
-        #endregion
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }
