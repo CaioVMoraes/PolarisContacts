@@ -1,0 +1,174 @@
+@charset "UTF-8";
+/*Colors*/
+/*Fonts*/
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+@font-face {
+  font-family: "Gotham Book";
+  src: url("/dist/desktop/fonts/gothamhtf-book-webfont.ttf");
+}
+@font-face {
+  font-family: "Gotham Medium";
+  src: url("/dist/desktop/fonts/gothamhtf-medium-webfont.ttf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Regular";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Regular.otf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Light";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Light.otf");
+}
+.modal {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.bootbox-close-button.close {
+  font-family: "Gotham Medium";
+  color: #29F4D5 !important;
+  opacity: 1;
+  font-size: 30px;
+  text-shadow: none;
+  position: relative;
+  font-weight: normal;
+}
+.bootbox-close-button.close:before {
+  content: "FECHAR";
+  font-size: 16px;
+  position: absolute;
+  top: 36%;
+  right: 37px;
+  color: #29F4D5;
+}
+.bootbox-close-button.close:focus {
+  outline: thin dotted;
+  outline: 0px auto -webkit-focus-ring-color;
+  outline-offset: 0px;
+}
+
+.modal-open {
+  background: #222427;
+}
+
+.modal-title {
+  font: 30px/33px "Gotham Medium";
+  color: #29F4D5;
+  text-transform: uppercase;
+}
+.modal-title span {
+  font: 20px/22px "Gotham Book";
+  display: block;
+  padding-left: 50px;
+  position: relative;
+}
+.modal-title span:before {
+  content: "";
+  position: absolute;
+  top: 11px;
+  left: 0;
+  width: 44px;
+  height: 1px;
+  background-color: #29F4D5;
+}
+
+@media (max-width: 500px) {
+  .modal-title {
+    margin-top: 50px;
+  }
+}
+.modal-content {
+  background-color: #222427;
+  border: solid 1px #222427;
+  color: #ffffff;
+  border-radius: 0;
+}
+
+.modal-content .i-form-input {
+  color: #000000;
+}
+
+.modal-header {
+  border-bottom: 0;
+  padding: 2rem 3rem 0;
+}
+
+.modal-header h4 {
+  color: #29F4D5;
+  font: 20px "Gotham HTF Bold";
+  text-transform: uppercase;
+}
+
+.modal-body {
+  padding: 1rem 2rem;
+}
+
+.modal-footer {
+  border-top: none;
+  padding: 0.5rem 2rem 1rem;
+}
+
+/*Modal Home - Docs Necessários*/
+.modal-docs-necessarios {
+  display: flex;
+  justify-content: center;
+}
+.modal-docs-necessarios .content-modal {
+  max-width: 650px;
+  margin: 30px 0;
+}
+.modal-docs-necessarios .content-modal div {
+  margin-bottom: 10px;
+}
+.modal-docs-necessarios .content-modal p {
+  font: 16px/22px "Gotham Book";
+  color: #E4E4E4;
+}
+.modal-docs-necessarios .content-modal p span {
+  font: 13px "Gotham Book";
+  color: #91A3AD;
+  display: block;
+  padding-top: 7px;
+}
+
+@media (max-width: 500px) {
+  .bootbox-close-button.close {
+    font-size: 20px;
+  }
+  .bootbox-close-button.close:before {
+    font-size: 14px;
+  }
+}
+.modal-finalizacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.modal-finalizacao .txt-dados-confirmados {
+  padding-top: 10px;
+}
+.modal-finalizacao .txt-dados-confirmados p {
+  font: 18px "Roboto";
+  color: #E4E4E4;
+  text-align: center;
+}
+.modal-finalizacao .title-dados-confirmados {
+  font: 18px "Gotham Medium";
+  color: #29F4D5;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 20px 0;
+}
+.modal-finalizacao .svg-icon {
+  text-align: center;
+}
+.modal-finalizacao .svg-icon svg {
+  fill: #29F4D5;
+}
+.modal-finalizacao .customer-btn.btn-modal {
+  padding: 8px 20px;
+  margin: 20px 0 30px 0;
+}
+.modal-finalizacao .customer-btn.btn-modal:hover {
+  text-decoration: none;
+}

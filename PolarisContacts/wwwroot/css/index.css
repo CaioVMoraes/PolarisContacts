@@ -1,0 +1,640 @@
+/*Colors*/
+/*Fonts*/
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+@font-face {
+  font-family: "Gotham Book";
+  src: url("/dist/desktop/fonts/gothamhtf-book-webfont.ttf");
+}
+@font-face {
+  font-family: "Gotham Medium";
+  src: url("/dist/desktop/fonts/gothamhtf-medium-webfont.ttf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Regular";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Regular.otf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Light";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Light.otf");
+}
+/*Colors*/
+/*Fonts*/
+@font-face {
+  font-family: "Gotham Book";
+  src: url("/dist/desktop/fonts/gothamhtf-book-webfont.ttf");
+}
+@font-face {
+  font-family: "Gotham Medium";
+  src: url("/dist/desktop/fonts/gothamhtf-medium-webfont.ttf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Regular";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Regular.otf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Light";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Light.otf");
+}
+body {
+  background: #011425 url("image/school-background.png") center no-repeat;
+  background-attachment: fixed;
+  font: 14px/22px "Gotham HTF Book";
+  min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.apresentacao h2 {
+  font: 38px/42px "Metronic Slab Pro Regular";
+  color: #29F4D5;
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.content-apresentacao {
+  padding: 30px 0;
+}
+.content-apresentacao p {
+  font: 20px/24px "Roboto";
+  text-align: center;
+  color: #91A3AD;
+}
+.content-apresentacao .text-space {
+  padding-top: 10px;
+}
+.content-apresentacao .apresentacao-text {
+  padding: 30px 0 40px 0;
+  max-width: 780px;
+  margin: 0 auto;
+}
+.content-apresentacao .apresentacao-text p {
+  font: 18px/24px "Roboto";
+}
+.content-apresentacao .apresentacao-text .text-bottom {
+  font: 20px/24px "Roboto";
+  color: #E4E4E4;
+}
+.content-apresentacao .text-button {
+  font: 18px/26px "Roboto";
+  padding: 0 0 60px 17px;
+}
+.content-apresentacao .text-button .link-upload {
+  color: #29F4D5;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s ease-out;
+}
+.content-apresentacao .text-button .link-upload:hover {
+  color: #E4E4E4;
+}
+.content-apresentacao .btn-iniciaApp {
+  font: 18px/24px "Gotham Medium";
+  color: #29F4D5 !important;
+  text-align: center;
+  width: 52%;
+  background-color: transparent !important;
+  border: solid 2px #29F4D5;
+}
+.content-apresentacao .btn-iniciaApp:hover {
+  color: #000000 !important;
+  border: solid 2px #29F4D5;
+  background-color: #29F4D5 !important;
+}
+
+.list-item-central {
+  max-width: 650px;
+  margin: 0 auto;
+}
+.list-item-central li {
+  text-transform: uppercase;
+  list-style: none;
+  display: flex;
+}
+.list-item-central li:first-child {
+  margin-bottom: 40px;
+}
+.list-item-central li .number {
+  font: 28px "Metronic Slab Pro Light";
+  color: #29F4D5;
+  width: 64px;
+  height: 64px;
+  padding: 10px 20px;
+  text-align: center;
+  margin-right: 25px;
+  border: solid 1px #485156;
+}
+.list-item-central li .number.first {
+  position: relative;
+}
+.list-item-central li .number.first:after {
+  content: "";
+  width: 1px;
+  height: 47px;
+  background-color: #485156;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+}
+.list-item-central li .list-title {
+  font: 26px/28px "Metronic Slab Pro Light";
+  text-align: left;
+}
+.list-item-central li .list-title span {
+  font: 18px/22px "Metronic Slab Pro Light";
+}
+
+::-webkit-scrollbar-thumb {
+  background: #29F4D5 !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #616D72;
+}
+
+@media (max-width: 375px) {
+  .list-item-central li .number {
+    font: 24px "Metronic Slab Pro Light";
+    width: 50px;
+    height: 50px;
+    padding: 8px 15px;
+    margin-right: 15px;
+  }
+
+  .list-item-central li .list-title span {
+    font: 16px/22px "Metronic Slab Pro Light";
+  }
+
+  .list-item-central li:first-child {
+    margin-bottom: 30px;
+  }
+
+  .list-item-central li .number.first:after {
+    height: 79px;
+  }
+
+  .list-item-central li .list-title {
+    font: 20px/28px "Metronic Slab Pro Light";
+  }
+
+  .content-apresentacao .text-button {
+    text-align: left;
+    padding: 0 0 40px 60px;
+  }
+
+  .content-apresentacao .apresentacao-text {
+    padding: 30px 0 20px 0;
+  }
+
+  .content-apresentacao .btn-iniciaApp {
+    width: 100%;
+  }
+}
+@media (max-width: 500px) {
+  .content-apresentacao p {
+    text-align: left;
+  }
+
+  .content-apresentacao .btn-iniciaApp {
+    width: 100%;
+  }
+
+  .list-item-central li .number.first:after {
+    height: 75px;
+  }
+
+  .content-apresentacao .text-button {
+    padding: 20px 0 60px 81px;
+  }
+}
+@media (max-width: 375px) {
+  .content-apresentacao .text-button {
+    padding: 20px 0 30px 0;
+  }
+}
+/*Colors*/
+/*Fonts*/
+@font-face {
+  font-family: "Gotham Book";
+  src: url("/dist/desktop/fonts/gothamhtf-book-webfont.ttf");
+}
+@font-face {
+  font-family: "Gotham Medium";
+  src: url("/dist/desktop/fonts/gothamhtf-medium-webfont.ttf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Regular";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Regular.otf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Light";
+  src: url("/dist/desktop/fonts/Metronic-Slab-Pro-Light.otf");
+}
+.title-form {
+  font: 24px/26px "Metronic Slab Pro Light";
+  color: #29F4D5;
+  padding: 20px 0 30px 0;
+}
+
+.card-section {
+  font: 32px/34px "Metronic Slab Pro Regular";
+  color: #91A3AD;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+.card-section:first-child {
+  margin-right: 80px;
+}
+
+.card-section-active {
+  color: #29F4D5;
+  border-bottom: 3px solid #29F4D5;
+}
+
+.label-informativa-etapas {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.section-group {
+  box-sizing: border-box;
+  margin-top: 4em;
+}
+
+.label-form {
+  font: 16px/20px "Gotham Medium";
+  color: #91A3AD;
+  text-transform: uppercase;
+  padding-left: 10px;
+}
+
+.i-form-input {
+  margin-top: 10px;
+  padding: 5px 15px !important;
+  font: 18px "Roboto" !important;
+  color: #616D72 !important;
+}
+
+.block-question,
+.block-expl,
+.block-expl2,
+.block-expl3 {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.svg-question {
+  width: 20px;
+  height: 20px;
+  border: solid 1px #29F4D5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.svg-question svg {
+  fill: #29F4D5;
+}
+
+.text-question,
+.text-expl,
+.text-expl2,
+.text-expl3 {
+  font: 14px "Gotham Medium";
+  color: #29F4D5;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.answer-question,
+.answer-expl,
+.answer-expl2,
+.answer-expl3 {
+  font: 16px "Roboto";
+  color: #91A3AD;
+  opacity: 1;
+  position: absolute;
+  top: 35px;
+  display: none;
+}
+
+.etapa-dados .title-etapa-dados {
+  font: 15px "Gotham Medium";
+  color: #91A3AD;
+  text-align: center;
+  text-transform: uppercase;
+  padding-bottom: 45px;
+}
+
+.text-title-responsaveis {
+  font: 22px "Metronic Slab Pro Light";
+  color: #91A3AD;
+  text-align: center;
+  padding-bottom: 70px;
+}
+
+.block-forms {
+  border: solid 1px #485156;
+  padding: 25px 35px;
+}
+
+.name-details h2 {
+  font: 26px/30px "Metronic Slab Pro Light";
+  color: #E4E4E4;
+}
+
+.secFinan-info {
+  padding-top: 50px;
+}
+
+.resp-title {
+  display: flex !important;
+  justify-content: space-between;
+}
+
+.menu-title--details {
+  font: 16px/20px "Gotham Medium";
+  color: #29F4D5;
+  text-transform: uppercase;
+  position: relative;
+  cursor: pointer;
+}
+.menu-title--details span {
+  width: 168px;
+  position: absolute;
+  right: 0;
+  display: block;
+  transition: opacity 0.4s ease;
+  cursor: pointer;
+}
+.menu-title--details .close-details {
+  opacity: 0;
+}
+.menu-title--details .close-details.show {
+  opacity: 1;
+}
+.menu-title--details .close-details.hide {
+  opacity: 0;
+}
+.menu-title--details .open-details.show {
+  opacity: 1;
+}
+.menu-title--details .open-details.hide {
+  opacity: 0;
+}
+
+.text-danger {
+  font: 14px/18px "Gotham Medium";
+}
+
+.secFinan-info--label {
+  font: 16px/20px "Gotham Medium";
+  color: #91A3AD;
+  text-transform: uppercase;
+}
+
+.dados-resp {
+  font: 20px/26px "Roboto";
+  color: #E4E4E4;
+}
+
+.group-margin {
+  margin-bottom: 2rem;
+}
+
+.form-error {
+  border: 1px solid red !important;
+}
+
+.infos-resp-ped {
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.subtitle-resp-ped {
+  font: 20px/22px "Metronic Slab Pro Light";
+  color: #29F4D5;
+}
+
+.i-form-checkbox-bullet, .i-form-radio-bullet {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #616D72 !important;
+  border-radius: 50%;
+}
+
+.i-form-checkbox-bullet:after, .i-form-radio-bullet:after {
+  background-color: #616D72 !important;
+  border-radius: 50%;
+}
+
+.i-form-checkbox .option-title {
+  font: 18px "Metronic Slab Pro Light";
+  color: #E4E4E4;
+  text-transform: capitalize;
+}
+
+.title-infos-mg {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.i-form-input {
+  color: #616D72 !important;
+  background-color: transparent !important;
+  width: 100% !important;
+  margin-bottom: 15px !important;
+  box-sizing: border-box !important;
+  padding-top: 5px !important;
+  border-radius: 0 !important;
+  border: 1px solid #485156 !important;
+}
+
+.link-centraldocumentos {
+  color: #29F4D5;
+}
+
+.link-centraldocumentos:hover {
+  color: #ffffff;
+}
+
+.i-form-label {
+  font-family: Gotham HTF !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 11px !important;
+  line-height: 20px !important;
+  text-transform: uppercase !important;
+  color: #91A3AD !important;
+}
+
+.form-error {
+  border: solid 1px #ca374f !important;
+}
+
+@media (max-width: 768px) {
+  .label-form {
+    font: 12px/16px "Gotham Medium";
+  }
+
+  .customer-btn {
+    padding: 8px 14px;
+  }
+
+  .secFinan-info--label {
+    font: 12px/16px "Gotham Medium";
+  }
+
+  .i-form-checkbox .option-title {
+    font: 16px "Metronic Slab Pro Light";
+  }
+
+  .answer-question, .answer-expl, .answer-expl2, .answer-expl3 {
+    font: 14px "Roboto";
+    top: 50px;
+  }
+}
+@media (max-width: 500px) {
+  .card-section {
+    font: 24px/24px "Metronic Slab Pro Regular";
+  }
+
+  .card-section:first-child {
+    margin-right: 20px;
+  }
+
+  .title-form {
+    font: 20px "Metronic Slab Pro Light";
+    padding: 0 0 20px 0;
+  }
+
+  .group-margin {
+    margin-bottom: 0;
+  }
+
+  .label-form {
+    font: 14px/18px "Gotham Medium";
+  }
+
+  .answer-question,
+.answer-expl,
+.answer-expl2,
+.answer-expl3 {
+    font: 14px "Roboto";
+    position: relative;
+    top: 10px;
+  }
+
+  .text-question,
+.text-expl,
+.text-expl2,
+.text-expl3 {
+    font: 14px "Gotham Medium";
+    margin-top: 20px;
+    text-transform: none;
+  }
+
+  .block-question,
+.block-expl,
+.block-expl2,
+.block-expl3 {
+    margin-top: 0;
+  }
+
+  .block-expl .svg-question,
+.block-expl2 .svg-question,
+.block-expl3 .svg-question {
+    width: 20px;
+    height: 15px;
+    margin-top: 20px;
+  }
+
+  .block-question .svg-question {
+    margin-top: 20px;
+  }
+
+  .space-question {
+    width: 100%;
+    height: 40px;
+  }
+
+  .text-title-responsaveis {
+    font: 18px "Metronic Slab Pro Light";
+    padding-bottom: 30px;
+  }
+
+  .block-forms {
+    padding: 35px 25px 15px 25px;
+  }
+
+  .menu-title--details {
+    font: 11px "Gotham Medium";
+    top: -5px;
+    right: -15px;
+  }
+
+  .menu-title--details span.close-details {
+    right: -35px;
+  }
+
+  .section-group {
+    margin-top: 3rem;
+  }
+
+  .subtitle-resp-ped {
+    font: 18px "Metronic Slab Pro Light";
+  }
+
+  .i-form-checkbox .option-title {
+    font: 14px "Metronic Slab Pro Light";
+  }
+
+  .secFinan-info--label {
+    font: 12px/12px "Gotham Medium";
+  }
+
+  .dados-resp {
+    font: 16px/22px "Roboto";
+  }
+
+  .secFinan-info {
+    padding-top: 30px;
+  }
+
+  .menu-title.resp-title {
+    font: 22px "Metronic Slab Pro Regular";
+  }
+
+  .name-details h2 {
+    font: 24px/28px "Metronic Slab Pro Light";
+  }
+
+  .menu-title--details span {
+    width: 138px;
+  }
+
+  .options-grau {
+    width: 70%;
+  }
+
+  .margin-title {
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 440px) {
+  .menu-title--details {
+    top: -5px;
+    right: -15px;
+  }
+}
+@media (max-width: 375px) {
+  .secFinan-info--label {
+    font: 11px/12px "Gotham Medium";
+  }
+}

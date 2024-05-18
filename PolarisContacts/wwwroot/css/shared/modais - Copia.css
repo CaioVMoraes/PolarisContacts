@@ -1,0 +1,19 @@
+/*Colors*/
+/*Fonts*/
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+@font-face {
+  font-family: "Gotham Book";
+  src: url("../dist/desktop/fonts/gothamhtf-book-webfont.ttf");
+}
+@font-face {
+  font-family: "Gotham Medium";
+  src: url("../dist/desktop/fonts/gothamhtf-medium-webfont.ttf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Regular";
+  src: url("../dist/desktop/fonts/Metronic-Slab-Pro-Regular.otf");
+}
+@font-face {
+  font-family: "Metronic Slab Pro Light";
+  src: url("../dist/desktop/fonts/Metronic-Slab-Pro-Light.otf");
+}

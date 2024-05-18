@@ -1,0 +1,44 @@
+﻿@import './variables';
+
+.title-form {
+    font: 24px/26px "Metronic Slab Pro Light";
+    color: $PRIMARY_COLOR;
+    padding-bottom: 30px;
+}
+
+.card-section {
+    font: 32px/34px "Metronic Slab Pro Regular";
+    color: map_get($COLORS_GREY, primary);
+    text-align: center;    
+    letter-spacing: 0.03em;
+}
+
+.card-section-active {
+    color: $PRIMARY_COLOR;
+    border-bottom: 3px solid $PRIMARY_COLOR;
+}
+
+.label-informativa-etapas {
+    display: flex;
+    align-content: stretch;
+    justify-content: space-evenly;
+}
+
+.section-group {    
+    box-sizing: border-box;   
+    margin-top: 4em;   
+}
+
+.label-form {
+    font: 16px/20px 'Gotham Medium';
+    color: map_get($COLORS_GREY, primary);
+    text-transform: uppercase;
+    padding-left: 10px;
+}
+
+.i-form-input {
+    margin-top: 10px;
+    padding: 5px 15px !important;
+    font: 18px 'Roboto' !important;
+    color: map_get($COLORS_GREY, quaternary) !important;
+}
