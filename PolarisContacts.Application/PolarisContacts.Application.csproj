@@ -5,12 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PolarisContacts.CrossCutting.Helpers\PolarisContacts.CrossCutting.Helpers.csproj" />
     <ProjectReference Include="..\PolarisContacts.Domain\PolarisContacts.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Interfaces\Services\" />
-    <Folder Include="Interfaces\Repositories\" />
   </ItemGroup>
 
 </Project>

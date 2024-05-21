@@ -339,7 +339,7 @@ $.validator.addMethod( "cnhBR", function( value ) {
 }, "Please specify a valid CNH number." );
 
 /*
- * Brazillian value number (Cadastrado de Pessoas Juridica).
+ * Brazillian value number (Cadastrado de Contatos Juridica).
  * value numbers have 14 digits in total: 12 numbers followed by 2 check numbers that are being used for validation.
  */
 $.validator.addMethod( "cnpjBR", function( value, element ) {
@@ -414,7 +414,7 @@ $.validator.addMethod( "cnpjBR", function( value, element ) {
 }, "Please specify a CNPJ value number." );
 
 /*
- * Brazillian CPF number (Cadastrado de Pessoas Físicas) is the equivalent of a Brazilian tax registration number.
+ * Brazillian CPF number (Cadastrado de Contatos Físicas) is the equivalent of a Brazilian tax registration number.
  * CPF numbers have 11 digits in total: 9 numbers followed by 2 check numbers that are being used for validation.
  */
 $.validator.addMethod( "cpfBR", function( value, element ) {

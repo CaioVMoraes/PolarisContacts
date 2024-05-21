@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PolarisContacts.Application\PolarisContacts.Application.csproj" />
+    <ProjectReference Include="..\PolarisContacts.CrossCutting.DependencyInjection\PolarisContacts.CrossCutting.DependencyInjection.csproj" />
     <ProjectReference Include="..\PolarisContacts.Domain\PolarisContacts.Domain.csproj" />
   </ItemGroup>
 

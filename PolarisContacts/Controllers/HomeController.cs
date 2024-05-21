@@ -1,30 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
+using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Domain;
 using PolarisContacts.Models;
 using System.Diagnostics;
 
 namespace PolarisContacts.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(IPessoaService pessoaService) : Controller
     {
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
+        private readonly IPessoaService _pessoaService = pessoaService;
+        
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 15)
         {
-            IEnumerable<Pessoa> pessoas = new List<Pessoa>
-            {
-                new Pessoa { Nome = "Mario", DataNascimento = new DateTime(2002, 7, 1), Genero = "Masculino" },
-                new Pessoa { Nome = "Jose", DataNascimento = new DateTime(2001, 6, 2), Genero = "Masculino" },
-                new Pessoa { Nome = "Maria", DataNascimento = new DateTime(2000, 5, 3), Genero = "Feminino" },
-                new Pessoa { Nome = "Fulano", DataNascimento = new DateTime(1999, 4, 4), Genero = "Masculino" },
-                new Pessoa { Nome = "Ciclano", DataNascimento = new DateTime(1998, 3, 5), Genero = "Masculino" }
-            };
-            var totalPessoas = 5;
+            IEnumerable<Pessoa> pessoas = _pessoaService.GetPessoas();
 
-            var viewModel = new PessoaListViewModel
+            var totalContatos = pessoas.Count();
+
+            var viewModel = new ContatoListViewModel
             {
                 Pessoas = pessoas,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalPessoas = totalPessoas
+                TotalContatos = totalContatos
             };
 
             return View(viewModel);

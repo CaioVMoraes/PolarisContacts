@@ -6,8 +6,8 @@ namespace PolarisContacts.CrossCutting.DependencyInjection;
 
 public static class Bootstrap
 {
-    //public static IServiceCollection RegisterServices(this IServiceCollection services) =>
-    //    services
-    //        .AddInfrastructure()
-    //        .AddApplication();
+    public static IServiceCollection RegisterServices(this IServiceCollection services) =>
+        services
+            .AddInfrastructure()
+            .AddApplication();
 }
