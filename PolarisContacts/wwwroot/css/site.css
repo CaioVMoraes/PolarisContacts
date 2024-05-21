@@ -1,22 +1,69 @@
+/* Definição do tamanho da fonte base */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* Estilos para elementos focados */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+/* Estilos gerais */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #1a0e3a;
+    color: #d6d1e3;
+}
+
+/* Estilos para o cabeçalho */
+header {
+    background-color: #351c75;
+    border-bottom: 2px solid #5d4990;
+}
+
+.navbar-brand,
+.nav-link {
+    color: #eae8f1;
+}
+
+.navbar-toggler-icon {
+    filter: invert(100%);
+}
+
+/* Estilos para o conteúdo principal */
+main {
+    background-color: #22124c;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para o rodapé */
+footer {
+    background-color: #351c75;
+    color: #eae8f1;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.nav-link.white-text {
+    color: white; /* Define a cor do texto para branco */
+}
+
+.navbar-nav {
+    color: white;
 }
