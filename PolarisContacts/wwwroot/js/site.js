@@ -1,4 +1,16 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function ModalNovoContato() {
+    $("#loaderHome").fadeIn()
 
-// Write your JavaScript code.
+    $.ajax({
+        type: "GET",
+        url: "/Home/ModalNovoContato",
+        success: function (data) {
+            $("#loaderHome").fadeOut()
+
+            if (data) {
+                $("#ModalNovoContato").html(data);
+                $("#modal-novo-contato").modal("show");
+            }
+        }
+    });
+};

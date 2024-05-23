@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Domain;
 using PolarisContacts.Models;
@@ -27,10 +28,19 @@ namespace PolarisContacts.Controllers
             return View(viewModel);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public ActionResult ModalNovoContato()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            try
+            {
+                return PartialView("_PartialNovoContato", new Pessoa());
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = true;
+                TempData["Message"] = ex.Message;
+                return View("../Shared/TelaErro");
+            }
         }
     }
 }

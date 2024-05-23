@@ -1,0 +1,296 @@
+﻿@model PolarisContacts.Domain.Pessoa
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-cadastrar" aria-hidden="true" id="modal-novo-contato">
+    <div class="modal-dialog modal-lg" role="document">
+        <div id="loaderCadastrarContato" class="back-loader"><span class="loader"></span></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-cadastrar">Novo Contato</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("InsertContato", "Home", FormMethod.Post, new { id = "ContatoForm" }))
+                {
+                    <section id="cadastrarContato" style="position:relative">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="Nome" class="form-label i-modal-color">Nome:</label>
+                                @Html.TextBoxFor(e => e.Nome, new { @class = "form-control", id = "Nome" })
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Genero" class="form-label i-modal-color">Gênero:</label>
+                                @Html.DropDownListFor(e => e.Genero, new List<SelectListItem>
+                                {
+                                new SelectListItem { Text = "Masculino", Value = "Masculino" },
+                                new SelectListItem { Text = "Feminino", Value = "Feminino" },
+                                new SelectListItem { Text = "Não especificado", Value = "Não especificado" }
+                                }, new { @class = "form-control", id = "Genero" })
+                            </div>
+                            <div class="col-md-4">
+                                <label for="DataNascimento" class="form-label i-modal-color">Data de Nascimento:</label>
+                                @Html.TextBoxFor(e => e.DataNascimento, new { @type = "date", @class = "form-control", id = "DataNascimento" })
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="text-primary">Contatos</h5>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addContato()">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                        <div id="contatos-list">
+                            @if (Model.Contatos is not null)
+                            {
+                                for (int i = 0; i < Model.Contatos.Count(); i++)
+                                {
+                                    <div class="row g-3 contato-item mb-3" id="contato-${i}">
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-2">
+                                                <label for="Contatos_@(i)__DDDTelefoneResidencial" class="form-label i-modal-color">DDD Tel:</label>
+                                                @Html.TextBox($"Contatos[{i}].DDDTelefoneResidencial", Model.Contatos.ElementAt(i).DDDTelefoneResidencial, new { @class = "form-control", id = $"Contatos_{i}__DDDTelefoneResidencial", maxlength = "3" })
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="Contatos_@(i)__NumeroTelefoneResidencial" class="form-label i-modal-color">Tel Residencial:</label>
+                                                @Html.TextBox($"Contatos[{i}].NumeroTelefoneResidencial", Model.Contatos.ElementAt(i).NumeroTelefoneResidencial, new { @class = "form-control", id = $"Contatos_{i}__NumeroTelefoneResidencial" })
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-2">
+                                                <label for="Contatos_@(i)__DDDCelular" class="form-label i-modal-color">DDD Cel:</label>
+                                                @Html.TextBox($"Contatos[{i}].DDDCelular", Model.Contatos.ElementAt(i).DDDCelular, new { @class = "form-control", id = $"Contatos_{i}__DDDCelular", maxlength = "3" })
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="Contatos_@(i)__NumeroCelular" class="form-label i-modal-color">Celular:</label>
+                                                @Html.TextBox($"Contatos[{i}].NumeroCelular", Model.Contatos.ElementAt(i).NumeroCelular, new { @class = "form-control", id = $"Contatos_{i}__NumeroCelular" })
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-6">
+                                                <label for="Contatos_@(i)__Email" class="form-label i-modal-color">E-mail:</label>
+                                                @Html.TextBox($"Contatos[{i}].Email", Model.Contatos.ElementAt(i).Email, new { @class = "form-control", id = $"Contatos_{i}__Email" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="text-primary">Endereços</h5>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addEndereco()">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                        <div id="enderecos-list">
+                            @if (Model.Enderecos is not null)
+                            {
+                                for (int i = 0; i < Model.Enderecos.Count(); i++)
+                                {
+                                    <div class="row g-3 endereco-item mb-3" id="endereco-${i}">
+                                        <div class="col-md-2">
+                                            <label for="Enderecos_@(i)__CEP" class="form-label i-modal-color">CEP:</label>
+                                            @Html.TextBox($"Enderecos[{i}].CEP", Model.Enderecos.ElementAt(i).CEP, new { @class = "form-control", id = $"Enderecos_{i}__CEP" })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="Enderecos_@(i)__Logradouro" class="form-label i-modal-color">Logradouro:</label>
+                                            @Html.TextBox($"Enderecos[{i}].Logradouro", Model.Enderecos.ElementAt(i).Logradouro, new { @class = "form-control", id = $"Enderecos_{i}__Logradouro" })
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="Enderecos_@(i)__Numero" class="form-label i-modal-color">Número:</label>
+                                            @Html.TextBox($"Enderecos[{i}].Numero", Model.Enderecos.ElementAt(i).Numero, new { @class = "form-control", id = $"Enderecos_{i}__Numero" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="Enderecos_@(i)__Bairro" class="form-label i-modal-color">Bairro:</label>
+                                            @Html.TextBox($"Enderecos[{i}].Bairro", Model.Enderecos.ElementAt(i).Bairro, new { @class = "form-control", id = $"Enderecos_{i}__Bairro" })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="Enderecos_@(i)__Complemento" class="form-label i-modal-color">Complemento:</label>
+                                            @Html.TextBox($"Enderecos[{i}].Complemento", Model.Enderecos.ElementAt(i).Complemento, new { @class = "form-control", id = $"Enderecos_{i}__Complemento" })
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="Enderecos_@(i)__Cidade" class="form-label i-modal-color">Cidade:</label>
+                                            @Html.TextBox($"Enderecos[{i}].Cidade", Model.Enderecos.ElementAt(i).Cidade, new { @class = "form-control", id = $"Enderecos_{i}__Cidade" })
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="Enderecos_@(i)__Estado" class="form-label i-modal-color">Estado:</label>
+                                            @Html.TextBox($"Enderecos[{i}].Estado", Model.Enderecos.ElementAt(i).Estado, new { @class = "form-control", id = $"Enderecos_{i}__Estado" })
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </section>
+                    <div class="text-end">
+                        <button id="btnSalvar" class="btn btn-success" onclick="LoadingCadastrarContato()">Salvar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let contatoIndex = 0;
+    let enderecoIndex = 0;
+
+    function addContato() {
+        const contatoHtml = `
+                <div class="row g-3 contato-item mb-3" id="contato-${contatoIndex}">
+                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeContato(${contatoIndex})">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-2">
+                            <label for="Contatos_${contatoIndex}__DDDTelefoneResidencial" class="form-label i-modal-color">DDD Tel:</label>
+                            <input class="form-control" id="Contatos_${contatoIndex}__DDDTelefoneResidencial" name="Contatos[${contatoIndex}].DDDTelefoneResidencial" maxlength="3" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Contatos_${contatoIndex}__NumeroTelefoneResidencial" class="form-label i-modal-color">Tel Residencial:</label>
+                            <input class="form-control" id="Contatos_${contatoIndex}__NumeroTelefoneResidencial" name="Contatos[${contatoIndex}].NumeroTelefoneResidencial" />
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-2">
+                            <label for="Contatos_${contatoIndex}__DDDCelular" class="form-label i-modal-color">DDD Cel:</label>
+                            <input class="form-control" id="Contatos_${contatoIndex}__DDDCelular" name="Contatos[${contatoIndex}].DDDCelular" maxlength="3" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Contatos_${contatoIndex}__NumeroCelular" class="form-label i-modal-color">Celular:</label>
+                            <input class="form-control" id="Contatos_${contatoIndex}__NumeroCelular" name="Contatos[${contatoIndex}].NumeroCelular" />
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="Contatos_${contatoIndex}__Email" class="form-label i-modal-color">E-mail:</label>
+                            <input class="form-control" id="Contatos_${contatoIndex}__Email" name="Contatos[${contatoIndex}].Email" />
+                        </div>
+                    </div>
+                </div>`;
+        $('#contatos-list').append(contatoHtml);
+        contatoIndex++;
+    }
+
+    function addEndereco() {
+        const enderecoHtml = `
+                <div class="row g-3 endereco-item mb-3" id="endereco-${enderecoIndex}">
+                    <div class="row g-3 mb-3">
+                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(${enderecoIndex})">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Enderecos_${enderecoIndex}__CEP" class="form-label i-modal-color">CEP:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__CEP" name="Enderecos[${enderecoIndex}].CEP" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Enderecos_${enderecoIndex}__Logradouro" class="form-label i-modal-color">Logradouro:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Logradouro" name="Enderecos[${enderecoIndex}].Logradouro" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Enderecos_${enderecoIndex}__Numero" class="form-label i-modal-color">Número:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Numero" name="Enderecos[${enderecoIndex}].Numero" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Enderecos_${enderecoIndex}__Bairro" class="form-label i-modal-color">Bairro:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Bairro" name="Enderecos[${enderecoIndex}].Bairro" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Enderecos_${enderecoIndex}__Complemento" class="form-label i-modal-color">Complemento:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Complemento" name="Enderecos[${enderecoIndex}].Complemento" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="Enderecos_${enderecoIndex}__Cidade" class="form-label i-modal-color">Cidade:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Cidade" name="Enderecos[${enderecoIndex}].Cidade" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Enderecos_${enderecoIndex}__Estado" class="form-label i-modal-color">Estado:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Estado" name="Enderecos[${enderecoIndex}].Estado" />
+                    </div>
+                </div>`;
+        $('#enderecos-list').append(enderecoHtml);
+        enderecoIndex++;
+    }
+
+    function removeContato(index) {
+        $(`#contato-${index}`).remove();
+    }
+
+    function removeEndereco(index) {
+        $(`#endereco-${index}`).remove();
+    }
+
+    function LoadingCadastrarContato() {
+        $("#loaderCadastrarContato").fadeIn();
+    }
+</script>
+
+<style>
+    .modal-header {
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #dee2e6;
+        padding-top: 10px;
+    }
+
+    .i-modal-color {
+        color: #333;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: .25rem;
+    }
+
+    .contato-item, .endereco-item {
+        border: 1px solid #dee2e6;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+    }
+
+    .modal-lg {
+        max-width: 80%;
+    }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+</style>
