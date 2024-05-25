@@ -6,7 +6,7 @@ namespace PolarisContacts.Application.Interfaces.Repositories
 {
     public interface IEnderecoRepository
     {
-        Task<IEnumerable<Endereco>> GetEnderecosByIdPessoa(int idPessoa);
+        Task<IEnumerable<Endereco>> GetEnderecosByIdContato(int idPessoa);
         Task<Endereco> GetEnderecoById(int id);
         Task AddEndereco(Endereco endereco);
         Task UpdateEndereco(Endereco endereco);

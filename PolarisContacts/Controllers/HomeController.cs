@@ -7,9 +7,9 @@ using System.Diagnostics;
 
 namespace PolarisContacts.Controllers
 {
-    public class HomeController(IPessoaService pessoaService) : Controller
+    public class HomeController(ITelefoneService pessoaService) : Controller
     {
-        private readonly IPessoaService _pessoaService = pessoaService;
+        private readonly ITelefoneService _pessoaService = pessoaService;
         
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 15)
         {

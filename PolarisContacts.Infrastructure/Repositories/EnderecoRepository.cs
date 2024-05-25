@@ -18,7 +18,7 @@ namespace PolarisContacts.Infrastructure.Repositories
         private readonly DbConnection _dbConnection = dbConnection;
         
 
-        public async Task<IEnumerable<Endereco>> GetEnderecosByIdPessoa(int idPessoa)
+        public async Task<IEnumerable<Endereco>> GetEnderecosByIdContato(int idPessoa)
         {
             using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
             

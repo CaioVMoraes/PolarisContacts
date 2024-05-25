@@ -7,7 +7,7 @@ namespace PolarisContacts.CrossCutting.DependencyInjection.Extensions.AddApplica
 public static partial class AddApplicationLayerExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services) =>
-        services.AddTransient<IPessoaService, PessoaService>()
+        services.AddTransient<ITelefoneService, TelefoneService>()
                 .AddTransient<IContatoService, ContatoService>()
                 .AddTransient<IEnderecoService, EnderecoService>();
 
