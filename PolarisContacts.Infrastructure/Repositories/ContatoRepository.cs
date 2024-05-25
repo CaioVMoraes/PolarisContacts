@@ -1,49 +1,62 @@
-﻿using PolarisContacts.Application.Interfaces.Repositories;
+﻿using Dapper;
+using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
 {
-    public class ContatoRepository : IContatoRepository
+    public class ContatoRepository(DbConnection dbConnection) : IContatoRepository
     {
-        public IEnumerable<Contato> GetContatosByIdPessoa(int idPessoa)
-        {
-            IEnumerable<Contato> contatos = new List<Contato>
-            {
-                new Contato
-                {
-                    Id = 1,
-                    IdPessoa = 1,
-                    DDDTelefoneResidencial = "11",
-                    NumeroTelefoneResidencial = "12345678",
-                    DDDCelular = "11",
-                    NumeroCelular = "987654321",
-                    Email = "joao.silva@example.com"
-                },
-                new Contato
-                {
-                    Id = 2,
-                    IdPessoa = 1,
-                    DDDTelefoneResidencial = "11",
-                    NumeroTelefoneResidencial = "87654321",
-                    DDDCelular = "11",
-                    NumeroCelular = "123456789",
-                    Email = "joao.silva@work.com"
-                },
-                new Contato
-                {
-                    Id = 3,
-                    IdPessoa = 2,
-                    DDDTelefoneResidencial = "21",
-                    NumeroTelefoneResidencial = "22334455",
-                    DDDCelular = "21",
-                    NumeroCelular = "998877665",
-                    Email = "maria.oliveira@example.com"
-                }
-            };
+        private readonly DbConnection _dbConnection = dbConnection;
 
-            return contatos.Where(x => x.IdPessoa == idPessoa);
+
+        public async Task<IEnumerable<Contato>> GetAllContatos()
+        {
+            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+
+            string query = "SELECT * FROM Contatos";
+
+            return await conn.QueryAsync<Contato>(query);
+        }
+
+        public async Task<Contato> GetContatoById(int idContato)
+        {
+            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+
+            string query = "SELECT * FROM Contatos WHERE Id = @Id";
+            return await conn.QueryFirstOrDefaultAsync<Contato>(query, new { Id = idContato });
+        }
+
+
+        public async Task AddContato(Contato contato)
+        {
+            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+
+            string query = @"INSERT INTO Contatos (Nome, Ativo) 
+                             VALUES (@Nome, @Ativo)";
+
+            await conn.ExecuteAsync(query, contato);
+        }
+
+        public async Task UpdateContato(Contato contato)
+        {
+            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+
+            string query = @"UPDATE Contatos SET 
+                             Nome = @Nome, Ativo = @Ativo 
+                             WHERE Id = @Id";
+            await conn.ExecuteAsync(query, contato);
+        }
+
+        public async Task DeleteContato(int id)
+        {
+            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+
+            string query = "DELETE FROM Contatos WHERE Id = @Id";
+            await conn.ExecuteAsync(query, new { Id = id });
         }
     }
 }

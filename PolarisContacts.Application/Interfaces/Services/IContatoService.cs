@@ -5,6 +5,6 @@ namespace PolarisContacts.Application.Interfaces.Services
 {
     public interface IContatoService
     {
-        IEnumerable<Contato> GetContatosByIdPessoa(int idPessoa);
+        IEnumerable<Telefone> GetContatosByIdPessoa(int idPessoa);
     }
 }

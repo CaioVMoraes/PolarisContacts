@@ -5,17 +5,17 @@ using System.Collections.Generic;
 
 namespace PolarisContacts.Application.Services
 {
-    public class PessoaService(IPessoaRepository pessoaRepository, IContatoService contatoService, IEnderecoService enderecoService) : IPessoaService
+    public class PessoaService(ITelefoneRepository pessoaRepository, IContatoService contatoService, IEnderecoService enderecoService) : IPessoaService
     {
-        private readonly IPessoaRepository _pessoaRepository = pessoaRepository;
+        private readonly ITelefoneRepository _pessoaRepository = pessoaRepository;
         private readonly IContatoService _contatoService = contatoService;
         private readonly IEnderecoService _enderecoService = enderecoService;
 
-        public IEnumerable<Pessoa> GetPessoas()
+        public IEnumerable<Contato> GetPessoas()
         {
-            IEnumerable<Pessoa> pessoas = _pessoaRepository.GetPessoas();
+            IEnumerable<Contato> pessoas = _pessoaRepository.GetPessoas();
 
-            foreach (Pessoa pessoa in pessoas)
+            foreach (Contato pessoa in pessoas)
             {
                 pessoa.Contatos = _contatoService.GetContatosByIdPessoa(pessoa.Id);
                 pessoa.Enderecos = _enderecoService.GetEnderecosByIdPessoa(pessoa.Id);
@@ -24,4 +24,3 @@ namespace PolarisContacts.Application.Services
             return pessoas;
         }
     }
-}

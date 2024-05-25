@@ -10,7 +10,7 @@ namespace PolarisContacts.Application.Services
     {
         private readonly IContatoRepository _contatoRepository = contatoRepository;
 
-        public IEnumerable<Contato> GetContatosByIdPessoa(int idPessoa)
+        public IEnumerable<Telefone> GetContatosByIdPessoa(int idPessoa)
         {
             if (idPessoa <= 0)
             {

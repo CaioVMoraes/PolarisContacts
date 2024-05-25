@@ -13,7 +13,7 @@ namespace PolarisContacts.Controllers
         
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 15)
         {
-            IEnumerable<Pessoa> pessoas = _pessoaService.GetPessoas();
+            IEnumerable<Contato> pessoas = _pessoaService.GetPessoas();
 
             var totalContatos = pessoas.Count();
 
@@ -33,7 +33,7 @@ namespace PolarisContacts.Controllers
         {
             try
             {
-                return PartialView("_PartialNovoContato", new Pessoa());
+                return PartialView("_PartialNovoContato", new Contato());
             }
             catch (Exception ex)
             {

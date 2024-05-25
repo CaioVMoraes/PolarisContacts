@@ -8,8 +8,13 @@ namespace PolarisContacts.Domain
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Pessoa")]
-        public int IdPessoa { get; set; }
+        [ForeignKey("Contato")]
+        public int IdContato { get; set; }
+
+        [Display(Name = "Logradouro")]
+        [Required(ErrorMessage = "O logradouro é obrigatório.")]
+        [StringLength(200, ErrorMessage = "O logradouro não pode exceder 200 caracteres.")]
+        public string Logradouro { get; set; }
 
         [Display(Name = "Estado")]
         [Required(ErrorMessage = "O estado é obrigatório.")]
@@ -25,16 +30,11 @@ namespace PolarisContacts.Domain
         [StringLength(100, ErrorMessage = "O bairro não pode exceder 100 caracteres.")]
         public string Bairro { get; set; }
 
-        [Display(Name = "Logradouro")]
-        [Required(ErrorMessage = "O logradouro é obrigatório.")]
-        [StringLength(200, ErrorMessage = "O logradouro não pode exceder 200 caracteres.")]
-        public string Logradouro { get; set; }
-
         [Display(Name = "Complemento")]
         [StringLength(200, ErrorMessage = "O complemento não pode exceder 200 caracteres.")]
         public string Complemento { get; set; }
 
-        [Display(Name = "Numero")]
+        [Display(Name = "Número")]
         [StringLength(10, ErrorMessage = "O número não pode exceder 10 caracteres.")]
         public string Numero { get; set; }
 
@@ -42,5 +42,7 @@ namespace PolarisContacts.Domain
         [Required(ErrorMessage = "O CEP é obrigatório.")]
         [RegularExpression(@"^\d{5}-\d{3}$", ErrorMessage = "O CEP deve estar no formato 00000-000.")]
         public string CEP { get; set; }
+               
+        public bool Ativo { get; set; }
     }
 }
