@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PolarisContacts.Application.Interfaces.Repositories
+namespace PolarisContacts.Application.Interfaces.Services
 {
-    public interface IRegiaoRepository
+    public interface IRegiaoService
     {
         Task<IEnumerable<Regiao>> GetAllRegioesAsync();
         Task<Regiao> GetRegiaoByIdAsync(int id);

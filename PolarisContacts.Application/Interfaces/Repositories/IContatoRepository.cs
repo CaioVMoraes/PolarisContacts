@@ -6,11 +6,11 @@ namespace PolarisContacts.Application.Interfaces.Repositories
 {
     public interface IContatoRepository
     {
-        Task<IEnumerable<Contato>> GetAllContatos();
-        Task<Contato> GetContatoById(int id);
-        Task AddContato(Contato contato);
-        Task UpdateContato(Contato contato);
-        Task DeleteContato(int id);
+        Task<IEnumerable<Contato>> GetAllContatosAsync();
+        Task<Contato> GetContatoByIdAsync(int id);
+        Task AddContatoAsync(Contato contato);
+        Task UpdateContatoAsync(Contato contato);
+        Task DeleteContatoAsync(int id);
 
     }
 }

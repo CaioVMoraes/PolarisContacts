@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PolarisContacts.Application.Interfaces.Repositories
+namespace PolarisContacts.Application.Interfaces.Services
 {
-    public interface ICelularRepository
+    public interface ICelularService
     {
         Task<IEnumerable<Celular>> GetCelularesByIdContatoAsync(int idContato);
         Task<Celular> GetCelularByIdAsync(int id);

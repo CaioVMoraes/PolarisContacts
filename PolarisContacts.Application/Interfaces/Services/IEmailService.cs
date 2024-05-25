@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PolarisContacts.Application.Interfaces.Repositories
+namespace PolarisContacts.Application.Interfaces.Services
 {
-    public interface IEmailRepository
+    public interface IEmailService
     {
         Task<IEnumerable<Email>> GetEmailsByIdContatoAsync(int idContato);
         Task<Email> GetEmailByIdAsync(int id);

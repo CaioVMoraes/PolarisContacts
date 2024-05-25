@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PolarisContacts.Application.Interfaces.Repositories
+namespace PolarisContacts.Application.Interfaces.Services
 {
-    public interface IUsuarioRepository
+    public interface IUsuarioService
     {
         Task<IEnumerable<Usuario>> GetAllUsuariosAsync();
         Task<Usuario> GetUsuarioByIdAsync(int id);

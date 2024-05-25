@@ -19,7 +19,7 @@ namespace PolarisContacts.Application.Services
                 throw new ContatoNotFoundException();
             }
 
-            return await _enderecoRepository.GetEnderecosByIdContato(idPessoa);
+            return await _enderecoRepository.GetEnderecosByIdContatoAsync(idPessoa);
         }
 
         public async Task<Endereco> GetEnderecoByIdAsync(int id)
@@ -29,7 +29,7 @@ namespace PolarisContacts.Application.Services
                 throw new InvalidIdException();
             }
 
-            var endereco = await _enderecoRepository.GetEnderecoById(id);
+            var endereco = await _enderecoRepository.GetEnderecoByIdAsync(id);
 
             if (endereco == null)
             {
@@ -46,7 +46,7 @@ namespace PolarisContacts.Application.Services
                 throw new ArgumentNullException(nameof(endereco));
             }
 
-            await _enderecoRepository.AddEndereco(endereco);
+            await _enderecoRepository.AddEnderecoAsync(endereco);
         }
 
         public async Task UpdateEnderecoAsync(Endereco endereco)
@@ -56,14 +56,14 @@ namespace PolarisContacts.Application.Services
                 throw new ArgumentNullException(nameof(endereco));
             }
 
-            var existingEndereco = await _enderecoRepository.GetEnderecoById(endereco.Id);
+            var existingEndereco = await _enderecoRepository.GetEnderecoByIdAsync(endereco.Id);
 
             if (existingEndereco == null)
             {
                 throw new EnderecoNotFoundException();
             }
 
-            await _enderecoRepository.UpdateEndereco(endereco);
+            await _enderecoRepository.UpdateEnderecoAsync(endereco);
         }
 
         public async Task DeleteEnderecoAsync(int id)
@@ -73,14 +73,14 @@ namespace PolarisContacts.Application.Services
                 throw new InvalidIdException();
             }
 
-            var existingEndereco = await _enderecoRepository.GetEnderecoById(id);
+            var existingEndereco = await _enderecoRepository.GetEnderecoByIdAsync(id);
 
             if (existingEndereco == null)
             {
                 throw new EnderecoNotFoundException();
             }
 
-            await _enderecoRepository.DeleteEndereco(id);
+            await _enderecoRepository.DeleteEnderecoAsync(id);
         }
     }
 }

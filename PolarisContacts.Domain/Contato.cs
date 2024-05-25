@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PolarisContacts.Domain
 {
@@ -9,6 +10,9 @@ namespace PolarisContacts.Domain
     {
         [Key]
         public int Id { get; set; }
+
+        [ForeignKey("Usuario")]
+        public int IdUsuario { get; set; }
 
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "O nome é obrigatório.")]
