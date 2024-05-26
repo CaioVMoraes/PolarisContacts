@@ -6,10 +6,10 @@ namespace PolarisContacts.Application.Interfaces.Repositories
 {
     public interface IEnderecoRepository
     {
-        Task<IEnumerable<Endereco>> GetEnderecosByIdContatoAsync(int idPessoa);
-        Task<Endereco> GetEnderecoByIdAsync(int id);
-        Task AddEnderecoAsync(Endereco endereco);
-        Task UpdateEnderecoAsync(Endereco endereco);
-        Task DeleteEnderecoAsync(int id);
+        Task<IEnumerable<Endereco>> GetEnderecosByIdContato(int idContato);
+        Task<Endereco> GetEnderecoById(int id);
+        Task<bool> AddEndereco(Endereco endereco);
+        Task<bool> UpdateEndereco(Endereco endereco);
+        Task<bool> DeleteEndereco(int id);
     }
 }

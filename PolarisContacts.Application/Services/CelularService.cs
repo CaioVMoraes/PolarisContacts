@@ -3,8 +3,6 @@ using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Domain;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
@@ -16,24 +14,24 @@ namespace PolarisContacts.Application.Services
         private readonly IContatoService _contatoService = contatoService;
         private readonly IRegiaoService _regiaoService = regiaoService;
 
-        public async Task<IEnumerable<Celular>> GetCelularesByIdContatoAsync(int idContato)
+        public async Task<IEnumerable<Celular>> GetCelularesByIdContato(int idContato)
         {
             if (idContato <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            return await _celularRepository.GetCelularesByIdContatoAsync(idContato);
+            return await _celularRepository.GetCelularesByIdContato(idContato);
         }
 
-        public async Task<Celular> GetCelularByIdAsync(int id)
+        public async Task<Celular> GetCelularById(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            var celular = await _celularRepository.GetCelularByIdAsync(id);
+            var celular = await _celularRepository.GetCelularById(id);
 
             if (celular == null)
             {
@@ -43,7 +41,7 @@ namespace PolarisContacts.Application.Services
             return celular;
         }
 
-        public async Task AddCelularAsync(Celular celular)
+        public async Task AddCelular(Celular celular)
         {
             if (celular == null)
             {
@@ -51,27 +49,27 @@ namespace PolarisContacts.Application.Services
             }
 
             // Validar entidades relacionadas
-            if (celular.IdContato <= 0 || await _contatoService.GetContatoByIdAsync(celular.IdContato) == null)
+            if (celular.IdContato <= 0 || await _contatoService.GetContatoById(celular.IdContato) == null)
             {
                 throw new ContatoNotFoundException();
             }
 
-            if (celular.IdRegiao <= 0 || await _regiaoService.GetRegiaoByIdAsync(celular.IdRegiao) == null)
+            if (celular.IdRegiao <= 0 || await _regiaoService.GetRegiaoById(celular.IdRegiao) == null)
             {
                 throw new RegiaoNotFoundException();
             }
 
-            await _celularRepository.AddCelularAsync(celular);
+            await _celularRepository.AddCelular(celular);
         }
 
-        public async Task UpdateCelularAsync(Celular celular)
+        public async Task UpdateCelular(Celular celular)
         {
             if (celular == null || celular.Id <= 0)
             {
                 throw new ArgumentNullException(nameof(celular));
             }
 
-            var existingCelular = await _celularRepository.GetCelularByIdAsync(celular.Id);
+            var existingCelular = await _celularRepository.GetCelularById(celular.Id);
 
             if (existingCelular == null)
             {
@@ -79,34 +77,34 @@ namespace PolarisContacts.Application.Services
             }
 
             // Validar entidades relacionadas
-            if (celular.IdContato <= 0 || await _contatoService.GetContatoByIdAsync(celular.IdContato) == null)
+            if (celular.IdContato <= 0 || await _contatoService.GetContatoById(celular.IdContato) == null)
             {
                 throw new ContatoNotFoundException();
             }
 
-            if (celular.IdRegiao <= 0 || await _regiaoService.GetRegiaoByIdAsync(celular.IdRegiao) == null)
+            if (celular.IdRegiao <= 0 || await _regiaoService.GetRegiaoById(celular.IdRegiao) == null)
             {
                 throw new RegiaoNotFoundException();
             }
 
-            await _celularRepository.UpdateCelularAsync(celular);
+            await _celularRepository.UpdateCelular(celular);
         }
 
-        public async Task DeleteCelularAsync(int id)
+        public async Task DeleteCelular(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            var existingCelular = await _celularRepository.GetCelularByIdAsync(id);
+            var existingCelular = await _celularRepository.GetCelularById(id);
 
             if (existingCelular == null)
             {
                 throw new CelularNotFoundException();
             }
 
-            await _celularRepository.DeleteCelularAsync(id);
+            await _celularRepository.DeleteCelular(id);
         }
     }
 }

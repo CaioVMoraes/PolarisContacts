@@ -9,16 +9,22 @@ namespace PolarisContacts.Domain
         public int Id { get; set; }
 
         [ForeignKey("Regiao")]
+        [Required(ErrorMessage = "A região é obrigatória.")]
         public int IdRegiao { get; set; }
 
         [ForeignKey("Contato")]
+        [Required(ErrorMessage = "O contato é obrigatório.")]
         public int IdContato { get; set; }
 
-
-        [Display(Name = "Tel Residencial")]
+        [Display(Name = "Telefone")]
+        [Required(ErrorMessage = "O número do celular é obrigatório.")]
         [Phone(ErrorMessage = "Número de telefone inválido.")]
-        public string NumeroTelefoneResidencial { get; set; }
-        public string NumeroTelefoneResidencialFormatado => string.Format("({0}) {1}-{2}", NumeroTelefoneResidencial.Substring(0, 5), NumeroTelefoneResidencial.Substring(5));
+        public string NumeroTelefone { get; set; }
 
+
+        public bool Ativo { get; set; }
+
+
+        public Regiao Regiao { get; set; }
     }
 }

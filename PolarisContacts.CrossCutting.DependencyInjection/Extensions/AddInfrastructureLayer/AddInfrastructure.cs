@@ -9,11 +9,16 @@ public static partial class AddInfrastructureLayerExtensions
 {
     public static IServiceCollection AddSettings(this IServiceCollection services) =>
         services.AddBindedSettings<DbSettings>();
-        
+
     public static IServiceCollection AddRepositories(this IServiceCollection services) =>
-        services.AddTransient<ITelefoneRepository, TelefoneRepository>()
+        services.AddTransient<IUsuarioRepository, UsuarioRepository>()
                 .AddTransient<IContatoRepository, ContatoRepository>()
-                .AddTransient<IEnderecoRepository, EnderecoRepository>();
+                .AddTransient<ITelefoneRepository, TelefoneRepository>()
+                .AddTransient<ICelularRepository, CelularRepository>()
+                .AddTransient<IEmailRepository, EmailRepository>()
+                .AddTransient<IRegiaoRepository, RegiaoRepository>()
+                .AddTransient<IEnderecoRepository, EnderecoRepository>()
+                .AddTransient<IDatabaseConnection, DatabaseConnection>();
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services) =>
         services

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PolarisContacts.Domain
 {
@@ -24,7 +19,12 @@ namespace PolarisContacts.Domain
         [Display(Name = "Celular")]
         [Required(ErrorMessage = "O número do celular é obrigatório.")]
         [StringLength(20, ErrorMessage = "O número do celular não pode exceder 20 caracteres.")]
-        public string Numero { get; set; }
+        public string NumeroCelular { get; set; }
+
+
         public bool Ativo { get; set; }
+
+
+        public Regiao Regiao { get; set; }
     }
 }

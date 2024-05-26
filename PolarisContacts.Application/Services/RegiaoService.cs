@@ -1,10 +1,7 @@
 ﻿using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Domain;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
@@ -14,19 +11,19 @@ namespace PolarisContacts.Application.Services
     {
         private readonly IRegiaoRepository _regiaoRepository = regiaoRepository;
 
-        public async Task<IEnumerable<Regiao>> GetAllRegioesAsync()
+        public async Task<IEnumerable<Regiao>> GetAllRegioes()
         {
-            return await _regiaoRepository.GetAllRegioesAsync();
+            return await _regiaoRepository.GetAllRegioes();
         }
 
-        public async Task<Regiao> GetRegiaoByIdAsync(int id)
+        public async Task<Regiao> GetRegiaoById(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            var regiao = await _regiaoRepository.GetRegiaoByIdAsync(id);
+            var regiao = await _regiaoRepository.GetRegiaoById(id);
 
             if (regiao == null)
             {
@@ -36,48 +33,48 @@ namespace PolarisContacts.Application.Services
             return regiao;
         }
 
-        public async Task AddRegiaoAsync(Regiao regiao)
+        public async Task AddRegiao(Regiao regiao)
         {
             if (regiao == null)
             {
                 throw new RegiaoNotFoundException();
             }
 
-            await _regiaoRepository.AddRegiaoAsync(regiao);
+            await _regiaoRepository.AddRegiao(regiao);
         }
 
-        public async Task UpdateRegiaoAsync(Regiao regiao)
+        public async Task UpdateRegiao(Regiao regiao)
         {
             if (regiao == null || regiao.Id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            var existingRegiao = await _regiaoRepository.GetRegiaoByIdAsync(regiao.Id);
+            var existingRegiao = await _regiaoRepository.GetRegiaoById(regiao.Id);
 
             if (existingRegiao == null)
             {
                 throw new RegiaoNotFoundException();
             }
 
-            await _regiaoRepository.UpdateRegiaoAsync(regiao);
+            await _regiaoRepository.UpdateRegiao(regiao);
         }
 
-        public async Task DeleteRegiaoAsync(int id)
+        public async Task DeleteRegiao(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            var existingRegiao = await _regiaoRepository.GetRegiaoByIdAsync(id);
+            var existingRegiao = await _regiaoRepository.GetRegiaoById(id);
 
             if (existingRegiao == null)
             {
                 throw new RegiaoNotFoundException();
             }
 
-            await _regiaoRepository.DeleteRegiaoAsync(id);
+            await _regiaoRepository.DeleteRegiao(id);
         }
     }
 }

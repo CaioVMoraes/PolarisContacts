@@ -6,10 +6,10 @@ namespace PolarisContacts.Application.Interfaces.Repositories
 {
     public interface ITelefoneRepository
     {
-        Task<IEnumerable<Telefone>> GetTelefonesByIdContatoAsync(int idContato);
-        Task<Telefone> GetTelefoneByIdAsync(int id);
-        Task AddTelefoneAsync(Telefone telefone);
-        Task UpdateTelefoneAsync(Telefone telefone);
-        Task DeleteTelefoneAsync(int id);
+        Task<IEnumerable<Telefone>> GetTelefonesByIdContato(int idContato);
+        Task<Telefone> GetTelefoneById(int id);
+        Task<bool> AddTelefone(Telefone telefone);
+        Task<bool> UpdateTelefone(Telefone telefone);
+        Task<bool> DeleteTelefone(int id);
     }
 }

@@ -1,7 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PolarisContacts.Domain
@@ -21,5 +19,10 @@ namespace PolarisContacts.Domain
 
         public bool Ativo { get; set; }
 
+
+        public IEnumerable<Celular> Celulares { get; set; }
+        public IEnumerable<Telefone> Telefones { get; set; }
+        public IEnumerable<Email> Emails { get; set; }
+        public IEnumerable<Endereco> Enderecos { get; set; }
     }
 }

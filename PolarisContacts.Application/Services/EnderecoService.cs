@@ -12,24 +12,24 @@ namespace PolarisContacts.Application.Services
     {
         private readonly IEnderecoRepository _enderecoRepository = enderecoRepository;
 
-        public async Task<IEnumerable<Endereco>> GetEnderecosByIdContatoAsync(int idPessoa)
+        public async Task<IEnumerable<Endereco>> GetEnderecosByIdContato(int idContato)
         {
-            if (idPessoa <= 0)
+            if (idContato <= 0)
             {
                 throw new ContatoNotFoundException();
             }
 
-            return await _enderecoRepository.GetEnderecosByIdContatoAsync(idPessoa);
+            return await _enderecoRepository.GetEnderecosByIdContato(idContato);
         }
 
-        public async Task<Endereco> GetEnderecoByIdAsync(int id)
+        public async Task<Endereco> GetEnderecoById(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            var endereco = await _enderecoRepository.GetEnderecoByIdAsync(id);
+            var endereco = await _enderecoRepository.GetEnderecoById(id);
 
             if (endereco == null)
             {
@@ -39,48 +39,48 @@ namespace PolarisContacts.Application.Services
             return endereco;
         }
 
-        public async Task AddEnderecoAsync(Endereco endereco)
+        public async Task AddEndereco(Endereco endereco)
         {
             if (endereco == null)
             {
                 throw new ArgumentNullException(nameof(endereco));
             }
 
-            await _enderecoRepository.AddEnderecoAsync(endereco);
+            await _enderecoRepository.AddEndereco(endereco);
         }
 
-        public async Task UpdateEnderecoAsync(Endereco endereco)
+        public async Task UpdateEndereco(Endereco endereco)
         {
             if (endereco == null || endereco.Id <= 0)
             {
                 throw new ArgumentNullException(nameof(endereco));
             }
 
-            var existingEndereco = await _enderecoRepository.GetEnderecoByIdAsync(endereco.Id);
+            var existingEndereco = await _enderecoRepository.GetEnderecoById(endereco.Id);
 
             if (existingEndereco == null)
             {
                 throw new EnderecoNotFoundException();
             }
 
-            await _enderecoRepository.UpdateEnderecoAsync(endereco);
+            await _enderecoRepository.UpdateEndereco(endereco);
         }
 
-        public async Task DeleteEnderecoAsync(int id)
+        public async Task DeleteEndereco(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            var existingEndereco = await _enderecoRepository.GetEnderecoByIdAsync(id);
+            var existingEndereco = await _enderecoRepository.GetEnderecoById(id);
 
             if (existingEndereco == null)
             {
                 throw new EnderecoNotFoundException();
             }
 
-            await _enderecoRepository.DeleteEnderecoAsync(id);
+            await _enderecoRepository.DeleteEndereco(id);
         }
     }
 }

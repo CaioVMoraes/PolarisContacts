@@ -4,7 +4,7 @@ namespace PolarisContacts.Models
 {
     public class ContatoListViewModel
     {
-        public IEnumerable<Contato> Pessoas { get; set; }
+        public IEnumerable<Contato> Contatos { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalContatos { get; set; }

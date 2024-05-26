@@ -1,78 +1,103 @@
 ﻿@model PolarisContacts.Domain.Contato
+@{
+    var regioes = ViewBag.Regioes as IEnumerable<PolarisContacts.Domain.Regiao>;
+}
 
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-cadastrar" aria-hidden="true" id="modal-novo-contato">
     <div class="modal-dialog modal-lg" role="document">
         <div id="loaderCadastrarContato" class="back-loader"><span class="loader"></span></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modal-cadastrar">Novo Contato</h4>
+                <h4 class="modal-title" id="modal-cadastrar">@((Model.Id == 0) ? "Novo Contato" : "Editar Contato")</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("InsertContato", "Home", FormMethod.Post, new { id = "ContatoForm" }))
+                @using (Html.BeginForm((Model.Id == 0) ? "InsertContato" : "UpdateContato", "Home", FormMethod.Post, new { id = "ContatoForm" }))
                 {
+                    @Html.HiddenFor(e => e.Id)
                     <section id="cadastrarContato" style="position:relative">
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label for="Nome" class="form-label i-modal-color">Nome:</label>
                                 @Html.TextBoxFor(e => e.Nome, new { @class = "form-control", id = "Nome" })
                             </div>
-                            <div class="col-md-4">
-                                <label for="Genero" class="form-label i-modal-color">Gênero:</label>
-                                @Html.DropDownListFor(e => e.Genero, new List<SelectListItem>
-                                {
-                                new SelectListItem { Text = "Masculino", Value = "Masculino" },
-                                new SelectListItem { Text = "Feminino", Value = "Feminino" },
-                                new SelectListItem { Text = "Não especificado", Value = "Não especificado" }
-                                }, new { @class = "form-control", id = "Genero" })
-                            </div>
-                            <div class="col-md-4">
-                                <label for="DataNascimento" class="form-label i-modal-color">Data de Nascimento:</label>
-                                @Html.TextBoxFor(e => e.DataNascimento, new { @type = "date", @class = "form-control", id = "DataNascimento" })
-                            </div>
                         </div>
                         <hr class="my-4" />
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="text-primary">Contatos</h5>
-                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addContato()">
+                            <h5 class="text-primary">Telefones</h5>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addTelefone()">
                                 <i class="bi bi-plus-lg"></i>
                             </button>
                         </div>
-                        <div id="contatos-list">
-                            @if (Model.Contatos is not null)
+                        <div id="telefones-list">
+                            @foreach (var telefone in Model.Telefones ?? Enumerable.Empty<PolarisContacts.Domain.Telefone>())
                             {
-                                for (int i = 0; i < Model.Contatos.Count(); i++)
-                                {
-                                    <div class="row g-3 contato-item mb-3" id="contato-${i}">
-                                        <div class="row g-3 mb-3">
-                                            <div class="col-md-2">
-                                                <label for="Contatos_@(i)__DDDTelefoneResidencial" class="form-label i-modal-color">DDD Tel:</label>
-                                                @Html.TextBox($"Contatos[{i}].DDDTelefoneResidencial", Model.Contatos.ElementAt(i).DDDTelefoneResidencial, new { @class = "form-control", id = $"Contatos_{i}__DDDTelefoneResidencial", maxlength = "3" })
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="Contatos_@(i)__NumeroTelefoneResidencial" class="form-label i-modal-color">Tel Residencial:</label>
-                                                @Html.TextBox($"Contatos[{i}].NumeroTelefoneResidencial", Model.Contatos.ElementAt(i).NumeroTelefoneResidencial, new { @class = "form-control", id = $"Contatos_{i}__NumeroTelefoneResidencial" })
-                                            </div>
-                                        </div>
-                                        <div class="row g-3 mb-3">
-                                            <div class="col-md-2">
-                                                <label for="Contatos_@(i)__DDDCelular" class="form-label i-modal-color">DDD Cel:</label>
-                                                @Html.TextBox($"Contatos[{i}].DDDCelular", Model.Contatos.ElementAt(i).DDDCelular, new { @class = "form-control", id = $"Contatos_{i}__DDDCelular", maxlength = "3" })
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="Contatos_@(i)__NumeroCelular" class="form-label i-modal-color">Celular:</label>
-                                                @Html.TextBox($"Contatos[{i}].NumeroCelular", Model.Contatos.ElementAt(i).NumeroCelular, new { @class = "form-control", id = $"Contatos_{i}__NumeroCelular" })
-                                            </div>
-                                        </div>
-                                        <div class="row g-3 mb-3">
-                                            <div class="col-md-6">
-                                                <label for="Contatos_@(i)__Email" class="form-label i-modal-color">E-mail:</label>
-                                                @Html.TextBox($"Contatos[{i}].Email", Model.Contatos.ElementAt(i).Email, new { @class = "form-control", id = $"Contatos_{i}__Email" })
-                                            </div>
+                                <div class="row g-3 telefone-item mb-3" id="telefone-@(telefone.Id)">
+                                    <div class="col-md-4">
+                                        <label for="Telefones_@(telefone.Id)__IdRegiao" class="form-label i-modal-color">Região:</label>
+                                        @Html.DropDownList($"Telefones[{telefone.Id}].IdRegiao", new SelectList(regioes, "Id", "NomeRegiao", telefone.IdRegiao), "Selecione uma região", new { @class = "form-control", id = $"Telefones_{telefone.Id}__IdRegiao", onchange = "updateDDD(this)" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="Telefones_@(telefone.Id)__NumeroTelefone" class="form-label i-modal-color">Tel Residencial:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="DDD_@(telefone.Id)"></span>
+                                            @Html.TextBox($"Telefones[{telefone.Id}].NumeroTelefone", telefone.NumeroTelefone, new { @class = "form-control", id = $"Telefones_{telefone.Id}__NumeroTelefone" })
                                         </div>
                                     </div>
-                                }
+                                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeTelefone(@telefone.Id)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="text-primary">Celulares</h5>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addCelular()">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                        <div id="celulares-list">
+                            @foreach (var celular in Model.Celulares ?? Enumerable.Empty<PolarisContacts.Domain.Celular>())
+                            {
+                                <div class="row g-3 celular-item mb-3" id="celular-@(celular.Id)">
+                                    <div class="col-md-4">
+                                        <label for="Celulares_@(celular.Id)__IdRegiao" class="form-label i-modal-color">Região:</label>
+                                        @Html.DropDownList($"Celulares[{celular.Id}].IdRegiao", new SelectList(regioes, "Id", "NomeRegiao", celular.IdRegiao), "Selecione uma região", new { @class = "form-control", id = $"Celulares_{celular.Id}__IdRegiao", onchange = "updateDDD(this)" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="Celulares_@(celular.Id)__NumeroCelular" class="form-label i-modal-color">Celular:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="DDD_@(celular.Id)"></span>
+                                            @Html.TextBox($"Celulares[{celular.Id}].NumeroCelular", celular.NumeroCelular, new { @class = "form-control", id = $"Celulares_{celular.Id}__NumeroCelular" })
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeCelular(@celular.Id)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="text-primary">Emails</h5>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addEmail()">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                        <div id="emails-list">
+                            @foreach (var email in Model.Emails ?? Enumerable.Empty<PolarisContacts.Domain.Email>())
+                            {
+                                <div class="row g-3 email-item mb-3" id="email-@(email.Id)">
+                                    <div class="col-md-6">
+                                        <label for="Emails_@(email.Id)__EnderecoEmail" class="form-label i-modal-color">E-mail:</label>
+                                        @Html.TextBox($"Emails[{email.Id}].EnderecoEmail", email.EnderecoEmail, new { @class = "form-control", id = $"Emails_{email.Id}__EnderecoEmail" })
+                                    </div>
+                                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEmail(@email.Id)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </div>
                             }
                         </div>
 
@@ -83,41 +108,41 @@
                             </button>
                         </div>
                         <div id="enderecos-list">
-                            @if (Model.Enderecos is not null)
+                            @foreach (var endereco in Model.Enderecos ?? Enumerable.Empty<PolarisContacts.Domain.Endereco>())
                             {
-                                for (int i = 0; i < Model.Enderecos.Count(); i++)
-                                {
-                                    <div class="row g-3 endereco-item mb-3" id="endereco-${i}">
-                                        <div class="col-md-2">
-                                            <label for="Enderecos_@(i)__CEP" class="form-label i-modal-color">CEP:</label>
-                                            @Html.TextBox($"Enderecos[{i}].CEP", Model.Enderecos.ElementAt(i).CEP, new { @class = "form-control", id = $"Enderecos_{i}__CEP" })
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="Enderecos_@(i)__Logradouro" class="form-label i-modal-color">Logradouro:</label>
-                                            @Html.TextBox($"Enderecos[{i}].Logradouro", Model.Enderecos.ElementAt(i).Logradouro, new { @class = "form-control", id = $"Enderecos_{i}__Logradouro" })
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="Enderecos_@(i)__Numero" class="form-label i-modal-color">Número:</label>
-                                            @Html.TextBox($"Enderecos[{i}].Numero", Model.Enderecos.ElementAt(i).Numero, new { @class = "form-control", id = $"Enderecos_{i}__Numero" })
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="Enderecos_@(i)__Bairro" class="form-label i-modal-color">Bairro:</label>
-                                            @Html.TextBox($"Enderecos[{i}].Bairro", Model.Enderecos.ElementAt(i).Bairro, new { @class = "form-control", id = $"Enderecos_{i}__Bairro" })
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="Enderecos_@(i)__Complemento" class="form-label i-modal-color">Complemento:</label>
-                                            @Html.TextBox($"Enderecos[{i}].Complemento", Model.Enderecos.ElementAt(i).Complemento, new { @class = "form-control", id = $"Enderecos_{i}__Complemento" })
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="Enderecos_@(i)__Cidade" class="form-label i-modal-color">Cidade:</label>
-                                            @Html.TextBox($"Enderecos[{i}].Cidade", Model.Enderecos.ElementAt(i).Cidade, new { @class = "form-control", id = $"Enderecos_{i}__Cidade" })
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="Enderecos_@(i)__Estado" class="form-label i-modal-color">Estado:</label>
-                                            @Html.TextBox($"Enderecos[{i}].Estado", Model.Enderecos.ElementAt(i).Estado, new { @class = "form-control", id = $"Enderecos_{i}__Estado" })
-                                        </div>
+                                <div class="row g-3 endereco-item mb-3" id="endereco-@(endereco.Id)">
+                                    <div class="col-md-2">
+                                        <label for="Enderecos_@(endereco.Id)__CEP" class="form-label i-modal-color">CEP:</label>
+                                        @Html.TextBox($"Enderecos[{endereco.Id}].CEP", endereco.CEP, new { @class = "form-control", id = $"Enderecos_{endereco.Id}__CEP" })
                                     </div>
-                                }
+                                    <div class="col-md-6">
+                                        <label for="Enderecos_@(endereco.Id)__Logradouro" class="form-label i-modal-color">Logradouro:</label>
+                                        @Html.TextBox($"Enderecos[{endereco.Id}].Logradouro", endereco.Logradouro, new { @class = "form-control", id = $"Enderecos_{endereco.Id}__Logradouro" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="Enderecos_@(endereco.Id)__Numero" class="form-label i-modal-color">Número:</label>
+                                        @Html.TextBox($"Enderecos[{endereco.Id}].Numero", endereco.Numero, new { @class = "form-control", id = $"Enderecos_{endereco.Id}__Numero" })
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="Enderecos_@(endereco.Id)__Bairro" class="form-label i-modal-color">Bairro:</label>
+                                        @Html.TextBox($"Enderecos[{endereco.Id}].Bairro", endereco.Bairro, new { @class = "form-control", id = $"Enderecos_{endereco.Id}__Bairro" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="Enderecos_@(endereco.Id)__Complemento" class="form-label i-modal-color">Complemento:</label>
+                                        @Html.TextBox($"Enderecos[{endereco.Id}].Complemento", endereco.Complemento, new { @class = "form-control", id = $"Enderecos_{endereco.Id}__Complemento" })
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Enderecos_@(endereco.Id)__Cidade" class="form-label i-modal-color">Cidade:</label>
+                                        @Html.TextBox($"Enderecos[{endereco.Id}].Cidade", endereco.Cidade, new { @class = "form-control", id = $"Enderecos_{endereco.Id}__Cidade" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="Enderecos_@(endereco.Id)__Estado" class="form-label i-modal-color">Estado:</label>
+                                        @Html.TextBox($"Enderecos[{endereco.Id}].Estado", endereco.Estado, new { @class = "form-control", id = $"Enderecos_{endereco.Id}__Estado" })
+                                    </div>
+                                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(@endereco.Id)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </div>
                             }
                         </div>
                     </section>
@@ -131,54 +156,88 @@
 </div>
 
 <script>
-    let contatoIndex = 0;
-    let enderecoIndex = 0;
+    let telefoneIndex = @(Model.Telefones?.Count() ?? 0);
+    let celularIndex = @(Model.Celulares?.Count() ?? 0);
+    let emailIndex = @(Model.Emails?.Count() ?? 0);
+    let enderecoIndex = @(Model.Enderecos?.Count() ?? 0);
 
-    function addContato() {
-        const contatoHtml = `
-                <div class="row g-3 contato-item mb-3" id="contato-${contatoIndex}">
-                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeContato(${contatoIndex})">
+    function addTelefone() {
+        const telefoneHtml = `
+                <div class="row g-3 telefone-item mb-3" id="telefone-${telefoneIndex}">
+                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeTelefone(${telefoneIndex})">
                         <i class="bi bi-trash-fill"></i>
                     </button>
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-2">
-                            <label for="Contatos_${contatoIndex}__DDDTelefoneResidencial" class="form-label i-modal-color">DDD Tel:</label>
-                            <input class="form-control" id="Contatos_${contatoIndex}__DDDTelefoneResidencial" name="Contatos[${contatoIndex}].DDDTelefoneResidencial" maxlength="3" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="Contatos_${contatoIndex}__NumeroTelefoneResidencial" class="form-label i-modal-color">Tel Residencial:</label>
-                            <input class="form-control" id="Contatos_${contatoIndex}__NumeroTelefoneResidencial" name="Contatos[${contatoIndex}].NumeroTelefoneResidencial" />
-                        </div>
+                    <div class="col-md-4">
+                        <label for="Telefones_${telefoneIndex}__IdRegiao" class="form-label i-modal-color">Região:</label>
+                        <select class="form-control" id="Telefones_${telefoneIndex}__IdRegiao" name="Telefones[${telefoneIndex}].IdRegiao" onchange="updateDDD(this)">
+                            <option value="">Selecione uma região</option>
+                            @foreach (var regiao in regioes)
+                            {
+                                <option value="@regiao.Id">@regiao.NomeRegiao</option>
+                            }
+                        </select>
                     </div>
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-2">
-                            <label for="Contatos_${contatoIndex}__DDDCelular" class="form-label i-modal-color">DDD Cel:</label>
-                            <input class="form-control" id="Contatos_${contatoIndex}__DDDCelular" name="Contatos[${contatoIndex}].DDDCelular" maxlength="3" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="Contatos_${contatoIndex}__NumeroCelular" class="form-label i-modal-color">Celular:</label>
-                            <input class="form-control" id="Contatos_${contatoIndex}__NumeroCelular" name="Contatos[${contatoIndex}].NumeroCelular" />
-                        </div>
-                    </div>
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label for="Contatos_${contatoIndex}__Email" class="form-label i-modal-color">E-mail:</label>
-                            <input class="form-control" id="Contatos_${contatoIndex}__Email" name="Contatos[${contatoIndex}].Email" />
+                    <div class="col-md-6">
+                        <label for="Telefones_${telefoneIndex}__NumeroTelefone" class="form-label i-modal-color">Tel Residencial:</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="DDD_${telefoneIndex}"></span>
+                            <input class="form-control" id="Telefones_${telefoneIndex}__NumeroTelefone" name="Telefones[${telefoneIndex}].NumeroTelefone" />
                         </div>
                     </div>
                 </div>`;
-        $('#contatos-list').append(contatoHtml);
-        contatoIndex++;
+        $('#telefones-list').append(telefoneHtml);
+        telefoneIndex++;
+    }
+
+    function addCelular() {
+        const celularHtml = `
+                <div class="row g-3 celular-item mb-3" id="celular-${celularIndex}">
+                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeCelular(${celularIndex})">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <div class="col-md-4">
+                        <label for="Celulares_${celularIndex}__IdRegiao" class="form-label i-modal-color">Região:</label>
+                        <select class="form-control" id="Celulares_${celularIndex}__IdRegiao" name="Celulares[${celularIndex}].IdRegiao" onchange="updateDDD(this)">
+                            <option value="">Selecione uma região</option>
+                            @foreach (var regiao in regioes)
+                            {
+                                <option value="@regiao.Id">@regiao.NomeRegiao</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Celulares_${celularIndex}__NumeroCelular" class="form-label i-modal-color">Celular:</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="DDD_${celularIndex}"></span>
+                            <input class="form-control" id="Celulares_${celularIndex}__NumeroCelular" name="Celulares[${celularIndex}].NumeroCelular" />
+                        </div>
+                    </div>
+                </div>`;
+        $('#celulares-list').append(celularHtml);
+        celularIndex++;
+    }
+
+    function addEmail() {
+        const emailHtml = `
+                <div class="row g-3 email-item mb-3" id="email-${emailIndex}">
+                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEmail(${emailIndex})">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <div class="col-md-6">
+                        <label for="Emails_${emailIndex}__EnderecoEmail" class="form-label i-modal-color">E-mail:</label>
+                        <input class="form-control" id="Emails_${emailIndex}__EnderecoEmail" name="Emails[${emailIndex}].EnderecoEmail" />
+                    </div>
+                </div>`;
+        $('#emails-list').append(emailHtml);
+        emailIndex++;
     }
 
     function addEndereco() {
         const enderecoHtml = `
                 <div class="row g-3 endereco-item mb-3" id="endereco-${enderecoIndex}">
-                    <div class="row g-3 mb-3">
-                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(${enderecoIndex})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                    </div>
+                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(${enderecoIndex})">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
                     <div class="col-md-2">
                         <label for="Enderecos_${enderecoIndex}__CEP" class="form-label i-modal-color">CEP:</label>
                         <input class="form-control" id="Enderecos_${enderecoIndex}__CEP" name="Enderecos[${enderecoIndex}].CEP" />
@@ -212,12 +271,27 @@
         enderecoIndex++;
     }
 
-    function removeContato(index) {
-        $(`#contato-${index}`).remove();
+    function removeTelefone(index) {
+        $(`#telefone-${index}`).remove();
+    }
+
+    function removeCelular(index) {
+        $(`#celular-${index}`).remove();
+    }
+
+    function removeEmail(index) {
+        $(`#email-${index}`).remove();
     }
 
     function removeEndereco(index) {
         $(`#endereco-${index}`).remove();
+    }
+
+    function updateDDD(element) {
+        const selectedRegion = $(element).val();
+        const dddText = $(element).find("option:selected").text().split("-")[0];
+        const id = $(element).attr('id').split('_')[1];
+        $(`#DDD_${id}`).text(dddText);
     }
 
     function LoadingCadastrarContato() {
@@ -278,7 +352,7 @@
         border-radius: .25rem;
     }
 
-    .contato-item, .endereco-item {
+    .telefone-item, .celular-item, .email-item, .endereco-item {
         border: 1px solid #dee2e6;
         padding: 10px;
         margin-bottom: 10px;

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PolarisContacts.Domain
 {
@@ -23,5 +19,8 @@ namespace PolarisContacts.Domain
         public string Senha { get; set; }
 
         public bool Ativo { get; set; }
+
+
+        public IEnumerable<Contato> Contatos { get; set; }
     }
 }

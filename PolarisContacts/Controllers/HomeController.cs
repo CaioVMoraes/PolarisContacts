@@ -1,38 +1,48 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Domain;
 using PolarisContacts.Models;
-using System.Diagnostics;
 
 namespace PolarisContacts.Controllers
 {
-    public class HomeController(ITelefoneService pessoaService) : Controller
+    public class HomeController(IContatoService contatoService, IRegiaoService regiaoService) : Controller
     {
-        private readonly ITelefoneService _pessoaService = pessoaService;
-        
+        private readonly IContatoService _contatoService = contatoService;
+        private readonly IRegiaoService _regiaoService = regiaoService;
+
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 15)
-        {
-            IEnumerable<Contato> pessoas = _pessoaService.GetPessoas();
-
-            var totalContatos = pessoas.Count();
-
-            var viewModel = new ContatoListViewModel
-            {
-                Pessoas = pessoas,
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalContatos = totalContatos
-            };
-
-            return View(viewModel);
-        }
-
-        [HttpGet]
-        public ActionResult ModalNovoContato()
         {
             try
             {
+                IEnumerable<Contato> contatos = await _contatoService.GetAllContatos();
+
+                var totalContatos = contatos.Count();
+
+                var viewModel = new ContatoListViewModel
+                {
+                    Contatos = contatos,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalContatos = totalContatos
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = true;
+                TempData["Message"] = ex.Message;
+                return View("../Shared/TelaErro");
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ModalNovoContato()
+        {
+            try
+            {
+                ViewBag.Regioes = await _regiaoService.GetAllRegioes();
+
                 return PartialView("_PartialNovoContato", new Contato());
             }
             catch (Exception ex)

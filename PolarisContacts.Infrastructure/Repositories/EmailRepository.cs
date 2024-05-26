@@ -1,22 +1,19 @@
 ﻿using Dapper;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
 {
-    public class EmailRepository(DbConnection dbConnection) : IEmailRepository
+    public class EmailRepository(IDatabaseConnection dbConnection) : IEmailRepository
     {
-        private readonly DbConnection _dbConnection = dbConnection;
+        private readonly IDatabaseConnection _dbConnection = dbConnection;
 
         public async Task<IEnumerable<Email>> GetEmailsByIdContato(int idContato)
         {
-            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+            using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = "SELECT * FROM Emails WHERE IdContato = @IdContato";
             return await conn.QueryAsync<Email>(query, new { IdContato = idContato });
@@ -24,38 +21,38 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<Email> GetEmailById(int id)
         {
-            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+            using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = "SELECT * FROM Emails WHERE Id = @Id";
             return await conn.QueryFirstOrDefaultAsync<Email>(query, new { Id = id });
         }
 
-        public async Task AddEmail(Email email)
+        public async Task<bool> AddEmail(Email email)
         {
-            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+            using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = @"INSERT INTO Emails (IdContato, EnderecoEmail, Ativo) 
                              VALUES (@IdContato, @EnderecoEmail, @Ativo)";
 
-            await conn.ExecuteAsync(query, email);
+            return await conn.ExecuteAsync(query, email) > 0;
         }
 
-        public async Task UpdateEmail(Email email)
+        public async Task<bool> UpdateEmail(Email email)
         {
-            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+            using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = @"UPDATE Emails SET 
                              IdContato = @IdContato, EnderecoEmail = @EnderecoEmail, Ativo = @Ativo 
                              WHERE Id = @Id";
-            await conn.ExecuteAsync(query, email);
+            return await conn.ExecuteAsync(query, email) > 0;
         }
 
-        public async Task DeleteEmail(int id)
+        public async Task<bool> DeleteEmail(int id)
         {
-            using IDbConnection conn = await _dbConnection.AbrirConexaoAsync();
+            using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = "DELETE FROM Emails WHERE Id = @Id";
-            await conn.ExecuteAsync(query, new { Id = id });
+            return await conn.ExecuteAsync(query, new { Id = id }) > 0;
         }
     }
 }

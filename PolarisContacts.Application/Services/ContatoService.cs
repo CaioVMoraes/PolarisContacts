@@ -13,19 +13,19 @@ namespace PolarisContacts.Application.Services
         private readonly IContatoRepository _contatoRepository = contatoRepository;
         private readonly IUsuarioService _usuarioService = usuarioService;
 
-        public async Task<IEnumerable<Contato>> GetAllContatosAsync()
+        public async Task<IEnumerable<Contato>> GetAllContatos()
         {
-            return await _contatoRepository.GetAllContatosAsync();
+            return await _contatoRepository.GetAllContatos();
         }
 
-        public async Task<Contato> GetContatoByIdAsync(int id)
+        public async Task<Contato> GetContatoById(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            var contato = await _contatoRepository.GetContatoByIdAsync(id);
+            var contato = await _contatoRepository.GetContatoById(id);
 
             if (contato == null)
             {
@@ -35,7 +35,7 @@ namespace PolarisContacts.Application.Services
             return contato;
         }
 
-        public async Task AddContatoAsync(Contato contato)
+        public async Task AddContato(Contato contato)
         {
             if (contato == null)
             {
@@ -43,22 +43,22 @@ namespace PolarisContacts.Application.Services
             }
 
             // Validar a entidade relacionada (Usuário)
-            if (contato.IdUsuario <= 0 || await _usuarioService.GetUsuarioByIdAsync(contato.IdUsuario) == null)
+            if (contato.IdUsuario <= 0 || await _usuarioService.GetUsuarioById(contato.IdUsuario) == null)
             {
                 throw new UsuarioNotFoundException();
             }
 
-            await _contatoRepository.AddContatoAsync(contato);
+            await _contatoRepository.AddContato(contato);
         }
 
-        public async Task UpdateContatoAsync(Contato contato)
+        public async Task UpdateContato(Contato contato)
         {
             if (contato == null || contato.Id <= 0)
             {
                 throw new ArgumentNullException(nameof(contato));
             }
 
-            var existingContato = await _contatoRepository.GetContatoByIdAsync(contato.Id);
+            var existingContato = await _contatoRepository.GetContatoById(contato.Id);
 
             if (existingContato == null)
             {
@@ -66,29 +66,29 @@ namespace PolarisContacts.Application.Services
             }
 
             // Validar a entidade relacionada (Usuário)
-            if (contato.IdUsuario <= 0 || await _usuarioService.GetUsuarioByIdAsync(contato.IdUsuario) == null)
+            if (contato.IdUsuario <= 0 || await _usuarioService.GetUsuarioById(contato.IdUsuario) == null)
             {
                 throw new UsuarioNotFoundException();
             }
 
-            await _contatoRepository.UpdateContatoAsync(contato);
+            await _contatoRepository.UpdateContato(contato);
         }
 
-        public async Task DeleteContatoAsync(int id)
+        public async Task DeleteContato(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            var existingContato = await _contatoRepository.GetContatoByIdAsync(id);
+            var existingContato = await _contatoRepository.GetContatoById(id);
 
             if (existingContato == null)
             {
                 throw new ContatoNotFoundException();
             }
 
-            await _contatoRepository.DeleteContatoAsync(id);
+            await _contatoRepository.DeleteContato(id);
         }
     }
 }

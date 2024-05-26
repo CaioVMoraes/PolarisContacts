@@ -1,18 +1,15 @@
 ﻿using PolarisContacts.Domain;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Application.Interfaces.Services
 {
     public interface ICelularService
     {
-        Task<IEnumerable<Celular>> GetCelularesByIdContatoAsync(int idContato);
-        Task<Celular> GetCelularByIdAsync(int id);
-        Task AddCelularAsync(Celular celular);
-        Task UpdateCelularAsync(Celular celular);
-        Task DeleteCelularAsync(int id);
+        Task<IEnumerable<Celular>> GetCelularesByIdContato(int idContato);
+        Task<Celular> GetCelularById(int id);
+        Task AddCelular(Celular celular);
+        Task UpdateCelular(Celular celular);
+        Task DeleteCelular(int id);
     }
 }
