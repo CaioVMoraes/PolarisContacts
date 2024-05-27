@@ -1,14 +1,14 @@
-﻿function ModalNovoContato() {
+﻿function ModalDadosContato() {
     $("#loaderHome").fadeIn()
 
     $.ajax({
         type: "GET",
-        url: "/Home/ModalNovoContato",
+        url: "/Home/ModalDadosContato",
         success: function (data) {
             $("#loaderHome").fadeOut()
 
             if (data) {
-                $("#ModalNovoContato").html(data);
+                $("#ModalDadosContato").html(data);
                 $("#modal-novo-contato").modal("show");
             }
         }

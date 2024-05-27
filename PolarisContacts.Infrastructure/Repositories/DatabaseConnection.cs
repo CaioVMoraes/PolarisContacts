@@ -10,14 +10,12 @@ namespace PolarisContacts.Infrastructure.Repositories
     {
         private readonly DbSettings _dbSettings = dbSettings.Value;
 
-
         public IDbConnection AbrirConexao()
         {
             SqlConnection connection = new SqlConnection(_dbSettings.ConnectionString);
             connection.Open();
             return connection;
         }
-
     }
 }
 

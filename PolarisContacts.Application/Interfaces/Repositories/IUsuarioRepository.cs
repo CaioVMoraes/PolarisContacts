@@ -1,15 +1,12 @@
 ﻿using PolarisContacts.Domain;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Application.Interfaces.Repositories
 {
     public interface IUsuarioRepository
     {
-        Task<IEnumerable<Usuario>> GetAllUsuarios();
-        Task<Usuario> GetUsuarioById(int id);
-        Task<bool> AddUsuario(Usuario usuario);
-        Task<bool> UpdateUsuario(Usuario usuario);
-        Task<bool> DeleteUsuario(int id);
+        Task<Usuario> GetUserByPasswordAsync(string login, string senha);
+        Task<bool> CreateUserAsync(string login, string senha);
+        Task<bool> ChangeUserPasswordAsync(string login, string oldPassword, string newPassword);
     }
 }

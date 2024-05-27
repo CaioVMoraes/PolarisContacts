@@ -7,7 +7,7 @@
 <h2>@ViewData["Title"]</h2>
 <div class="form-group">
     <div class="text-right">
-        <input type="button" class="btn btn-primary pull-right" value="NOVO CONTATO" onclick="ModalNovoContato()" />
+        <input type="button" class="btn btn-primary pull-right" value="NOVO CONTATO" onclick="ModalDadosContato()" />
     </div>
 </div>
 <br />
@@ -19,28 +19,17 @@
         <div class="accordion-item">
             <h2 class="accordion-header" id="heading-@contatoId">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@contatoId" aria-expanded="false" aria-controls="collapse-@contatoId">
-                    @contato.Nome)
+                    @contato.Nome
                 </button>
             </h2>
             <div id="collapse-@contatoId" class="accordion-collapse collapse" aria-labelledby="heading-@contatoId" data-bs-parent="#accordion">
                 <div class="accordion-body">
-                    <h3>Telefone:</h3>
+                    <h3>Telefones:</h3>
                     <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>Tel Residencial</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
                         <tbody>
                             @foreach (var telefone in contato.Telefones)
                             {
                                 <tr>
-                                    <td></td>
-                                    <td></td>
                                     <td>@telefone.NumeroTelefone</td>
                                     <td>
                                         <a href="@Url.Action("Edit", "Telefone", new { id = contato.Id })" class="btn btn-primary btn-sm">
@@ -59,23 +48,12 @@
                             }
                         </tbody>
                     </table>
-                    <h3>Celular:</h3>
+                    <h3>Celulares:</h3>
                     <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>Celular</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
                         <tbody>
                             @foreach (var celular in contato.Celulares)
                             {
                                 <tr>
-                                    <td></td>
-                                    <td></td>
                                     <td>@celular.NumeroCelular</td>
                                     <td>
                                         <a href="@Url.Action("Edit", "Telefone", new { id = contato.Id })" class="btn btn-primary btn-sm">
@@ -94,23 +72,12 @@
                             }
                         </tbody>
                     </table>
-                    <h3>E-mail:</h3>
+                    <h3>E-mails:</h3>
                     <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>E-mail</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
                         <tbody>
                             @foreach (var email in contato.Emails)
                             {
                                 <tr>
-                                    <td></td>
-                                    <td></td>
                                     <td>@email.EnderecoEmail</td>
                                     <td>
                                         <a href="@Url.Action("Edit", "Email", new { id = contato.Id })" class="btn btn-primary btn-sm">
@@ -129,27 +96,25 @@
                             }
                         </tbody>
                     </table>
-                    <h3>Endereço:</h3>
+                    <h3>Endereços:</h3>
                     <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>Logradouro</th>
-                                <th>Número</th>
-                                <th>Cidade</th>
-                                <th>Estado</th>
-                                <th>CEP</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
+                        @if (contato.Enderecos is not null && contato.Enderecos.Any())
+                        {
+                            <thead>
+                                <tr>
+                                    <th>Logradouro</th>
+                                    <th>Número</th>
+                                    <th>Cidade</th>
+                                    <th>Estado</th>
+                                    <th>CEP</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        }
                         <tbody>
                             @foreach (var endereco in contato.Enderecos)
                             {
                                 <tr>
-                                    <td></td>
-                                    <td></td>
                                     <td>@endereco.Logradouro</td>
                                     <td>@endereco.Numero</td>
                                     <td>@endereco.Cidade</td>
@@ -205,5 +170,5 @@
     </ul>
 </nav>
 
-<div id="ModalNovoContato">
+<div id="ModalDadosContato">
 </div>

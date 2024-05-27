@@ -13,7 +13,7 @@ namespace PolarisContacts.Domain
 
         [Display(Name = "Logradouro")]
         [Required(ErrorMessage = "O logradouro é obrigatório.")]
-        [StringLength(200, ErrorMessage = "O logradouro não pode exceder 200 caracteres.")]
+        [StringLength(100, ErrorMessage = "O logradouro não pode exceder 100 caracteres.")]
         public string Logradouro { get; set; }
 
         [Display(Name = "Número")]
@@ -22,20 +22,20 @@ namespace PolarisContacts.Domain
 
         [Display(Name = "Cidade")]
         [Required(ErrorMessage = "A cidade é obrigatória.")]
-        [StringLength(100, ErrorMessage = "A cidade não pode exceder 100 caracteres.")]
+        [StringLength(50, ErrorMessage = "A cidade não pode exceder 50 caracteres.")]
         public string Cidade { get; set; }
 
         [Display(Name = "Estado")]
         [Required(ErrorMessage = "O estado é obrigatório.")]
-        [StringLength(2, MinimumLength = 2, ErrorMessage = "O estado deve ter 2 caracteres.")]
+        [StringLength(50, ErrorMessage = "O estado deve ter 50 caracteres.")]
         public string Estado { get; set; }
 
         [Display(Name = "Bairro")]
-        [StringLength(100, ErrorMessage = "O bairro não pode exceder 100 caracteres.")]
+        [StringLength(50, ErrorMessage = "O bairro não pode exceder 50 caracteres.")]
         public string Bairro { get; set; }
 
         [Display(Name = "Complemento")]
-        [StringLength(200, ErrorMessage = "O complemento não pode exceder 200 caracteres.")]
+        [StringLength(50, ErrorMessage = "O complemento não pode exceder 50 caracteres.")]
         public string Complemento { get; set; }
 
         [Display(Name = "CEP")]

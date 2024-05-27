@@ -8,7 +8,7 @@ namespace PolarisContacts.Application.Interfaces.Services
     {
         Task<IEnumerable<Endereco>> GetEnderecosByIdContato(int idContato);
         Task<Endereco> GetEnderecoById(int id);
-        Task AddEndereco(Endereco endereco);
+        //Task AddEndereco(Endereco endereco);
         Task UpdateEndereco(Endereco endereco);
         Task DeleteEndereco(int id);
     }

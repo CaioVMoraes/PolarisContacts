@@ -1,8 +1,6 @@
 ﻿using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Domain;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
@@ -12,70 +10,55 @@ namespace PolarisContacts.Application.Services
     {
         private readonly IUsuarioRepository _usuarioRepository = usuarioRepository;
 
-        public async Task<IEnumerable<Usuario>> GetAllUsuarios()
+        public async Task<Usuario> GetUserByPasswordAsync(string login, string senha)
         {
-            return await _usuarioRepository.GetAllUsuarios();
+            if (string.IsNullOrEmpty(login))
+            {
+                throw new LoginVazioException();
+            }
+            if (string.IsNullOrEmpty(senha))
+            {
+                throw new SenhaVaziaException();
+            }
+
+            return await _usuarioRepository.GetUserByPasswordAsync(login, senha);
         }
 
-        public async Task<Usuario> GetUsuarioById(int id)
+        public async Task<bool> CreateUserAsync(string login, string senha)
         {
-            if (id <= 0)
+            if (string.IsNullOrEmpty(login))
             {
-                throw new InvalidIdException();
+                throw new LoginVazioException();
+            }
+            if (string.IsNullOrEmpty(senha))
+            {
+                throw new SenhaVaziaException();
             }
 
-            var usuario = await _usuarioRepository.GetUsuarioById(id);
-
-            if (usuario == null)
-            {
-                throw new UsuarioNotFoundException();
-            }
-
-            return usuario;
+            return await _usuarioRepository.CreateUserAsync(login, senha);
         }
 
-        public async Task AddUsuario(Usuario usuario)
+        public async Task<bool> ChangeUserPasswordAsync(string login, string oldPassword, string newPassword)
         {
-            if (usuario == null)
+            if (string.IsNullOrEmpty(login))
             {
-                throw new ArgumentNullException(nameof(usuario));
+                throw new LoginVazioException();
+            }
+            if (string.IsNullOrEmpty(oldPassword))
+            {
+                throw new SenhaIncorretaException();
+            }
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                throw new SenhaVaziaException();
             }
 
-            await _usuarioRepository.AddUsuario(usuario);
-        }
-
-        public async Task UpdateUsuario(Usuario usuario)
-        {
-            if (usuario == null || usuario.Id <= 0)
+            if (await _usuarioRepository.GetUserByPasswordAsync(login, oldPassword) is null)
             {
-                throw new ArgumentNullException(nameof(usuario));
+                throw new SenhaIncorretaException();
             }
 
-            var existingUsuario = await _usuarioRepository.GetUsuarioById(usuario.Id);
-
-            if (existingUsuario == null)
-            {
-                throw new UsuarioNotFoundException();
-            }
-
-            await _usuarioRepository.UpdateUsuario(usuario);
-        }
-
-        public async Task DeleteUsuario(int id)
-        {
-            if (id <= 0)
-            {
-                throw new InvalidIdException();
-            }
-
-            var existingUsuario = await _usuarioRepository.GetUsuarioById(id);
-
-            if (existingUsuario == null)
-            {
-                throw new UsuarioNotFoundException();
-            }
-
-            await _usuarioRepository.DeleteUsuario(id);
+            return await _usuarioRepository.ChangeUserPasswordAsync(login, oldPassword, newPassword);
         }
     }
 }

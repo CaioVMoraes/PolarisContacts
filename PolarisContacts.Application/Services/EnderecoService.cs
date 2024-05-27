@@ -39,15 +39,15 @@ namespace PolarisContacts.Application.Services
             return endereco;
         }
 
-        public async Task AddEndereco(Endereco endereco)
-        {
-            if (endereco == null)
-            {
-                throw new ArgumentNullException(nameof(endereco));
-            }
+        //public async Task AddEndereco(Endereco endereco)
+        //{
+        //    if (endereco == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(endereco));
+        //    }
 
-            await _enderecoRepository.AddEndereco(endereco);
-        }
+        //    await _enderecoRepository.AddEndereco(endereco);
+        //}
 
         public async Task UpdateEndereco(Endereco endereco)
         {

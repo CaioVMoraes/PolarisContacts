@@ -11,48 +11,12 @@ namespace PolarisContacts.Infrastructure.Repositories
     {
         private readonly IDatabaseConnection _dbConnection = dbConnection;
 
-        public async Task<IEnumerable<Regiao>> GetAllRegioes()
+        public async Task<IEnumerable<Regiao>> GetAll()
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "SELECT * FROM Regioes";
+            var query = "SELECT * FROM Regioes WHERE Ativo = 1";
             return await conn.QueryAsync<Regiao>(query);
-        }
-
-        public async Task<Regiao> GetRegiaoById(int id)
-        {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
-
-            string query = "SELECT * FROM Regioes WHERE Id = @Id";
-            return await conn.QueryFirstOrDefaultAsync<Regiao>(query, new { Id = id });
-        }
-
-        public async Task<bool> AddRegiao(Regiao regiao)
-        {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
-
-            string query = @"INSERT INTO Regioes (DDD, NomeRegiao, Ativo) 
-                            VALUES (@DDD, @NomeRegiao, @Ativo)";
-
-            return await conn.ExecuteAsync(query, regiao) > 0;
-        }
-
-        public async Task<bool> UpdateRegiao(Regiao regiao)
-        {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
-
-            string query = @"UPDATE Regioes SET 
-                            DDD = @DDD, NomeRegiao = @NomeRegiao, Ativo = @Ativo 
-                            WHERE Id = @Id";
-            return await conn.ExecuteAsync(query, regiao) > 0;
-        }
-
-        public async Task<bool> DeleteRegiao(int id)
-        {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
-
-            string query = "DELETE FROM Regioes WHERE Id = @Id";
-            return await conn.ExecuteAsync(query, new { Id = id }) > 0;
         }
     }
 }

@@ -27,14 +27,13 @@ namespace PolarisContacts.Infrastructure.Repositories
             return await conn.QueryFirstOrDefaultAsync<Telefone>(query, new { Id = id });
         }
 
-        public async Task<bool> AddTelefone(Telefone telefone)
+        public async Task<int> AddTelefone(Telefone telefone, IDbConnection connection, IDbTransaction transaction)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            string query = @"INSERT INTO Telefones (IdRegiao, IdContato, NumeroTelefone, Ativo) 
+                             OUTPUT INSERTED.Id
+                             VALUES (@IdRegiao, @IdContato, @NumeroTelefone, @Ativo)";
 
-            string query = @"INSERT INTO Telefones (IdRegiao, IdContato, Numero, Ativo) 
-                             VALUES (@IdRegiao, @IdContato, @Numero, @Ativo)";
-
-            return await conn.ExecuteAsync(query, telefone) > 0;
+            return await connection.QuerySingleAsync<int>(query, telefone, transaction);
         }
 
         public async Task<bool> UpdateTelefone(Telefone telefone)
@@ -42,7 +41,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = @"UPDATE Telefones SET 
-                             IdRegiao = @IdRegiao, IdContato = @IdContato, Numero = @Numero, Ativo = @Ativo 
+                             IdRegiao = @IdRegiao, IdContato = @IdContato, Numero = @NumeroTelefone, Ativo = @Ativo 
                              WHERE Id = @Id";
             return await conn.ExecuteAsync(query, telefone) > 0;
         }

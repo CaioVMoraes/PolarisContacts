@@ -12,13 +12,13 @@ namespace PolarisContacts.Infrastructure.Repositories
         private readonly IDatabaseConnection _dbConnection = dbConnection;
 
 
-        public async Task<IEnumerable<Contato>> GetAllContatos()
+        public async Task<IEnumerable<Contato>> GetAllContatosByIdUsuario(int idUsuario)
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "SELECT * FROM Contatos";
+            string query = "SELECT * FROM Contatos WHERE IdUsuario = @IdUsuario";
 
-            return await conn.QueryAsync<Contato>(query);
+            return await conn.QueryAsync<Contato>(query, new { IdUsuario = idUsuario });
         }
 
         public async Task<Contato> GetContatoById(int idContato)
@@ -30,14 +30,13 @@ namespace PolarisContacts.Infrastructure.Repositories
         }
 
 
-        public async Task<bool> AddContato(Contato contato)
+        public async Task<int> AddContato(Contato contato, IDbConnection connection, IDbTransaction transaction)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            string query = @"INSERT INTO Contatos (Nome, IdUsuario, Ativo)
+                             OUTPUT INSERTED.Id
+                             VALUES (@Nome, @IdUsuario, @Ativo)";
 
-            string query = @"INSERT INTO Contatos (Nome, Ativo) 
-                             VALUES (@Nome, @Ativo)";
-
-            return await conn.ExecuteAsync(query, contato) > 0;
+            return await connection.QuerySingleAsync<int>(query, contato, transaction);
         }
 
         public async Task<bool> UpdateContato(Contato contato)
@@ -50,12 +49,12 @@ namespace PolarisContacts.Infrastructure.Repositories
             return await conn.ExecuteAsync(query, contato) > 0;
         }
 
-        public async Task<bool> DeleteContato(int id)
+        public async Task<bool> DeleteContato(int idContato)
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = "DELETE FROM Contatos WHERE Id = @Id";
-            return await conn.ExecuteAsync(query, new { Id = id }) > 0;
+            return await conn.ExecuteAsync(query, new { Id = idContato }) > 0;
         }
     }
 }

@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Cadastro";
+}
+
+<style>
+    body, html {
+        height: 100%;
+        padding-bottom: 5%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-primary {
+        font-weight: bold;
+    }
+
+    .btn-back {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        color: #FFFF;
+        text-decoration: none;
+    }
+
+        .btn-back:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .btn-back i {
+            margin-right: 5px;
+            font-weight: bold;
+        }
+</style>
+
+<div class="container container-center">
+    <div class="row justify-content-center">
+        <div>
+            <a href="/Account/Login" class="btn-back">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h2 class="text-center">Cadastrar-se</h2>
+            @if (ViewBag.SuccessMessage != null)
+            {
+                <div class="alert alert-success d-flex align-items-center" role="alert">
+                    <i class="bi bi-check-circle"></i>
+                    <div>
+                        @ViewBag.SuccessMessage
+                    </div>
+                </div>
+            }
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-diamond"></i>
+                    &nbsp;
+                    <div>
+                        @ViewBag.ErrorMessage
+                    </div>
+                </div>
+            }
+            <form method="post" action="/Account/Register">
+                <div class="mb-3">
+                    <label for="login" class="form-label">Login</label>
+                    <input type="text" class="form-control" id="login" name="login" required>
+                </div>
+                <div class="mb-3">
+                    <label for="senha" class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="senha" name="senha" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirmSenha" class="form-label">Confirme a Senha</label>
+                    <input type="password" class="form-control" id="confirmSenha" name="confirmSenha" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+</div>

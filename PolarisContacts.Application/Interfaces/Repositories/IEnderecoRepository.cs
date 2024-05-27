@@ -1,5 +1,6 @@
 ﻿using PolarisContacts.Domain;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Application.Interfaces.Repositories
@@ -8,7 +9,7 @@ namespace PolarisContacts.Application.Interfaces.Repositories
     {
         Task<IEnumerable<Endereco>> GetEnderecosByIdContato(int idContato);
         Task<Endereco> GetEnderecoById(int id);
-        Task<bool> AddEndereco(Endereco endereco);
+        Task<int> AddEndereco(Endereco endereco, IDbConnection connection, IDbTransaction transaction);
         Task<bool> UpdateEndereco(Endereco endereco);
         Task<bool> DeleteEndereco(int id);
     }

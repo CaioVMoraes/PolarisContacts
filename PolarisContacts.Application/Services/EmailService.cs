@@ -40,21 +40,15 @@ namespace PolarisContacts.Application.Services
             return email;
         }
 
-        public async Task AddEmail(Email email)
-        {
-            if (email == null)
-            {
-                throw new ArgumentNullException(nameof(email));
-            }
+        //public async Task AddEmail(Email email)
+        //{
+        //    if (email == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(email));
+        //    }
 
-            // Validar entidades relacionadas
-            if (email.IdContato <= 0 || await _contatoService.GetContatoById(email.IdContato) == null)
-            {
-                throw new ContatoNotFoundException();
-            }
-
-            await _emailRepository.AddEmail(email);
-        }
+        //    await _emailRepository.AddEmail(email);
+        //}
 
         public async Task UpdateEmail(Email email)
         {
@@ -68,12 +62,6 @@ namespace PolarisContacts.Application.Services
             if (existingEmail == null)
             {
                 throw new EmailNotFoundException();
-            }
-
-            // Validar entidades relacionadas
-            if (email.IdContato <= 0 || await _contatoService.GetContatoById(email.IdContato) == null)
-            {
-                throw new ContatoNotFoundException();
             }
 
             await _emailRepository.UpdateEmail(email);

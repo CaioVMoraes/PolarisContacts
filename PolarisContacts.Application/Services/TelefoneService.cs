@@ -41,25 +41,15 @@ namespace PolarisContacts.Application.Services
             return telefone;
         }
 
-        public async Task AddTelefone(Telefone telefone)
-        {
-            if (telefone == null)
-            {
-                throw new ArgumentNullException(nameof(telefone));
-            }
+        //public async Task AddTelefone(Telefone telefone)
+        //{
+        //    if (telefone == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(telefone));
+        //    }
 
-            if (telefone.IdContato <= 0 || await _contatoService.GetContatoById(telefone.IdContato) == null)
-            {
-                throw new ContatoNotFoundException();
-            }
-
-            if (telefone.IdRegiao <= 0 || await _regiaoService.GetRegiaoById(telefone.IdRegiao) == null)
-            {
-                throw new RegiaoNotFoundException();
-            }
-
-            await _telefoneRepository.AddTelefone(telefone);
-        }
+        //    await _telefoneRepository.AddTelefone(telefone);
+        //}
 
         public async Task UpdateTelefone(Telefone telefone)
         {
@@ -73,16 +63,6 @@ namespace PolarisContacts.Application.Services
             if (existingTelefone == null)
             {
                 throw new TelefoneNotFoundException();
-            }
-
-            if (telefone.IdContato <= 0 || await _contatoService.GetContatoById(telefone.IdContato) == null)
-            {
-                throw new ContatoNotFoundException();
-            }
-
-            if (telefone.IdRegiao <= 0 || await _regiaoService.GetRegiaoById(telefone.IdRegiao) == null)
-            {
-                throw new RegiaoNotFoundException();
             }
 
             await _telefoneRepository.UpdateTelefone(telefone);

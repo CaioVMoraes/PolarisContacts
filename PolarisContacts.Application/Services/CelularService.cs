@@ -41,26 +41,16 @@ namespace PolarisContacts.Application.Services
             return celular;
         }
 
-        public async Task AddCelular(Celular celular)
-        {
-            if (celular == null)
-            {
-                throw new ArgumentNullException(nameof(celular));
-            }
+        //public async Task AddCelular(Celular celular)
+        //{
+        //    if (celular == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(celular));
+        //    }
 
-            // Validar entidades relacionadas
-            if (celular.IdContato <= 0 || await _contatoService.GetContatoById(celular.IdContato) == null)
-            {
-                throw new ContatoNotFoundException();
-            }
 
-            if (celular.IdRegiao <= 0 || await _regiaoService.GetRegiaoById(celular.IdRegiao) == null)
-            {
-                throw new RegiaoNotFoundException();
-            }
-
-            await _celularRepository.AddCelular(celular);
-        }
+        //    await _celularRepository.AddCelular(celular);
+        //}
 
         public async Task UpdateCelular(Celular celular)
         {
@@ -74,17 +64,6 @@ namespace PolarisContacts.Application.Services
             if (existingCelular == null)
             {
                 throw new CelularNotFoundException();
-            }
-
-            // Validar entidades relacionadas
-            if (celular.IdContato <= 0 || await _contatoService.GetContatoById(celular.IdContato) == null)
-            {
-                throw new ContatoNotFoundException();
-            }
-
-            if (celular.IdRegiao <= 0 || await _regiaoService.GetRegiaoById(celular.IdRegiao) == null)
-            {
-                throw new RegiaoNotFoundException();
             }
 
             await _celularRepository.UpdateCelular(celular);

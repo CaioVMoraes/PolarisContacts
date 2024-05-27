@@ -27,14 +27,13 @@ namespace PolarisContacts.Infrastructure.Repositories
             return await conn.QueryFirstOrDefaultAsync<Email>(query, new { Id = id });
         }
 
-        public async Task<bool> AddEmail(Email email)
+        public async Task<int> AddEmail(Email email, IDbConnection connection, IDbTransaction transaction)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
-
             string query = @"INSERT INTO Emails (IdContato, EnderecoEmail, Ativo) 
+                             OUTPUT INSERTED.Id
                              VALUES (@IdContato, @EnderecoEmail, @Ativo)";
 
-            return await conn.ExecuteAsync(query, email) > 0;
+            return await connection.QuerySingleAsync<int>(query, email, transaction);
         }
 
         public async Task<bool> UpdateEmail(Email email)

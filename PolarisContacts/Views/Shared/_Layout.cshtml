@@ -6,40 +6,50 @@
     <title>@ViewData["Title"] - Polaris</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/PolarisContacts.styles.css" asp-append-version="true" />   
+    <link rel="stylesheet" href="~/PolarisContacts.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-
 </head>
 <body>
     <div id="loaderHome" class="back-loader"><span class="loader"></span></div>
     <header>
-        <nav class="navbar navbar-expand-sm">
-            <div class="container-fluid">
-               <a class="navbar-brand navbar-text" asp-area="" asp-controller="Home" asp-action="Index">Polaris</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link white-text" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>                       
-                    </ul>
+        @if (!Context.Request.Path.Value.Contains("/Account"))
+        {
+            <nav class="navbar navbar-expand-sm">
+                <div class="container-fluid">
+                    <a class="navbar-brand navbar-text" asp-area="" asp-controller="Account" asp-action="MyAccount"><i class="bi bi-person-circle"></i></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link white-text" asp-area="" asp-controller="Home" asp-action="Index">Lista de Contatos</a>
+                            </li>
+                            <li class="nav-link white-text">
+                                <a>|</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link white-text" style="cursor:pointer" onclick="ModalDadosContato()">Novo Contato</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-
-            </div>
-        </nav>
+            </nav>
+        }
     </header>
+    <br />
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-    <footer class="footer">
+    @if (Context.Request.Path.Value.Contains("/Account"))
+    {
+        <footer class="footer">
             <span>&copy; 2024 - Polaris</span>
-    </footer>
+        </footer>
+    }
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

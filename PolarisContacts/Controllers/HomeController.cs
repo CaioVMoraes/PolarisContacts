@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Domain;
 using PolarisContacts.Models;
+using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
 namespace PolarisContacts.Controllers
 {
@@ -14,7 +15,9 @@ namespace PolarisContacts.Controllers
         {
             try
             {
-                IEnumerable<Contato> contatos = await _contatoService.GetAllContatos();
+                int idUsuario = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+
+                IEnumerable<Contato> contatos = await _contatoService.GetAllContatosByIdUsuario(idUsuario);
 
                 var totalContatos = contatos.Count();
 
@@ -37,13 +40,27 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> ModalNovoContato()
+        public async Task<ActionResult> ModalDadosContato(int idContato = 0)
         {
             try
             {
-                ViewBag.Regioes = await _regiaoService.GetAllRegioes();
+                Contato contato;
+                if (idContato == 0)
+                {
+                    contato = new Contato();
+                }
+                else
+                {
+                    contato = await _contatoService.GetContatoByIdAsync(idContato);
+                    if (contato == null)
+                    {
+                        throw new ContatoNotFoundException();
+                    }
+                }
 
-                return PartialView("_PartialNovoContato", new Contato());
+                ViewBag.Regioes = await _regiaoService.GetAll();
+
+                return PartialView("_PartialDadosContato", contato);
             }
             catch (Exception ex)
             {
@@ -51,6 +68,39 @@ namespace PolarisContacts.Controllers
                 TempData["Message"] = ex.Message;
                 return View("../Shared/TelaErro");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertContato(Contato contato)
+        {
+            try
+            {
+                contato.IdUsuario = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+
+                if (ModelState.IsValid)
+                {
+                    await _contatoService.AddContato(contato);
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = true;
+                TempData["Message"] = ex.Message;
+                return View("../Shared/TelaErro");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateContato(Contato contato)
+        {
+            if (ModelState.IsValid)
+            {
+                await _contatoService.UpdateContato(contato);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
