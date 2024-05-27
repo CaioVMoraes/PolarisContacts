@@ -42,32 +42,23 @@ namespace PolarisContacts.Controllers
         [HttpGet]
         public async Task<ActionResult> ModalDadosContato(int idContato = 0)
         {
-            try
+            Contato contato;
+            if (idContato == 0)
             {
-                Contato contato;
-                if (idContato == 0)
-                {
-                    contato = new Contato();
-                }
-                else
-                {
-                    contato = await _contatoService.GetContatoByIdAsync(idContato);
-                    if (contato == null)
-                    {
-                        throw new ContatoNotFoundException();
-                    }
-                }
-
-                ViewBag.Regioes = await _regiaoService.GetAll();
-
-                return PartialView("_PartialDadosContato", contato);
+                contato = new Contato();
             }
-            catch (Exception ex)
+            else
             {
-                TempData["ErrorMessage"] = true;
-                TempData["Message"] = ex.Message;
-                return View("../Shared/TelaErro");
+                contato = await _contatoService.GetContatoByIdAsync(idContato);
+                if (contato == null)
+                {
+                    throw new ContatoNotFoundException();
+                }
             }
+
+            ViewBag.Regioes = await _regiaoService.GetAll();
+
+            return PartialView("_PartialDadosContato", contato);
         }
 
         [HttpPost]

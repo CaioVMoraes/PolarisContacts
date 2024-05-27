@@ -1,0 +1,46 @@
+﻿@model PolarisContacts.Domain.Telefone
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-telefone" aria-hidden="true" id="modal-edit-telefone">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-telefone">Editar Telefone</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("UpdateTelefone", "Telefone", FormMethod.Post, new { id = "TelefoneForm" }))
+                {
+                    @Html.HiddenFor(e => e.Id)
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="IdRegiao" class="form-label">Região:</label>
+                            @Html.DropDownListFor(e => e.IdRegiao, new SelectList(ViewBag.Regioes, "Id", "NomeRegiao"), "Selecione uma região", new { @class = "form-control", id = "IdRegiao", onchange = "updateDDD(this, 'DDD_Telefone')" })
+                        </div>
+                        <div class="col-md-6">
+                            <label for="NumeroTelefone" class="form-label">Telefone:</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="DDD_Telefone">(@Model.Regiao?.DDD)</span>
+                                @Html.TextBoxFor(e => e.NumeroTelefone, new { @class = "form-control telefone-mask", id = "NumeroTelefone" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.telefone-mask').mask('(00) 0000-0000');
+    });
+
+    function updateDDD(element, dddElementId) {
+        const selectedOption = $(element).find('option:selected');
+        const ddd = selectedOption.data('ddd');
+        $(`#${dddElementId}`).text(`(${ddd})`);
+    }
+</script>

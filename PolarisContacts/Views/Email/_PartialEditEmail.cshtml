@@ -1,0 +1,27 @@
+﻿@model PolarisContacts.Domain.Email
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-email" aria-hidden="true" id="modal-edit-email">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-email">Editar Email</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("UpdateEmail", "Email", FormMethod.Post, new { id = "EmailForm" }))
+                {
+                    @Html.HiddenFor(e => e.Id)
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label for="EnderecoEmail" class="form-label">E-mail:</label>
+                            @Html.TextBoxFor(e => e.EnderecoEmail, new { @class = "form-control", id = "EnderecoEmail" })
+                        </div>
+                    </div>
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
