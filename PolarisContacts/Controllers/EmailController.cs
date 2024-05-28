@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PolarisContacts.Application.Interfaces.Services;
+using PolarisContacts.Application.Services;
 using PolarisContacts.Domain;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
@@ -27,16 +28,23 @@ namespace PolarisContacts.Controllers
             if (ModelState.IsValid)
             {
                 await _emailService.UpdateEmail(email);
-                return Ok();
+                return Json(new { success = true, message = "Alterado com sucesso!" });
             }
-            return BadRequest(ModelState);
+            return Json(new { success = false, message = "Erro ao atualizar o email." });
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteEmail(int idEmail)
+        public async Task<IActionResult> DeleteEmail(int id)
         {
-            await _emailService.DeleteEmail(idEmail);
-            return Ok();
+            try
+            {
+                await _emailService.DeleteEmail(id);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
     }
 }

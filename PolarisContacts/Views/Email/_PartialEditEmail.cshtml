@@ -1,27 +1,79 @@
 ﻿@model PolarisContacts.Domain.Email
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-email" aria-hidden="true" id="modal-edit-email">
-    <div class="modal-dialog modal-lg" role="document">
+<!-- Modal de Edição de Email -->
+<div class="modal fade" id="modal-edit-email" tabindex="-1" aria-labelledby="modalEditEmailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modal-email">Editar Email</h4>
+                <h5 class="modal-title custom-modal-title" id="modalEditEmailLabel">Editar Email</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                @using (Html.BeginForm("UpdateEmail", "Email", FormMethod.Post, new { id = "EmailForm" }))
-                {
-                    @Html.HiddenFor(e => e.Id)
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <label for="EnderecoEmail" class="form-label">E-mail:</label>
-                            @Html.TextBoxFor(e => e.EnderecoEmail, new { @class = "form-control", id = "EnderecoEmail" })
+            <div class="modal-body custom-modal-body">
+                <p id="confirmUpdateMessage">Tem certeza que deseja alterar este email?</p>
+                <p id="updateSuccessMessage" style="display:none;">Alterado com sucesso!</p>
+                <div id="emailFormContainer">
+                    @using (Html.BeginForm("UpdateEmail", "Email", FormMethod.Post, new { id = "EmailForm" }))
+                    {
+                        @Html.HiddenFor(e => e.Id)
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="EnderecoEmail" class="form-label">E-mail:</label>
+                                @Html.TextBoxFor(e => e.EnderecoEmail, new { @class = "form-control", id = "EnderecoEmail" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="text-end mt-3">
-                        <button type="submit" class="btn btn-success">Salvar</button>
-                    </div>
-                }
+                        <div class="text-end mt-3">
+                            <button type="submit" class="btn btn-success">Salvar</button>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).on('submit', '#EmailForm', function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.success) {
+                    $('#confirmUpdateMessage').hide();
+                    $('#emailFormContainer').hide();
+                    $('#updateSuccessMessage').text(response.message).show();
+                    $('#confirmDeleteButton').prop('disabled', true);
+                    $('#cancelButton').prop('disabled', true);
+                    setTimeout(() => {
+                        var myModal = bootstrap.Modal.getInstance(document.getElementById('modal-edit-email'));
+                        myModal.hide();
+                        location.reload(); // Recarrega a página para atualizar a lista
+                    }, 2000);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Erro ao atualizar o email. Tente novamente.');
+            }
+        });
+    });
+
+    function ModalEditEmail(idEmail) {
+        $.ajax({
+            type: "GET",
+            url: "/Email/ModalEditEmail",
+            data: { idEmail: idEmail },
+            success: function (data) {
+                $("#modal-edit-email .modal-content").html(data);
+                var myModal = new bootstrap.Modal(document.getElementById('modal-edit-email'));
+                myModal.show();
+            },
+            error: function () {
+                alert('Erro ao carregar os dados do email. Tente novamente.');
+            }
+        });
+    }
+</script>

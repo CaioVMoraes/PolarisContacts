@@ -30,16 +30,24 @@ namespace PolarisContacts.Controllers
             if (ModelState.IsValid)
             {
                 await _celularService.UpdateCelular(celular);
-                return Ok();
+                return Json(new { success = true, message = "Alterado com sucesso!" });
             }
-            return BadRequest(ModelState);
+            return Json(new { success = false, message = "Erro ao atualizar o celular." });
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> DeleteCelular(int idCelular)
+        public async Task<IActionResult> DeleteCelular(int id)
         {
-            await _celularService.DeleteCelular(idCelular);
-            return Ok();
+            try
+            {
+                await _celularService.DeleteCelular(id);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
     }
 }

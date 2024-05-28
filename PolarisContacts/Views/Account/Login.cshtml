@@ -53,7 +53,8 @@
 <div class="container container-center">
     <div class="row justify-content-center">
         <div>
-            <h2 class="text-center">Login</h2>
+            <div class="modal-titulo"> <h2 class="text-center">Login</h2></div>
+           
             @if (ViewBag.SuccessMessage != null)
             {
                 <div class="alert alert-success d-flex align-items-center" role="alert">
@@ -74,11 +75,11 @@
             }
             <form method="post" action="/Account/Login">
                 <div class="mb-3">
-                    <label for="login" class="form-label">Login</label>
+                    <label for="login" class="form-label text-light">Usuário</label>
                     <input type="text" class="form-control" id="login" name="login" required>
                 </div>
                 <div class="mb-3">
-                    <label for="senha" class="form-label">Senha</label>
+                    <label for="senha" class="form-label text-light">Senha</label>
                     <input type="password" class="form-control" id="senha" name="senha" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Login</button>

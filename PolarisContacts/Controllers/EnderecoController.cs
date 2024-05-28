@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PolarisContacts.Application.Interfaces.Services;
+using PolarisContacts.Application.Services;
 using PolarisContacts.Domain;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
@@ -26,17 +27,25 @@ namespace PolarisContacts.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _enderecoService.UpdateEndereco(endereco);
-                return Ok();
+                await _enderecoService.UpdateEndereco(endereco);                
+                return Json(new { success = true, message = "Alterado com sucesso!" });  
+                
             }
-            return BadRequest(ModelState);
+            return Json(new { success = false, message = "Dados inválidos. Verifique as informações e tente novamente." });         
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteEndereco(int idEndereco)
+        public async Task<IActionResult> DeleteEndereco(int id)
         {
-            await _enderecoService.DeleteEndereco(idEndereco);
-            return Ok();
+            try
+            {
+                await _enderecoService.DeleteEndereco(id);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
     }
 }

@@ -47,8 +47,8 @@ namespace PolarisContacts.Infrastructure.Repositories
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = @"UPDATE Enderecos SET 
-                                IdContato = @IdContato, Logradouro = @Logradouro, Numero = @Numero, Cidade = @Cidade, Estado = @Estado, 
-                                Bairro = @Bairro, Complemento = @Complemento, CEP = @CEP, Ativo = @Ativo 
+                                Logradouro = @Logradouro, Numero = @Numero, Cidade = @Cidade, Estado = @Estado, 
+                                Bairro = @Bairro, Complemento = @Complemento, CEP = @CEP 
                                 WHERE Id = @Id";
 
             return await conn.ExecuteAsync(query, endereco) > 0;
@@ -59,7 +59,9 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "DELETE FROM Enderecos WHERE Id = @Id";
+            string query = @"UPDATE Enderecos SET 
+                             Ativo = 0
+                             WHERE Id = @Id";
 
             return await conn.ExecuteAsync(query, new { Id = id }) > 0;
 

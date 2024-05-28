@@ -53,7 +53,9 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "DELETE FROM Contatos WHERE Id = @Id";
+            string query = @"UPDATE Contatos SET 
+                             Ativo = 0
+                             WHERE Id = @Id";
             return await conn.ExecuteAsync(query, new { Id = idContato }) > 0;
         }
     }

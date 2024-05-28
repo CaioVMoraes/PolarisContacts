@@ -4,6 +4,7 @@ using PolarisContacts.Domain;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PolarisContacts.Infrastructure.Repositories
 {
@@ -15,7 +16,7 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "SELECT * FROM Celulares WHERE IdContato = @IdContato";
+            string query = "SELECT * FROM Celulares WHERE IdContato = @IdContato AND Ativo = 1";
             return await conn.QueryAsync<Celular>(query, new { IdContato = idContato });
         }
 
@@ -23,7 +24,7 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "SELECT * FROM Celulares WHERE Id = @Id";
+            string query = "SELECT * FROM Celulares WHERE Id = @Id AND Ativo = 1";
             return await conn.QueryFirstOrDefaultAsync<Celular>(query, new { Id = id });
         }
 
@@ -41,7 +42,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = @"UPDATE Celulares SET 
-                             IdRegiao = @IdRegiao, IdContato = @IdContato, Numero = @NumeroCelular, Ativo = @Ativo 
+                             IdRegiao = @IdRegiao, Numero = @NumeroCelular, Ativo = @Ativo 
                              WHERE Id = @Id";
             return await conn.ExecuteAsync(query, celular) > 0;
         }
@@ -50,7 +51,9 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "DELETE FROM Celulares WHERE Id = @Id";
+            string query = @"UPDATE Celulares SET 
+                             Ativo = 0
+                             WHERE Id = @Id";
             return await conn.ExecuteAsync(query, new { Id = id }) > 0;
         }
     }

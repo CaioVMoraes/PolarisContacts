@@ -26,7 +26,6 @@ html {
 
 body {
     background-color: #1a0e3a;
-    color: #d6d1e3;
 }
 
 /* Estilos para o cabeçalho */
@@ -124,9 +123,27 @@ footer {
 }
 
 .modal-dialog {
-    max-width: 1000px !important
+    max-width: 500px !important
 }
 
 .pull-right {
     float: right !important;
+}
+
+.modal-titulo {
+    color: white;
+}
+
+/* Customizando a cor do título */
+.custom-modal-title {
+    color: #333; /* Cor escura para o título */
+}
+
+/* Customizando a cor do texto */
+.custom-modal-body {
+    color: #555; /* Cor escura para o texto */
+}
+
+.text-light {
+    color: #f8f9fa; /* Você pode ajustar essa cor para o tom claro que preferir */
 }

@@ -50,7 +50,9 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "DELETE FROM Telefones WHERE Id = @Id";
+            string query = @"UPDATE Telefones SET 
+                             Ativo = 0
+                             WHERE Id = @Id";
             return await conn.ExecuteAsync(query, new { Id = id }) > 0;
         }
     }

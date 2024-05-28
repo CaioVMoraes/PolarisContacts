@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PolarisContacts.Application.Interfaces.Services;
+using PolarisContacts.Application.Services;
 using PolarisContacts.Domain;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
@@ -36,10 +37,17 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteTelefone(int idTelefone)
+        public async Task<IActionResult> DeleteTelefone(int id)
         {
-            await _telefoneService.DeleteTelefone(idTelefone);
-            return Ok();
+            try
+            {
+                await _telefoneService.DeleteTelefone(id);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
     }
 }
