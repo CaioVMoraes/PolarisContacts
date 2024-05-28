@@ -42,7 +42,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
             string query = @"UPDATE Celulares SET 
-                             IdRegiao = @IdRegiao, Numero = @NumeroCelular, Ativo = @Ativo 
+                             IdRegiao = @IdRegiao, NumeroCelular = @NumeroCelular
                              WHERE Id = @Id";
             return await conn.ExecuteAsync(query, celular) > 0;
         }

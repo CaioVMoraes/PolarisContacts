@@ -57,13 +57,6 @@ namespace PolarisContacts.Application.Services
                 throw new ArgumentNullException(nameof(email));
             }
 
-            var existingEmail = await _emailRepository.GetEmailById(email.Id);
-
-            if (existingEmail == null)
-            {
-                throw new EmailNotFoundException();
-            }
-
             await _emailRepository.UpdateEmail(email);
         }
 
@@ -72,13 +65,6 @@ namespace PolarisContacts.Application.Services
             if (id <= 0)
             {
                 throw new InvalidIdException();
-            }
-
-            var existingEmail = await _emailRepository.GetEmailById(id);
-
-            if (existingEmail == null)
-            {
-                throw new EmailNotFoundException();
             }
 
             await _emailRepository.DeleteEmail(id);

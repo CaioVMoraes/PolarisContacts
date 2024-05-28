@@ -19,6 +19,8 @@ namespace PolarisContacts.Controllers
                 throw new CelularNotFoundException();
             }
 
+            celular.Regiao = await _regiaoService.GetById(celular.IdRegiao);
+
             ViewBag.Regioes = await _regiaoService.GetAll();
 
             return PartialView("_PartialEditCelular", celular);

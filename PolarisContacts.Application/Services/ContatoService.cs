@@ -16,7 +16,8 @@ namespace PolarisContacts.Application.Services
                                 ITelefoneRepository telefoneRepository,
                                 ICelularRepository celularRepository,
                                 IEmailRepository emailRepository,
-                                IEnderecoRepository enderecoRepository) : IContatoService
+                                IEnderecoRepository enderecoRepository,
+                                IRegiaoService regiaoService) : IContatoService
     {
         private readonly IDatabaseConnection _dbConnection = dbConnection;
         private readonly IContatoRepository _contatoRepository = contatoRepository;
@@ -24,6 +25,7 @@ namespace PolarisContacts.Application.Services
         private readonly ICelularRepository _celularRepository = celularRepository;
         private readonly IEmailRepository _emailRepository = emailRepository;
         private readonly IEnderecoRepository _enderecoRepository = enderecoRepository;
+        private readonly IRegiaoService _regiaoService = regiaoService;
 
         public async Task<IEnumerable<Contato>> GetAllContatosByIdUsuario(int idUsuario)
         {
@@ -33,8 +35,19 @@ namespace PolarisContacts.Application.Services
                 foreach (var contato in contatos)
                 {
                     contato.Telefones = await _telefoneRepository.GetTelefonesByIdContato(contato.Id);
+                    foreach (var telefone in contato.Telefones)
+                    {
+                        telefone.Regiao = await _regiaoService.GetById(telefone.IdRegiao);
+                    }
+
                     contato.Celulares = await _celularRepository.GetCelularesByIdContato(contato.Id);
+                    foreach (var celular in contato.Celulares)
+                    {
+                        celular.Regiao = await _regiaoService.GetById(celular.IdRegiao);
+                    }
+
                     contato.Emails = await _emailRepository.GetEmailsByIdContato(contato.Id);
+                    
                     contato.Enderecos = await _enderecoRepository.GetEnderecosByIdContato(contato.Id);
                 }
             }
@@ -161,13 +174,6 @@ namespace PolarisContacts.Application.Services
             if (id <= 0)
             {
                 throw new InvalidIdException();
-            }
-
-            var existingContato = await _contatoRepository.GetContatoById(id);
-
-            if (existingContato == null)
-            {
-                throw new ContatoNotFoundException();
             }
 
             return await _contatoRepository.DeleteContato(id);

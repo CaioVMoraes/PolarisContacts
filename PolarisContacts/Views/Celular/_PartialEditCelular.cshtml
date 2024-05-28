@@ -1,8 +1,8 @@
-﻿@model PolarisContacts.Domain.Celular
+﻿@using PolarisContacts.Domain
+@model PolarisContacts.Domain.Celular
 
-<!-- Modal de Edição de Celular -->
-<div class="modal fade" id="modal-edit-celular" tabindex="-1" aria-labelledby="modalEditCelularLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalEditCelularLabel" aria-hidden="true" id="modal-edit-celular">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title custom-modal-title" id="modalEditCelularLabel">Editar Celular</h5>
@@ -17,8 +17,19 @@
                         @Html.HiddenFor(e => e.Id)
                         <div class="row g-3">
                             <div class="col-md-6">
+                                @Html.HiddenFor(e => e.IdRegiao, new { id = "HiddenIdRegiao" })
                                 <label for="IdRegiao" class="form-label">Região:</label>
-                                @Html.DropDownListFor(e => e.IdRegiao, new SelectList(ViewBag.Regioes, "Id", "NomeRegiao"), "Selecione uma região", new { @class = "form-control", id = "IdRegiao", onchange = "updateDDD(this, 'DDD_Celular')" })
+                                <select class="form-control" id="IdRegiao" onchange="updateDDD(this, 'DDD_Celular')">
+                                    <option value="">Selecione uma região</option>
+                                    @{
+                                        IEnumerable<Regiao> regioes = ViewBag.Regioes;
+
+                                        foreach (var regiao in regioes)
+                                        {
+                                            <option value="@regiao.Id" data-ddd="@regiao.DDD">@regiao.NomeRegiao</option>
+                                        }
+                                    }
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="NumeroCelular" class="form-label">Celular:</label>
@@ -40,12 +51,14 @@
 
 <script>
     $(document).ready(function () {
-        $('.celular-mask').mask('(00) 00000-0000');
+        $('.celular-mask').mask('00000-0000');
     });
 
     function updateDDD(element, dddElementId) {
         const selectedOption = $(element).find('option:selected');
         const ddd = selectedOption.data('ddd');
+
+        $('#HiddenIdRegiao').val(selectedOption.val());
         $(`#${dddElementId}`).text(`(${ddd})`);
     }
 
@@ -64,8 +77,6 @@
                     $('#confirmDeleteButton').prop('disabled', true);
                     $('#cancelButton').prop('disabled', true);
                     setTimeout(() => {
-                        var myModal = bootstrap.Modal.getInstance(document.getElementById('modal-edit-celular'));
-                        myModal.hide();
                         location.reload(); // Recarrega a página para atualizar a lista
                     }, 2000);
                 } else {

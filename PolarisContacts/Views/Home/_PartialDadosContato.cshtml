@@ -1,7 +1,5 @@
 ﻿@model PolarisContacts.Domain.Contato
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-
 @{
     var regioes = ViewBag.Regioes as IEnumerable<PolarisContacts.Domain.Regiao>;
 }
@@ -99,13 +97,13 @@
                             @foreach (var email in Model.Emails ?? Enumerable.Empty<PolarisContacts.Domain.Email>())
                             {
                                 <div class="row g-3 email-item mb-3" id="email-@(email.Id)">
+                                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEmail(@email.Id)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
                                     <div class="col-md-6">
                                         <label for="Emails_@(email.Id)__EnderecoEmail" class="form-label i-modal-color">E-mail:</label>
                                         @Html.TextBox($"Emails[{email.Id}].EnderecoEmail", email.EnderecoEmail, new { @class = "form-control", id = $"Emails_{email.Id}__EnderecoEmail" })
                                     </div>
-                                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEmail(@email.Id)">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
                                 </div>
                             }
                         </div>
@@ -121,6 +119,9 @@
                         <div id="enderecos-list">
                             @foreach (var endereco in Model.Enderecos ?? Enumerable.Empty<PolarisContacts.Domain.Endereco>())
                             {
+                                <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(@endereco.Id)">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
                                 <div class="row g-3 endereco-item mb-3" id="endereco-@(endereco.Id)">
                                     <div class="col-md-2">
                                         <label for="Enderecos_@(endereco.Id)__CEP" class="form-label i-modal-color">CEP:</label>
@@ -151,9 +152,6 @@
                                         @Html.TextBox($"Enderecos[{endereco.Id}].Estado", endereco.Estado, new { @class = "form-control", id = $"Enderecos_{endereco.Id}__Estado" })
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(@endereco.Id)">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
                             }
                         </div>
                     </section>
@@ -194,6 +192,9 @@
     function addTelefone() {
         const telefoneHtml = `
                     <div class="row g-3 telefone-item mb-3" id="telefone-${telefoneIndex}">
+                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeTelefone(${telefoneIndex})">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
                         <div class="col-md-4">
                             <label for="Telefones_${telefoneIndex}__IdRegiao" class="form-label i-modal-color">Região:</label>
                             <select class="form-control" id="Telefones_${telefoneIndex}__IdRegiao" name="Telefones[${telefoneIndex}].IdRegiao" onchange="updateDDDTelefone(this)">
@@ -211,9 +212,6 @@
                                 <input class="form-control telefone-mask" id="Telefones_${telefoneIndex}__NumeroTelefone" name="Telefones[${telefoneIndex}].NumeroTelefone" />
                             </div>
                         </div>
-                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeTelefone(${telefoneIndex})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
                     </div>`;
         $('#telefones-list').append(telefoneHtml);
         $('.telefone-mask').mask('0000-0000');
@@ -223,6 +221,9 @@
     function addCelular() {
         const celularHtml = `
                     <div class="row g-3 celular-item mb-3" id="celular-${celularIndex}">
+                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeCelular(${celularIndex})">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
                         <div class="col-md-4">
                             <label for="Celulares_${celularIndex}__IdRegiao" class="form-label i-modal-color">Região:</label>
                             <select class="form-control" id="Celulares_${celularIndex}__IdRegiao" name="Celulares[${celularIndex}].IdRegiao" onchange="updateDDDCelular(this)">
@@ -240,9 +241,6 @@
                                 <input class="form-control celular-mask" id="Celulares_${celularIndex}__NumeroCelular" name="Celulares[${celularIndex}].NumeroCelular" />
                             </div>
                         </div>
-                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeCelular(${celularIndex})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
                     </div>`;
         $('#celulars-list').append(celularHtml);
         $('.celular-mask').mask('00000-0000');
@@ -252,13 +250,13 @@
     function addEmail() {
         const emailHtml = `
                     <div class="row g-3 email-item mb-3" id="email-${emailIndex}">
+                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEmail(${emailIndex})">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
                         <div class="col-md-6">
                             <label for="Emails_${emailIndex}__EnderecoEmail" class="form-label i-modal-color">E-mail:</label>
                             <input class="form-control" id="Emails_${emailIndex}__EnderecoEmail" name="Emails[${emailIndex}].EnderecoEmail" />
                         </div>
-                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEmail(${emailIndex})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
                     </div>`;
         $('#emails-list').append(emailHtml);
         emailIndex++;
@@ -267,6 +265,9 @@
     function addEndereco() {
         const enderecoHtml = `
                     <div class="row g-3 endereco-item mb-3" id="endereco-${enderecoIndex}">
+                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(${enderecoIndex})">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
                         <div class="col-md-2">
                             <label for="Enderecos_${enderecoIndex}__CEP" class="form-label i-modal-color">CEP:</label>
                             <input class="form-control cep-mask" id="Enderecos_${enderecoIndex}__CEP" name="Enderecos[${enderecoIndex}].CEP" />
@@ -295,9 +296,6 @@
                             <label for="Enderecos_${enderecoIndex}__Estado" class="form-label i-modal-color">Estado:</label>
                             <input class="form-control" id="Enderecos_${enderecoIndex}__Estado" name="Enderecos[${enderecoIndex}].Estado" />
                         </div>
-                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(${enderecoIndex})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
                     </div>`;
         $('#enderecos-list').append(enderecoHtml);
         $('.cep-mask').mask('00000-000');

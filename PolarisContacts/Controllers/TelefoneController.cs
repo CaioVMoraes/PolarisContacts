@@ -15,10 +15,12 @@ namespace PolarisContacts.Controllers
         public async Task<ActionResult> ModalEditTelefone(int idTelefone = 0)
         {
             Telefone telefone = await _telefoneService.GetTelefoneById(idTelefone);
-            if (telefone == null)
+            if (telefone is null)
             {
                 throw new TelefoneNotFoundException();
             }
+
+            telefone.Regiao = await _regiaoService.GetById(telefone.IdRegiao);
 
             ViewBag.Regioes = await _regiaoService.GetAll();
 
@@ -31,9 +33,9 @@ namespace PolarisContacts.Controllers
             if (ModelState.IsValid)
             {
                 await _telefoneService.UpdateTelefone(telefone);
-                return Ok();
+                return Json(new { success = true, message = "Alterado com sucesso!" });
             }
-            return BadRequest(ModelState);
+            return Json(new { success = false, message = "Erro ao atualizar o telefone." });
         }
 
         [HttpPost]

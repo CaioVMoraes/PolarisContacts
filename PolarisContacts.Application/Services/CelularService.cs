@@ -59,13 +59,6 @@ namespace PolarisContacts.Application.Services
                 throw new ArgumentNullException(nameof(celular));
             }
 
-            var existingCelular = await _celularRepository.GetCelularById(celular.Id);
-
-            if (existingCelular == null)
-            {
-                throw new CelularNotFoundException();
-            }
-
             await _celularRepository.UpdateCelular(celular);
         }
 

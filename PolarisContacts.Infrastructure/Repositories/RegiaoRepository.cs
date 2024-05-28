@@ -18,5 +18,13 @@ namespace PolarisContacts.Infrastructure.Repositories
             var query = "SELECT * FROM Regioes WHERE Ativo = 1";
             return await conn.QueryAsync<Regiao>(query);
         }
+
+        public async Task<Regiao> GetById(int idRegiao)
+        {
+            using IDbConnection conn = _dbConnection.AbrirConexao();
+
+            var query = "SELECT * FROM Regioes WHERE Ativo = 1 AND Id = @IdRegiao";
+            return await conn.QueryFirstOrDefaultAsync<Regiao>(query, new { @IdRegiao = idRegiao });
+        }
     }
 }

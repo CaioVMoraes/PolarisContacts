@@ -56,13 +56,6 @@ namespace PolarisContacts.Application.Services
                 throw new ArgumentNullException(nameof(endereco));
             }
 
-            var existingEndereco = await _enderecoRepository.GetEnderecoById(endereco.Id);
-
-            if (existingEndereco == null)
-            {
-                throw new EnderecoNotFoundException();
-            }
-
             await _enderecoRepository.UpdateEndereco(endereco);
         }
 
@@ -71,13 +64,6 @@ namespace PolarisContacts.Application.Services
             if (id <= 0)
             {
                 throw new InvalidIdException();
-            }
-
-            var existingEndereco = await _enderecoRepository.GetEnderecoById(id);
-
-            if (existingEndereco == null)
-            {
-                throw new EnderecoNotFoundException();
             }
 
             await _enderecoRepository.DeleteEndereco(id);

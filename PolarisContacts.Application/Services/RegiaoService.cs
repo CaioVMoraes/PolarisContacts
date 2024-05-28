@@ -14,5 +14,10 @@ namespace PolarisContacts.Application.Services
         {
             return await _regiaoRepository.GetAll();
         }
+
+        public async Task<Regiao> GetById(int idRegiao)
+        {
+            return await _regiaoRepository.GetById(idRegiao);
+        }
     }
 }

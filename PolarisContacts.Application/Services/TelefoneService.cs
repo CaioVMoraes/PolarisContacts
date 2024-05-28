@@ -33,7 +33,7 @@ namespace PolarisContacts.Application.Services
 
             var telefone = await _telefoneRepository.GetTelefoneById(id);
 
-            if (telefone == null)
+            if (telefone is null)
             {
                 throw new TelefoneNotFoundException();
             }
@@ -58,13 +58,6 @@ namespace PolarisContacts.Application.Services
                 throw new ArgumentNullException(nameof(telefone));
             }
 
-            var existingTelefone = await _telefoneRepository.GetTelefoneById(telefone.Id);
-
-            if (existingTelefone == null)
-            {
-                throw new TelefoneNotFoundException();
-            }
-
             await _telefoneRepository.UpdateTelefone(telefone);
         }
 
@@ -73,13 +66,6 @@ namespace PolarisContacts.Application.Services
             if (id <= 0)
             {
                 throw new InvalidIdException();
-            }
-
-            var existingTelefone = await _telefoneRepository.GetTelefoneById(id);
-
-            if (existingTelefone == null)
-            {
-                throw new TelefoneNotFoundException();
             }
 
             await _telefoneRepository.DeleteTelefone(id);
