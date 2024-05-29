@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarisContacts.Infrastruct
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarisContacts.Domain", "PolarisContacts.Domain\PolarisContacts.Domain.csproj", "{591284CC-7E0B-422D-BCB7-7CF035A45745}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarisContacts.TST", "PolarisContacts.TST\PolarisContacts.TST.csproj", "{E2429D9B-8E22-4F01-93AE-06CB958F7DD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarisContacts.Test", "PolarisContacts.TST\PolarisContacts.Test.csproj", "{E2429D9B-8E22-4F01-93AE-06CB958F7DD4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DD9BC4B0-2D54-42DE-80A7-6391E385C326}"
 EndProject
@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{949A517E-E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarisContacts.CrossCutting.DependencyInjection", "PolarisContacts.CrossCutting.DependencyInjection\PolarisContacts.CrossCutting.DependencyInjection.csproj", "{58CC7697-B0EC-4C1C-B180-5F8EFF9AD31B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarisContacts.CrossCutting.Helpers", "PolarisContacts.CrossCutting.Helpers\PolarisContacts.CrossCutting.Helpers.csproj", "{9D5C88CB-FAD4-47BB-ACFB-1E4317CF21FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarisContacts.CrossCutting.Helpers", "PolarisContacts.CrossCutting.Helpers\PolarisContacts.CrossCutting.Helpers.csproj", "{9D5C88CB-FAD4-47BB-ACFB-1E4317CF21FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
