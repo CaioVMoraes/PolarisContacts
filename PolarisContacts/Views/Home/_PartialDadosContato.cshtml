@@ -4,12 +4,12 @@
     var regioes = ViewBag.Regioes as IEnumerable<PolarisContacts.Domain.Regiao>;
 }
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-cadastrar" aria-hidden="true" id="modal-contato">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-contato-label" aria-hidden="true" id="modal-dados-contato">
     <div class="modal-dialog modal-lg" role="document">
         <div id="loaderCadastrarContato" class="back-loader"><span class="loader"></span></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modal-cadastrar">@((Model.Id == 0) ? "Novo Contato" : "Editar Contato")</h4>
+                <h4 class="modal-title" id="modal-contato-label">@((Model.Id == 0) ? "Novo Contato" : "Editar Contato")</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -47,7 +47,7 @@
                                     <div class="col-md-6">
                                         <label for="Telefones_@(telefone.Id)__NumeroTelefone" class="form-label i-modal-color">Telefone:</label>
                                         <div class="input-group">
-                                            <span class="input-group-text" id="DDD_@(telefone.Id)">(@telefone.Regiao.DDD)</span>
+                                            <span class="input-group-text" id="DDD_@(telefone.Id)">(@telefone.Regiao?.DDD)</span>
                                             @Html.TextBox($"Telefones[{telefone.Id}].NumeroTelefone", telefone.NumeroTelefone, new { @class = "form-control telefone-mask", id = $"Telefones_{telefone.Id}__NumeroTelefone" })
                                         </div>
                                     </div>
@@ -72,12 +72,12 @@
                                     </button>
                                     <div class="col-md-4">
                                         <label for="Celulares_@(celular.Id)__IdRegiao" class="form-label i-modal-color">Região:</label>
-                                        @Html.DropDownList($"Celulares[{celular.Id}].IdRegiao", new SelectList(regioes, "Id", "NomeRegiao", celular.IdRegiao), "Selecione uma região", new { @class = "form-control", id = $"Celulares_{celular.Id}__IdRegiao", onchange = "updateDDD(this)" })
+                                        @Html.DropDownList($"Celulares[{celular.Id}].IdRegiao", new SelectList(ViewBag.Regioes, "Id", "NomeRegiao", celular.IdRegiao), "Selecione uma região", new { @class = "form-control", id = $"Celulares_{celular.Id}__IdRegiao", onchange = "updateDDDCelular(this)" })
                                     </div>
                                     <div class="col-md-6">
                                         <label for="Celulares_@(celular.Id)__NumeroCelular" class="form-label i-modal-color">Celular:</label>
                                         <div class="input-group">
-                                            <span class="input-group-text" id="DDD_@(celular.Id)">(@celular.Regiao.DDD)</span>
+                                            <span class="input-group-text" id="DDDCelular_@(celular.Id)">@($"({celular.Regiao?.DDD ?? ""})")</span>
                                             @Html.TextBox($"Celulares[{celular.Id}].NumeroCelular", celular.NumeroCelular, new { @class = "form-control celular-mask", id = $"Celulares_{celular.Id}__NumeroCelular" })
                                         </div>
                                     </div>
@@ -165,13 +165,13 @@
 </div>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('.telefone-mask').mask('0000-0000');
         $('.celular-mask').mask('00000-0000');
         $('.cep-mask').mask('00000-000');
 
         // Reaplicar a máscara ao adicionar novos campos dinamicamente
-        $(document).on('DOMNodeInserted', function(e) {
+        $(document).on('DOMNodeInserted', function (e) {
             if ($(e.target).find('.telefone-mask').length) {
                 $(e.target).find('.telefone-mask').mask('0000-0000');
             }
@@ -191,28 +191,30 @@
 
     function addTelefone() {
         const telefoneHtml = `
-                    <div class="row g-3 telefone-item mb-3" id="telefone-${telefoneIndex}">
-                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeTelefone(${telefoneIndex})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                        <div class="col-md-4">
-                            <label for="Telefones_${telefoneIndex}__IdRegiao" class="form-label i-modal-color">Região:</label>
-                            <select class="form-control" id="Telefones_${telefoneIndex}__IdRegiao" name="Telefones[${telefoneIndex}].IdRegiao" onchange="updateDDDTelefone(this)">
-                                <option value="">Selecione uma região</option>
-                                @foreach (var regiao in regioes)
-                                {
-                                    <option value="@regiao.Id" data-ddd="@regiao.DDD">@regiao.NomeRegiao</option>
-                                }
-                            </select>
+                <div class="row g-3 telefone-item mb-3" id="telefone-${telefoneIndex}">
+                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeTelefone(${telefoneIndex})">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <div class="col-md-4">
+                        <label for="Telefones_${telefoneIndex}__IdRegiao" class="form-label i-modal-color">Região:</label>
+                        <select class="form-control" id="Telefones_${telefoneIndex}__IdRegiao" name="Telefones[${telefoneIndex}].IdRegiao" onchange="updateDDDTelefone(this)">
+                            <option value="">Selecione uma região</option>
+
+    @foreach (var regiao in regioes)
+    {
+                                        <option value="@regiao.Id" data-ddd="@regiao.DDD">@regiao.NomeRegiao</option>
+    }
+
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Telefones_${telefoneIndex}__NumeroTelefone" class="form-label i-modal-color">Telefone:</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="DDDTelefone_${telefoneIndex}"></span>
+                            <input class="form-control telefone-mask" id="Telefones_${telefoneIndex}__NumeroTelefone" name="Telefones[${telefoneIndex}].NumeroTelefone" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="Telefones_${telefoneIndex}__NumeroTelefone" class="form-label i-modal-color">Telefone:</label>
-                            <div class="input-group">
-                                <span class="input-group-text" id="DDDTelefone_${telefoneIndex}"></span>
-                                <input class="form-control telefone-mask" id="Telefones_${telefoneIndex}__NumeroTelefone" name="Telefones[${telefoneIndex}].NumeroTelefone" />
-                            </div>
-                        </div>
-                    </div>`;
+                    </div>
+                </div>`;
         $('#telefones-list').append(telefoneHtml);
         $('.telefone-mask').mask('0000-0000');
         telefoneIndex++;
@@ -220,28 +222,28 @@
 
     function addCelular() {
         const celularHtml = `
-                    <div class="row g-3 celular-item mb-3" id="celular-${celularIndex}">
-                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeCelular(${celularIndex})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                        <div class="col-md-4">
-                            <label for="Celulares_${celularIndex}__IdRegiao" class="form-label i-modal-color">Região:</label>
-                            <select class="form-control" id="Celulares_${celularIndex}__IdRegiao" name="Celulares[${celularIndex}].IdRegiao" onchange="updateDDDCelular(this)">
-                                <option value="">Selecione uma região</option>
-                                @foreach (var regiao in regioes)
-                                {
+                <div class="row g-3 celular-item mb-3" id="celular-${celularIndex}">
+                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeCelular(${celularIndex})">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <div class="col-md-4">
+                        <label for="Celulares_${celularIndex}__IdRegiao" class="form-label i-modal-color">Região:</label>
+                        <select class="form-control" id="Celulares_${celularIndex}__IdRegiao" name="Celulares[${celularIndex}].IdRegiao" onchange="updateDDDCelular(this)">
+                            <option value="">Selecione uma região</option>
+    @foreach (var regiao in regioes)
+    {
                                     <option value="@regiao.Id" data-ddd="@regiao.DDD">@regiao.NomeRegiao</option>
-                                }
-                            </select>
+    }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Celulares_${celularIndex}__NumeroCelular" class="form-label i-modal-color">Celular:</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="DDDCelular_${celularIndex}"></span>
+                            <input class="form-control celular-mask" id="Celulares_${celularIndex}__NumeroCelular" name="Celulares[${celularIndex}].NumeroCelular" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="Celulares_${celularIndex}__NumeroCelular" class="form-label i-modal-color">Celular:</label>
-                            <div class="input-group">
-                                <span class="input-group-text" id="DDDCelular_${celularIndex}"></span>
-                                <input class="form-control celular-mask" id="Celulares_${celularIndex}__NumeroCelular" name="Celulares[${celularIndex}].NumeroCelular" />
-                            </div>
-                        </div>
-                    </div>`;
+                    </div>
+                </div>`;
         $('#celulars-list').append(celularHtml);
         $('.celular-mask').mask('00000-0000');
         celularIndex++;
@@ -249,54 +251,54 @@
 
     function addEmail() {
         const emailHtml = `
-                    <div class="row g-3 email-item mb-3" id="email-${emailIndex}">
-                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEmail(${emailIndex})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                        <div class="col-md-6">
-                            <label for="Emails_${emailIndex}__EnderecoEmail" class="form-label i-modal-color">E-mail:</label>
-                            <input class="form-control" id="Emails_${emailIndex}__EnderecoEmail" name="Emails[${emailIndex}].EnderecoEmail" />
-                        </div>
-                    </div>`;
+                <div class="row g-3 email-item mb-3" id="email-${emailIndex}">
+                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEmail(${emailIndex})">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <div class="col-md-6">
+                        <label for="Emails_${emailIndex}__EnderecoEmail" class="form-label i-modal-color">E-mail:</label>
+                        <input class="form-control" id="Emails_${emailIndex}__EnderecoEmail" name="Emails[${emailIndex}].EnderecoEmail" />
+                    </div>
+                </div>`;
         $('#emails-list').append(emailHtml);
         emailIndex++;
     }
 
     function addEndereco() {
         const enderecoHtml = `
-                    <div class="row g-3 endereco-item mb-3" id="endereco-${enderecoIndex}">
-                        <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(${enderecoIndex})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                        <div class="col-md-2">
-                            <label for="Enderecos_${enderecoIndex}__CEP" class="form-label i-modal-color">CEP:</label>
-                            <input class="form-control cep-mask" id="Enderecos_${enderecoIndex}__CEP" name="Enderecos[${enderecoIndex}].CEP" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="Enderecos_${enderecoIndex}__Logradouro" class="form-label i-modal-color">Logradouro:</label>
-                            <input class="form-control" id="Enderecos_${enderecoIndex}__Logradouro" name="Enderecos[${enderecoIndex}].Logradouro" />
-                        </div>
-                        <div class="col-md-2">
-                            <label for="Enderecos_${enderecoIndex}__Numero" class="form-label i-modal-color">Número:</label>
-                            <input class="form-control" id="Enderecos_${enderecoIndex}__Numero" name="Enderecos[${enderecoIndex}].Numero" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="Enderecos_${enderecoIndex}__Bairro" class="form-label i-modal-color">Bairro:</label>
-                            <input class="form-control" id="Enderecos_${enderecoIndex}__Bairro" name="Enderecos[${enderecoIndex}].Bairro" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="Enderecos_${enderecoIndex}__Complemento" class="form-label i-modal-color">Complemento:</label>
-                            <input class="form-control" id="Enderecos_${enderecoIndex}__Complemento" name="Enderecos[${enderecoIndex}].Complemento" />
-                        </div>
-                        <div class="col-md-3">
-                            <label for="Enderecos_${enderecoIndex}__Cidade" class="form-label i-modal-color">Cidade:</label>
-                            <input class="form-control" id="Enderecos_${enderecoIndex}__Cidade" name="Enderecos[${enderecoIndex}].Cidade" />
-                        </div>
-                        <div class="col-md-2">
-                            <label for="Enderecos_${enderecoIndex}__Estado" class="form-label i-modal-color">Estado:</label>
-                            <input class="form-control" id="Enderecos_${enderecoIndex}__Estado" name="Enderecos[${enderecoIndex}].Estado" />
-                        </div>
-                    </div>`;
+                <div class="row g-3 endereco-item mb-3" id="endereco-${enderecoIndex}">
+                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(${enderecoIndex})">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <div class="col-md-2">
+                        <label for="Enderecos_${enderecoIndex}__CEP" class="form-label i-modal-color">CEP:</label>
+                        <input class="form-control cep-mask" id="Enderecos_${enderecoIndex}__CEP" name="Enderecos[${enderecoIndex}].CEP" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Enderecos_${enderecoIndex}__Logradouro" class="form-label i-modal-color">Logradouro:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Logradouro" name="Enderecos[${enderecoIndex}].Logradouro" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Enderecos_${enderecoIndex}__Numero" class="form-label i-modal-color">Número:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Numero" name="Enderecos[${enderecoIndex}].Numero" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Enderecos_${enderecoIndex}__Bairro" class="form-label i-modal-color">Bairro:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Bairro" name="Enderecos[${enderecoIndex}].Bairro" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Enderecos_${enderecoIndex}__Complemento" class="form-label i-modal-color">Complemento:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Complemento" name="Enderecos[${enderecoIndex}].Complemento" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="Enderecos_${enderecoIndex}__Cidade" class="form-label i-modal-color">Cidade:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Cidade" name="Enderecos[${enderecoIndex}].Cidade" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Enderecos_${enderecoIndex}__Estado" class="form-label i-modal-color">Estado:</label>
+                        <input class="form-control" id="Enderecos_${enderecoIndex}__Estado" name="Enderecos[${enderecoIndex}].Estado" />
+                    </div>
+                </div>`;
         $('#enderecos-list').append(enderecoHtml);
         $('.cep-mask').mask('00000-000');
         enderecoIndex++;
@@ -321,16 +323,20 @@
     function updateDDDTelefone(element) {
         const selectedOption = $(element).find('option:selected');
         const ddd = selectedOption.data('ddd');
-        const id = $(element).attr('id').split('_')[1];
-        $(`#DDDTelefone_${id}`).text(ddd);
+        const id = $(element).attr('id').split('_')[1]; // Captura o índice correto
+        $(`#DDDTelefone_${id}`).text(`(${ddd})`); // Atualiza o valor do DDD corretamente
     }
 
     function updateDDDCelular(element) {
         const selectedOption = $(element).find('option:selected');
         const ddd = selectedOption.data('ddd');
+        console.log('Selected DDD:', ddd); // Adicionado para debug
         const id = $(element).attr('id').split('_')[1];
-        $(`#DDDCelular_${id}`).text(ddd);
+        $(`#DDDCelular_${id}`).text(`(${ddd})`);
     }
+
+
+
 
 
     function LoadingCadastrarContato() {
