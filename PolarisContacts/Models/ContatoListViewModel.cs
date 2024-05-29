@@ -9,6 +9,8 @@ namespace PolarisContacts.Models
         public int PageSize { get; set; }
         public int TotalContatos { get; set; }
 
+        public string SearchTerm { get; set; }
+
         public int TotalPages => (int)Math.Ceiling((double)TotalContatos / PageSize);
     }
 }

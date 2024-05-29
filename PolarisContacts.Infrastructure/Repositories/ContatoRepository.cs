@@ -29,6 +29,40 @@ namespace PolarisContacts.Infrastructure.Repositories
             return await conn.QueryFirstOrDefaultAsync<Contato>(query, new { Id = idContato });
         }
 
+        public async Task<IEnumerable<Contato>> SearchByUsuarioIdAndTerm(int idUsuario, string searchTerm)
+        {
+            using (var connection = _dbConnection.AbrirConexao())
+            {
+                var query = @"
+                            SELECT DISTINCT c.*
+                            FROM Contatos c
+                            LEFT JOIN Telefones t ON c.Id = t.IdContato
+                            LEFT JOIN Celulares cl ON c.Id = cl.IdContato
+                            LEFT JOIN Emails e ON c.Id = e.IdContato
+                            LEFT JOIN Enderecos en ON c.Id = en.IdContato
+                            LEFT JOIN Regioes rt ON t.IdRegiao = rt.Id
+                            LEFT JOIN Regioes rcl ON cl.IdRegiao = rcl.Id
+                            WHERE c.IdUsuario = @IdUsuario
+                                AND (
+                                    c.Nome LIKE @SearchTerm OR
+                                    t.NumeroTelefone LIKE @SearchTerm OR
+                                    cl.NumeroCelular LIKE @SearchTerm OR
+                                    e.EnderecoEmail LIKE @SearchTerm OR
+                                    en.Logradouro LIKE @SearchTerm OR
+                                    en.CEP LIKE @SearchTerm OR
+                                    en.Cidade LIKE @SearchTerm OR
+                                    en.Estado LIKE @SearchTerm OR
+                                    rt.DDD + t.NumeroTelefone LIKE @SearchTerm OR
+                                    rcl.DDD + cl.NumeroCelular LIKE @SearchTerm OR
+                                    REPLACE(REPLACE(REPLACE(t.NumeroTelefone, '(', ''), ')', ''), '-', '') LIKE '%' + REPLACE(REPLACE(REPLACE(@SearchTerm, '(', ''), ')', ''), '-', '') + '%' OR
+                                    REPLACE(REPLACE(REPLACE(cl.NumeroCelular, '(', ''), ')', ''), '-', '') LIKE '%' + REPLACE(REPLACE(REPLACE(@SearchTerm, '(', ''), ')', ''), '-', '') + '%'
+                                )
+                            ORDER BY
+                                c.Nome";
+
+                return await connection.QueryAsync<Contato>(query, new { SearchTerm = "%" + searchTerm + "%", IdUsuario = idUsuario });
+            }
+        }
 
         public async Task<int> AddContato(Contato contato, IDbConnection connection, IDbTransaction transaction)
         {

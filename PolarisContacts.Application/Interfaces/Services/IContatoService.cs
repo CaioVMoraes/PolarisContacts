@@ -8,6 +8,7 @@ namespace PolarisContacts.Application.Interfaces.Services
     {
         Task<IEnumerable<Contato>> GetAllContatosByIdUsuario(int idUsuario);
         Task<Contato> GetContatoByIdAsync(int idContato);
+        Task<IEnumerable<Contato>> SearchContatosByIdUsuario(int idUsuario, string searchTerm);
         Task<bool> AddContato(Contato contato);
         Task<bool> UpdateContato(Contato contato);
         Task<bool> DeleteContato(int id);

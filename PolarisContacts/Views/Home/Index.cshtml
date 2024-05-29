@@ -68,10 +68,19 @@
 <br />
 <br />
 
+<div class="form-group">
+    <form method="post" id="searchForm" action="@Url.Action("Index", "Home")">
+        <input type="text" name="searchTerm" id="searchTerm" class="form-control" placeholder="Buscar contatos..." value="@ViewData["SearchTerm"]" />
+        <input type="hidden" name="pageNumber" id="pageNumber" value="1" />
+    </form>
+</div>
+
+<br />
+
 <div class="container-fluid boxTable">
     <table class="table table-striped">
         <tbody>
-            @foreach (Contato contato in Model.Contatos.GroupBy(c => c.Id).Select(c => c.First()))
+            @foreach (Contato contato in Model.Contatos)
             {
                 string accordionId = string.Concat("accordion", contato.Id);
 
@@ -197,27 +206,40 @@
         @if (Model.PageNumber > 1)
         {
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize })" aria-label="Previous">
-                    <span aria-hidden="true">&laquo; Anterior</span>
-                </a>
+                <form method="post" action="@Url.Action("Index", new { pageSize = Model.PageSize })" style="display:inline;">
+                    <input type="hidden" name="pageNumber" value="@Model.PageNumber - 1" />
+                    <input type="hidden" name="searchTerm" value="@Model.SearchTerm" />
+                    <button type="submit" class="page-link" aria-label="Previous">
+                        <span aria-hidden="true">&laquo; Anterior</span>
+                    </button>
+                </form>
             </li>
         }
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(Model.PageNumber == i ? "active" : "")">
-                <a class="page-link" href="@Url.Action("Index", new { pageNumber = i, pageSize = Model.PageSize })">@i</a>
+                <form method="post" action="@Url.Action("Index", new { pageSize = Model.PageSize })" style="display:inline;">
+                    <input type="hidden" name="pageNumber" value="@i" />
+                    <input type="hidden" name="searchTerm" value="@Model.SearchTerm" />
+                    <button type="submit" class="page-link">@i</button>
+                </form>
             </li>
         }
         @if (Model.PageNumber < Model.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize })" aria-label="Next">
-                    <span aria-hidden="true">Próximo &raquo;</span>
-                </a>
+                <form method="post" action="@Url.Action("Index", new { pageSize = Model.PageSize })" style="display:inline;">
+                    <input type="hidden" name="pageNumber" value="@Model.PageNumber + 1" />
+                    <input type="hidden" name="searchTerm" value="@Model.SearchTerm" />
+                    <button type="submit" class="page-link" aria-label="Next">
+                        <span aria-hidden="true">Próximo &raquo;</span>
+                    </button>
+                </form>
             </li>
         }
     </ul>
 </nav>
+
 
 <script>
     function ModalDadosContato() {

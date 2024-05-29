@@ -32,24 +32,7 @@ namespace PolarisContacts.Application.Services
             IEnumerable<Contato> contatos = await _contatoRepository.GetAllContatosByIdUsuario(idUsuario);
             if (contatos is not null && contatos.Any())
             {
-                foreach (var contato in contatos)
-                {
-                    contato.Telefones = await _telefoneRepository.GetTelefonesByIdContato(contato.Id);
-                    foreach (var telefone in contato.Telefones)
-                    {
-                        telefone.Regiao = await _regiaoService.GetById(telefone.IdRegiao);
-                    }
-
-                    contato.Celulares = await _celularRepository.GetCelularesByIdContato(contato.Id);
-                    foreach (var celular in contato.Celulares)
-                    {
-                        celular.Regiao = await _regiaoService.GetById(celular.IdRegiao);
-                    }
-
-                    contato.Emails = await _emailRepository.GetEmailsByIdContato(contato.Id);
-                    
-                    contato.Enderecos = await _enderecoRepository.GetEnderecosByIdContato(contato.Id);
-                }
+                contatos = await BuscaDadosContato(contatos);
             }
             return contatos;
         }
@@ -65,6 +48,41 @@ namespace PolarisContacts.Application.Services
                 contato.Enderecos = await _enderecoRepository.GetEnderecosByIdContato(idContato);
             }
             return contato;
+        }
+
+        public async Task<IEnumerable<Contato>> SearchContatosByIdUsuario(int idUsuario, string searchTerm)
+        {
+            IEnumerable<Contato> contatos = await _contatoRepository.SearchByUsuarioIdAndTerm(idUsuario, searchTerm);
+            if (contatos is not null && contatos.Any())
+            {
+                contatos = await BuscaDadosContato(contatos);
+            }
+
+            return contatos;
+        }
+
+        private async Task<IEnumerable<Contato>> BuscaDadosContato(IEnumerable<Contato> contatos)
+        {
+            foreach (var contato in contatos)
+            {
+                contato.Telefones = await _telefoneRepository.GetTelefonesByIdContato(contato.Id);
+                foreach (var telefone in contato.Telefones)
+                {
+                    telefone.Regiao = await _regiaoService.GetById(telefone.IdRegiao);
+                }
+
+                contato.Celulares = await _celularRepository.GetCelularesByIdContato(contato.Id);
+                foreach (var celular in contato.Celulares)
+                {
+                    celular.Regiao = await _regiaoService.GetById(celular.IdRegiao);
+                }
+
+                contato.Emails = await _emailRepository.GetEmailsByIdContato(contato.Id);
+
+                contato.Enderecos = await _enderecoRepository.GetEnderecosByIdContato(contato.Id);
+            }
+
+            return contatos;
         }
 
         public async Task<bool> AddContato(Contato contato)
