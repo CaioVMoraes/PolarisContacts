@@ -21,7 +21,7 @@ namespace PolarisContacts.Controllers
             _regiaoService = regiaoService;
         }
 
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 2, string searchTerm = null)
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 15, string searchTerm = null)
         {
             try
             {
