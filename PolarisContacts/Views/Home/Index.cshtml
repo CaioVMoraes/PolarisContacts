@@ -1,8 +1,60 @@
-﻿@model PolarisContacts.Models.ContatoListViewModel
+﻿@using PolarisContacts.Domain
+@model PolarisContacts.Models.ContatoListViewModel
 
 @{
     ViewData["Title"] = "Contatos";
 }
+
+<style>
+    
+    .table {
+        background-color: #34495e;
+        color: #ecf0f1;
+    }
+
+        .table > :not(caption) > * > * {
+            border-bottom-width: 0px;
+        }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #2c3e50;
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #34495e;
+    }
+
+    .pagination .page-item .page-link {
+        background-color: #34495e;
+        color: #ecf0f1;
+        border: none;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+
+    td {
+        color: #ecf0f1;
+    }
+
+    .boxTable {
+        background-color: #2c3e50;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .collapse-toggle {
+        display: flex;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+</style>
+
 <div class="modal-titulo">
     <h2>@ViewData["Title"]</h2>
 </div>
@@ -12,150 +64,133 @@
         <input type="button" class="btn btn-primary pull-right" value="NOVO CONTATO" onclick="ModalDadosContato()" />
     </div>
 </div>
-<br />
-<br />
-<div class="accordion" id="accordion">
-    @foreach (var contato in Model.Contatos)
-    {
-        var contatoId = contato.Id;
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="heading-@contatoId">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@contatoId" aria-expanded="false" aria-controls="collapse-@contatoId">
-                    @contato.Nome
-                </button>
-            </h2>
-            <div id="collapse-@contatoId" class="accordion-collapse collapse" aria-labelledby="heading-@contatoId" data-bs-parent="#accordion">
-                <div class="accordion-body">
-                    @if (contato.Telefones.Any())
-                    {
-                        <h3>Telefones:</h3>
-                        <table class="table table-striped">
-                            <tbody>
-                                @foreach (var telefone in contato.Telefones)
-                                {
-                                    <tr id="telefone-@telefone.Id">
-                                        <td>(@telefone.Regiao.DDD)</td>
-                                        <td>@telefone.NumeroTelefone</td>
-                                        <td>
-                                            <a class="btn btn-primary btn-sm" onclick="ModalEditTelefone(@telefone.Id)">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-                                                </svg>
-                                            </a>
-                                            <button class="btn btn-danger btn-sm" onclick="confirmDeleteItem(@telefone.Id, 'Telefone')">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                    @if (contato.Celulares.Any())
-                    {
-                        <h3>Celulares:</h3>
-                        <table class="table table-striped">
-                            <tbody>
-                                @foreach (var celular in contato.Celulares)
-                                {
-                                    <tr id="celular-@celular.Id">
-                                        <td>(@celular.Regiao.DDD)</td>
-                                        <td>@celular.NumeroCelular</td>
-                                        <td>
-                                            <a class="btn btn-primary btn-sm" onclick="ModalEditCelular(@celular.Id, @celular.IdRegiao)">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-                                                </svg>
-                                            </a>
-                                            <button class="btn btn-danger btn-sm" onclick="confirmDeleteItem(@celular.Id, 'Celular')">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                    @if (contato.Emails.Any())
-                    {
-                        <h3>E-mails:</h3>
-                        <table class="table table-striped">
-                            <tbody>
-                                @foreach (var email in contato.Emails)
-                                {
-                                    <tr id="email-@email.Id">
-                                        <td>@email.EnderecoEmail</td>
-                                        <td>
-                                            <a class="btn btn-primary btn-sm" onclick="ModalEditEmail(@email.Id)">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-                                                </svg>
-                                            </a>
-                                            <button class="btn btn-danger btn-sm" onclick="confirmDeleteItem(@email.Id, 'Email')">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                                </svg>
-                                            </button>
 
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                    @if (contato.Enderecos.Any())
-                    {
-                        <h3>Endereços:</h3>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Logradouro</th>
-                                    <th>Número</th>
-                                    <th>Cidade</th>
-                                    <th>Estado</th>
-                                    <th>CEP</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var endereco in contato.Enderecos)
-                                {
-                                    <tr id="endereco-@endereco.Id">
-                                        <td>@endereco.Logradouro</td>
-                                        <td>@endereco.Numero</td>
-                                        <td>@endereco.Cidade</td>
-                                        <td>@endereco.Estado</td>
-                                        <td>@endereco.CEP</td>
-                                        <td>
-                                            <a class="btn btn-primary btn-sm" onclick="ModalEditEndereco(@endereco.Id)">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-                                                </svg>
-                                            </a>
-                                            <button class="btn btn-danger btn-sm" onclick="confirmDeleteItem(@endereco.Id, 'Endereco')">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                </div>
-            </div>
-        </div>
-    }
+<br />
+<br />
+
+<div class="container-fluid boxTable">
+    <table class="table table-striped">
+        <tbody>
+            @foreach (Contato contato in Model.Contatos.GroupBy(c => c.Id).Select(c => c.First()))
+            {
+                string accordionId = string.Concat("accordion", contato.Id);
+
+                <tr style="font-weight:bold">
+                    <td class="collapse-toggle">
+                        @if (contato.Telefones.Any() || contato.Celulares.Any() || contato.Emails.Any() || contato.Enderecos.Any())
+                        {
+                            <a class="accordion-toggle" data-bs-toggle="collapse" href="#@accordionId" aria-expanded="false" aria-controls="@accordionId">
+                                <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        }                        
+                    </td>
+                    <td>
+                        @contato.Nome
+                    </td>
+                    <td>
+                        <div class="d-flex">
+                            <button class="btn btn-primary btn-sm me-2" onclick="ModalEditContato(@contato.Id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="10">
+                        <div class="collapse" id="@accordionId" data-bs-parent="#accordionParent">
+                            @if (contato.Telefones.Any())
+                            {
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr style="user-select: none; box-shadow: 0 0 20px 2px rgb(34 18 76 / 80%); font-size:14px;">
+                                            <td><h5>Telefone:</h5></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var telefone in contato.Telefones)
+                                        {
+                                            <tr id="telefone-@telefone.Id">
+                                                <td onclick="ModalEditTelefone(@telefone.Id)" style="cursor:pointer">(@telefone.Regiao.DDD) @telefone.NumeroTelefone</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            @if (contato.Celulares.Any())
+                            {
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr style="user-select: none; box-shadow: 0 0 20px 2px rgb(34 18 76 / 80%); font-size:14px;">
+                                            <td><h5>Celular:</h5></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var celular in contato.Celulares)
+                                        {
+                                            <tr id="celular-@celular.Id">
+                                                <td onclick="ModalEditCelular(@celular.Id)" style="cursor:pointer">(@celular.Regiao.DDD) @celular.NumeroCelular</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            @if (contato.Emails.Any())
+                            {
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr style="user-select: none; box-shadow: 0 0 20px 2px rgb(34 18 76 / 80%); font-size:14px;">
+                                            <td><h5>E-mail:</h5></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var email in contato.Emails)
+                                        {
+                                            <tr id="email-@email.Id">
+                                                <td onclick="ModalEditEmail(@email.Id)" style="cursor:pointer">@email.EnderecoEmail</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            @if (contato.Enderecos.Any())
+                            {
+                                <h5>Endereço:</h5>
+                                <table class="table table-striped">
+                                    <thead style="font-weight:bold">
+                                        <tr style="user-select: none; box-shadow: 0 0 20px 2px rgb(34 18 76 / 80%); font-size:14px;">
+                                            <td>Logradouro</td>
+                                            <td>Número</td>
+                                            <td>Cidade</td>
+                                            <td>Estado</td>
+                                            <td>CEP</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var endereco in contato.Enderecos)
+                                        {
+                                            <tr id="endereco-@endereco.Id" onclick="ModalEditEndereco(@endereco.Id)" style="cursor:pointer">
+                                                <td>@endereco.Logradouro</td>
+                                                <td>@endereco.Numero</td>
+                                                <td>@endereco.Cidade</td>
+                                                <td>@endereco.Estado</td>
+                                                <td>@endereco.CEP</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
 <br />
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
@@ -183,26 +218,6 @@
         }
     </ul>
 </nav>
-
-<!-- Modal de Confirmação -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title custom-modal-title" id="confirmDeleteModalLabel">Confirmação</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-                <p id="confirmDeleteMessage">Tem certeza que deseja deletar este <span id="itemType"></span>?</p>
-                <p id="deleteSuccessMessage" style="display:none;">Deletado com sucesso!</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancelButton" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Deletar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     function ModalDadosContato() {
@@ -242,26 +257,26 @@
         });
     };
 
-        function ModalEditCelular(idCelular) {
-            $("#loaderHome").fadeIn()
+    function ModalEditCelular(idCelular) {
+        $("#loaderHome").fadeIn()
 
-            $.ajax({
-                type: "GET",
-                url: "/Celular/ModalEditCelular",
-                data: { idCelular: idCelular },
-                success: function (data) {
-                    $("#loaderHome").fadeOut()
-                    if (data) {
-                        $("#Modal").html(data);
-                        $("#modal-edit-celular").modal("show");
-                    }
-                },
-                error: function () {
-                    $("#loaderHome").fadeOut();
-                    alert('Erro ao carregar os dados do celular. Tente novamente.');
+        $.ajax({
+            type: "GET",
+            url: "/Celular/ModalEditCelular",
+            data: { idCelular: idCelular },
+            success: function (data) {
+                $("#loaderHome").fadeOut()
+                if (data) {
+                    $("#Modal").html(data);
+                    $("#modal-edit-celular").modal("show");
                 }
-            });
-        }
+            },
+            error: function () {
+                $("#loaderHome").fadeOut();
+                alert('Erro ao carregar os dados do celular. Tente novamente.');
+            }
+        });
+    }
 
     function ModalEditEmail(idEmail) {
         $("#loaderHome").fadeIn()
@@ -302,51 +317,4 @@
             }
         });
     };
-
-      var idToDelete;
-        var typeToDelete;
-
-        function confirmDeleteItem(id, type) {
-            idToDelete = id;
-            typeToDelete = type;
-            document.getElementById('itemType').innerText = type.toLowerCase();
-            document.getElementById('confirmDeleteMessage').style.display = 'block';
-            document.getElementById('deleteSuccessMessage').style.display = 'none';
-            document.getElementById('confirmDeleteButton').disabled = false;
-            document.getElementById('cancelButton').disabled = false;
-            var myModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-            myModal.show();
-        }
-
-        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-            deleteItem(idToDelete, typeToDelete);
-        });
-
-        function deleteItem(id, type) {
-        
-            $("#loaderHome").fadeIn()
-
-            $.ajax({
-                type: "POST",
-                url: `/${type}/Delete${type}`,
-                data: { id: id },
-                success: function () {
-                    $(`#${type.toLowerCase()}-${id}`).remove();
-                    document.getElementById('confirmDeleteMessage').style.display = 'none';
-                    document.getElementById('deleteSuccessMessage').style.display = 'block';
-                    document.getElementById('confirmDeleteButton').disabled = true;
-                    document.getElementById('cancelButton').disabled = true;
-                    setTimeout(() => {
-                        var myModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
-                        myModal.hide();
-                    }, 2000); // Esconde a modal após 2 segundos
-                },
-                error: function () {
-                    alert('Erro ao deletar o item. Tente novamente.');
-                }
-            });
-
-            $("#loaderHome").fadeOut()
-        }
-
 </script>

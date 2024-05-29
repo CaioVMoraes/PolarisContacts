@@ -18,7 +18,7 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "SELECT * FROM Enderecos WHERE IdContato = @IdContato";
+            string query = "SELECT * FROM Enderecos WHERE IdContato = @IdContato  AND Ativo = 1";
 
             return await conn.QueryAsync<Endereco>(query, new { IdContato = idContato });
         }
@@ -27,7 +27,7 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "SELECT * FROM Enderecos WHERE Id = @Id";
+            string query = "SELECT * FROM Enderecos WHERE Id = @Id  AND Ativo = 1";
 
             return await conn.QueryFirstOrDefaultAsync<Endereco>(query, new { Id = id });
         }

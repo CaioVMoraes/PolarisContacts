@@ -15,7 +15,7 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "SELECT * FROM Telefones WHERE IdContato = @IdContato";
+            string query = "SELECT * FROM Telefones WHERE IdContato = @IdContato AND Ativo = 1";
             return await conn.QueryAsync<Telefone>(query, new { IdContato = idContato });
         }
 
@@ -23,7 +23,7 @@ namespace PolarisContacts.Infrastructure.Repositories
         {
             using IDbConnection conn = _dbConnection.AbrirConexao();
 
-            string query = "SELECT * FROM Telefones WHERE Id = @Id";
+            string query = "SELECT * FROM Telefones WHERE Id = @Id  AND Ativo = 1";
             return await conn.QueryFirstOrDefaultAsync<Telefone>(query, new { Id = id });
         }
 
