@@ -32,11 +32,11 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --configuration Release --no-restore --logger "trx;LogFileName=TestResults.trx" --collect:"XPlat Code Coverage"
+      run: dotnet test --configuration Release --no-restore --logger "trx;LogFileName=TestResults/TestResults.trx" --collect:"XPlat Code Coverage"
 
     - name: Publish Test Results
       uses: actions/upload-artifact@v2
       if: always()
       with:
         name: TestResults
-        path: '**/TestResults.trx'
+        path: '**/TestResults/TestResults.trx'
