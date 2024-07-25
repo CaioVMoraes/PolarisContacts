@@ -7,7 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.RegisterServices();
 builder.Services.AddControllersWithViews(options =>
 {
-    options.Filters.Add(new AuthenticationFilterAttribute()); // Adicionar o filtro globalmente
+    // Adiciona o filtro globalmente, exceto em ambientes de teste
+    if (!builder.Environment.IsEnvironment("Test"))
+    {
+        options.Filters.Add(new AuthenticationFilterAttribute());
+    }
 });
 
 // Add session services
@@ -40,3 +44,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+public partial class Program { }

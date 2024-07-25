@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarisContacts.CrossCuttin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarisContacts.CrossCutting.Helpers", "PolarisContacts.CrossCutting.Helpers\PolarisContacts.CrossCutting.Helpers.csproj", "{9D5C88CB-FAD4-47BB-ACFB-1E4317CF21FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarisContacts.IntegrationTests", "PolarisContacts.IntegrationTests\PolarisContacts.IntegrationTests.csproj", "{1D66CD0E-263F-4006-915E-8D5480A219C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{9D5C88CB-FAD4-47BB-ACFB-1E4317CF21FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D5C88CB-FAD4-47BB-ACFB-1E4317CF21FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D5C88CB-FAD4-47BB-ACFB-1E4317CF21FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D66CD0E-263F-4006-915E-8D5480A219C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D66CD0E-263F-4006-915E-8D5480A219C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D66CD0E-263F-4006-915E-8D5480A219C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D66CD0E-263F-4006-915E-8D5480A219C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{E2429D9B-8E22-4F01-93AE-06CB958F7DD4} = {949A517E-EB60-44F0-BECB-CF9CA3F06FD2}
 		{58CC7697-B0EC-4C1C-B180-5F8EFF9AD31B} = {DD9BC4B0-2D54-42DE-80A7-6391E385C326}
 		{9D5C88CB-FAD4-47BB-ACFB-1E4317CF21FA} = {DD9BC4B0-2D54-42DE-80A7-6391E385C326}
+		{1D66CD0E-263F-4006-915E-8D5480A219C8} = {949A517E-EB60-44F0-BECB-CF9CA3F06FD2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80EDF8AF-6D4C-46A5-ACC6-45F2585DD842}

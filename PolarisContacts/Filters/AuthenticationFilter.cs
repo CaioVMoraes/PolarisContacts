@@ -5,10 +5,20 @@ namespace PolarisContacts.Filters
 {
     public class AuthenticationFilterAttribute : ActionFilterAttribute
     {
+        private const string TestEnvironment = "Test";
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var controller = context.RouteData.Values["controller"].ToString();
             var action = context.RouteData.Values["action"].ToString();
+
+            // Verifica se o ambiente é de teste
+            var environment = context.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
+            if (environment.IsEnvironment(TestEnvironment))
+            {
+                // Ignora o filtro se for ambiente de teste
+                base.OnActionExecuting(context);
+                return;
+            }
 
             if (controller == "Account" && (action == "Login" || action == "Register"))
             {
