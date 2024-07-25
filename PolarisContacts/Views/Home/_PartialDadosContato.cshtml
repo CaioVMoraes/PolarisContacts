@@ -119,10 +119,10 @@
                         <div id="enderecos-list">
                             @foreach (var endereco in Model.Enderecos ?? Enumerable.Empty<PolarisContacts.Domain.Endereco>())
                             {
-                                <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(@endereco.Id)">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
                                 <div class="row g-3 endereco-item mb-3" id="endereco-@(endereco.Id)">
+                                    <button type="button" class="btn btn-outline-danger btn-sm col-md-1" onclick="removeEndereco(@endereco.Id)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
                                     <div class="col-md-2">
                                         <label for="Enderecos_@(endereco.Id)__CEP" class="form-label i-modal-color">CEP:</label>
                                         @Html.TextBox($"Enderecos[{endereco.Id}].CEP", endereco.CEP, new { @class = "form-control cep-mask", id = $"Enderecos_{endereco.Id}__CEP" })

@@ -43,7 +43,17 @@ namespace PolarisContacts.Application.Services
             if (contato is not null)
             {
                 contato.Telefones = await _telefoneRepository.GetTelefonesByIdContato(idContato);
+                foreach (var telefone in contato.Telefones)
+                {
+                    telefone.Regiao = await _regiaoService.GetById(telefone.IdRegiao);
+                }
+
                 contato.Celulares = await _celularRepository.GetCelularesByIdContato(idContato);
+                foreach (var celular in contato.Celulares)
+                {
+                    celular.Regiao = await _regiaoService.GetById(celular.IdRegiao);
+                }
+
                 contato.Emails = await _emailRepository.GetEmailsByIdContato(idContato);
                 contato.Enderecos = await _enderecoRepository.GetEnderecosByIdContato(idContato);
             }
