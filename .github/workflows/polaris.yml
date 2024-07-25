@@ -3,10 +3,10 @@ name: .NET Core CI
 on:
   push:
     branches:
-      - main
+      - Add-IntegrationTests
   pull_request:
     branches:
-      - main
+      - Add-IntegrationTests
 
 jobs:
   build:
@@ -34,12 +34,22 @@ jobs:
     - name: Install SQLite
       run: sudo apt-get install -y sqlite3 libsqlite3-dev
 
-    - name: Run All Tests
+    - name: Run Unit Tests
       run: dotnet test --configuration Release --no-restore --logger "trx;LogFileName=TestResults/TestResults.trx" --collect:"XPlat Code Coverage"
 
-    - name: Publish Test Results
+    - name: Run Integration Tests
+      run: dotnet test PolarisContacts.IntegrationTests/PolarisContacts.IntegrationTests.csproj --configuration Release --no-restore --logger "trx;LogFileName=IntegrationTestResults/IntegrationTestResults.trx" --collect:"XPlat Code Coverage"
+
+    - name: Publish Unit Test Results
       uses: actions/upload-artifact@v2
       if: always()
       with:
-        name: TestResults
+        name: UnitTestResults
         path: '**/TestResults/TestResults.trx'
+
+    - name: Publish Integration Test Results
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: IntegrationTestResults
+        path: '**/IntegrationTestResults/IntegrationTestResults.trx'
