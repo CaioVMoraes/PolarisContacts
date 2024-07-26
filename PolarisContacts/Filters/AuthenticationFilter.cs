@@ -15,7 +15,6 @@ namespace PolarisContacts.Filters
             var environment = context.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
             if (environment.IsEnvironment(TestEnvironment))
             {
-                // Ignora o filtro se for ambiente de teste
                 base.OnActionExecuting(context);
                 return;
             }

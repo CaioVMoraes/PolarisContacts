@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Options;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain.Settings;
 using System.Data;
@@ -12,9 +13,18 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public IDbConnection AbrirConexao()
         {
-            SqlConnection connection = new SqlConnection(_dbSettings.ConnectionString);
-            connection.Open();
-            return connection;
+            if (_dbSettings.ConnectionString.Contains("Data Source=:memory:"))
+            {
+                // Usando SQLite para testes
+                return new SqliteConnection(_dbSettings.ConnectionString);
+            }
+            else
+            {
+                // Usando SQL Server para ambiente de produção
+                var connection = new SqlConnection(_dbSettings.ConnectionString);
+                connection.Open();
+                return connection;
+            }
         }
     }
 }

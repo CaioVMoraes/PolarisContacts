@@ -81,12 +81,15 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertContato(Contato contato)
+        public async Task<IActionResult> InsertContato([FromBody] Contato contato)
         {
             try
             {
-                contato.IdUsuario = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-
+                if(contato.IdUsuario == 0)
+                { 
+                    contato.IdUsuario = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                }
+                
                 if (ModelState.IsValid)
                 {
                     await _contatoService.AddContato(contato);
@@ -133,7 +136,7 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteContato(int id)
+        public async Task<IActionResult> DeleteContato([FromQuery] int id)
         {
             try
             {

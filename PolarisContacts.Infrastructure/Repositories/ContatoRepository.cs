@@ -3,6 +3,7 @@ using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
@@ -66,12 +67,29 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<int> AddContato(Contato contato, IDbConnection connection, IDbTransaction transaction)
         {
-            string query = @"INSERT INTO Contatos (Nome, IdUsuario, Ativo)
-                             OUTPUT INSERTED.Id
-                             VALUES (@Nome, @IdUsuario, @Ativo)";
+            string query;
+            var isSqlServer = connection.GetType() == typeof(SqlConnection);
+
+            if (isSqlServer)
+            {
+                // SQL Server
+                query = @"
+            INSERT INTO Contatos (Nome, IdUsuario, Ativo)
+            OUTPUT INSERTED.Id
+            VALUES (@Nome, @IdUsuario, @Ativo)";
+            }
+            else
+            {
+                // SQLite
+                query = @"
+            INSERT INTO Contatos (Nome, IdUsuario, Ativo)
+            VALUES (@Nome, @IdUsuario, @Ativo);
+            SELECT last_insert_rowid();";
+            }
 
             return await connection.QuerySingleAsync<int>(query, contato, transaction);
         }
+
 
         public async Task<bool> UpdateContato(Contato contato)
         {

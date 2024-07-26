@@ -1,7 +1,23 @@
 using PolarisContacts.CrossCutting.DependencyInjection;
 using PolarisContacts.Filters;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Adiciona configuração para o ambiente de teste
+builder.Host.ConfigureAppConfiguration((context, config) =>
+{
+    var env = context.HostingEnvironment;
+
+    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
+    if (env.IsEnvironment("Test"))
+    {
+        config.AddJsonFile("appsettings.test.json", optional: true, reloadOnChange: true);
+    }
+});
 
 // Add services to the container.
 builder.Services.RegisterServices();

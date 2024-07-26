@@ -34,6 +34,9 @@ namespace PolarisContacts.Infrastructure.Repositories
                              OUTPUT INSERTED.Id
                              VALUES (@IdRegiao, @IdContato, @NumeroCelular, @Ativo)";
 
+
+
+
             return await connection.QuerySingleAsync<int>(query, celular, transaction);
         }
 

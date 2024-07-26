@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PolarisContacts.CrossCutting.Helpers\PolarisContacts.CrossCutting.Helpers.csproj" />
     <ProjectReference Include="..\PolarisContacts.Domain\PolarisContacts.Domain.csproj" />
   </ItemGroup>
