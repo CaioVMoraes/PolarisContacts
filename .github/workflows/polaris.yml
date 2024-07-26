@@ -34,11 +34,8 @@ jobs:
     - name: Install SQLite
       run: sudo apt-get install -y sqlite3 libsqlite3-dev
 
-    - name: Run Unit Tests
+    - name: Run Unit and Integration Tests
       run: dotnet test --configuration Release --no-restore --logger "trx;LogFileName=TestResults/TestResults.trx" --collect:"XPlat Code Coverage"
-
-    - name: Run Integration Tests
-      run: dotnet test PolarisContacts.IntegrationTests/PolarisContacts.IntegrationTests.csproj --configuration Release --no-restore --logger "trx;LogFileName=IntegrationTestResults/IntegrationTestResults.trx" --collect:"XPlat Code Coverage"
 
     - name: Publish Unit Test Results
       uses: actions/upload-artifact@v2
