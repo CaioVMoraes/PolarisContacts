@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.DependencyInjection;
-using SQLitePCL; // Certifique-se de adicionar esta diretiva
-using System;
-using System.Data;
-using System.Net.Http;
-using Xunit;
 
 public class IntegrationTestFixture : WebApplicationFactory<Program>
 {
@@ -26,7 +20,7 @@ public class IntegrationTestFixture : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            
+
         });
     }
 

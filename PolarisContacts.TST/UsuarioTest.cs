@@ -1,9 +1,8 @@
-﻿using System.Threading.Tasks;
-using NSubstitute;
+﻿using NSubstitute;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Application.Services;
 using PolarisContacts.Domain;
-using PolarisContacts.CrossCutting.Helpers.Exceptions;
+using System.Threading.Tasks;
 using Xunit;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
@@ -15,7 +14,7 @@ namespace PolarisContacts.Tests.Services
         private readonly UsuarioService _usuarioService;
 
         public UsuarioTests()
-        {           
+        {
             _usuarioService = new UsuarioService(_usuarioRepository);
         }
 

@@ -2,10 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Domain;
 using PolarisContacts.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
 namespace PolarisContacts.Controllers
@@ -85,11 +81,11 @@ namespace PolarisContacts.Controllers
         {
             try
             {
-                if(contato.IdUsuario == 0)
-                { 
+                if (contato.IdUsuario == 0)
+                {
                     contato.IdUsuario = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                 }
-                
+
                 if (ModelState.IsValid)
                 {
                     await _contatoService.AddContato(contato);

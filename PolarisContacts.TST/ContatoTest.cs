@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using NSubstitute;
+﻿using NSubstitute;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Application.Services;
-using PolarisContacts.CrossCutting.Helpers.Exceptions;
 using PolarisContacts.Domain;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
@@ -25,7 +24,7 @@ namespace PolarisContacts.Tests.Services
         private readonly ContatoService _contatoService;
 
         public ContatoTests()
-        {         
+        {
             _contatoService = new ContatoService(_dbConnection, _contatoRepository, _telefoneRepository, _celularRepository, _emailRepository, _enderecoRepository, _regiaoService);
         }
 

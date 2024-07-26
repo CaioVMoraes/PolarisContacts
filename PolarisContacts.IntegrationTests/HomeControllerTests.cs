@@ -1,9 +1,6 @@
-﻿using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PolarisContacts.Domain;
-using Xunit;
+using System.Text;
 
 public class HomeControllerTests : IClassFixture<IntegrationTestFixture>
 {

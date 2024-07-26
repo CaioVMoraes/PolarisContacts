@@ -4,7 +4,6 @@ using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain.Settings;
 using SQLitePCL;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace PolarisContacts.Infrastructure.Repositories

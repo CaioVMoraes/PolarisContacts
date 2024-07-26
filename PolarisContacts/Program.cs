@@ -1,7 +1,5 @@
 using PolarisContacts.CrossCutting.DependencyInjection;
 using PolarisContacts.Filters;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
