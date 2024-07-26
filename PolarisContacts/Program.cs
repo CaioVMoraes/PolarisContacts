@@ -12,11 +12,6 @@ builder.Host.ConfigureAppConfiguration((context, config) =>
 
     config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-
-    if (env.IsEnvironment("Test"))
-    {
-        config.AddJsonFile("appsettings.test.json", optional: true, reloadOnChange: true);
-    }
 });
 
 // Add services to the container.

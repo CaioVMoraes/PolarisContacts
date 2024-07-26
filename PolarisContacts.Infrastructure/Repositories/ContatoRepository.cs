@@ -73,18 +73,16 @@ namespace PolarisContacts.Infrastructure.Repositories
             if (isSqlServer)
             {
                 // SQL Server
-                query = @"
-            INSERT INTO Contatos (Nome, IdUsuario, Ativo)
-            OUTPUT INSERTED.Id
-            VALUES (@Nome, @IdUsuario, @Ativo)";
+                query = @"INSERT INTO Contatos (Nome, IdUsuario, Ativo)
+                          OUTPUT INSERTED.Id
+                          VALUES (@Nome, @IdUsuario, @Ativo)";
             }
             else
             {
                 // SQLite
-                query = @"
-            INSERT INTO Contatos (Nome, IdUsuario, Ativo)
-            VALUES (@Nome, @IdUsuario, @Ativo);
-            SELECT last_insert_rowid();";
+                query = @"INSERT INTO Contatos (Nome, IdUsuario, Ativo)
+                          VALUES (@Nome, @IdUsuario, @Ativo);
+                          SELECT last_insert_rowid();";
             }
 
             return await connection.QuerySingleAsync<int>(query, contato, transaction);
