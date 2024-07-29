@@ -3,10 +3,10 @@ name: .NET Core CI
 on:
   push:
     branches:
-      - Add-IntegrationTests
+      - main
   pull_request:
     branches:
-      - Add-IntegrationTests
+      - main
   workflow_dispatch:
 
 jobs:
