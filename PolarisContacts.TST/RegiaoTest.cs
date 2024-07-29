@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using NSubstitute;
+﻿using NSubstitute;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Application.Services;
 using PolarisContacts.Domain;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace PolarisContacts.Tests.Services
@@ -15,7 +15,7 @@ namespace PolarisContacts.Tests.Services
         private readonly RegiaoService _regiaoService;
 
         public RegiaoTests()
-        {            
+        {
             _regiaoService = new RegiaoService(_regiaoRepository);
         }
 

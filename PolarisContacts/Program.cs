@@ -3,11 +3,24 @@ using PolarisContacts.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Adiciona configuração para o ambiente de teste
+builder.Host.ConfigureAppConfiguration((context, config) =>
+{
+    var env = context.HostingEnvironment;
+
+    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+});
+
 // Add services to the container.
 builder.Services.RegisterServices();
 builder.Services.AddControllersWithViews(options =>
 {
-    options.Filters.Add(new AuthenticationFilterAttribute()); // Adicionar o filtro globalmente
+    // Adiciona o filtro globalmente, exceto em ambientes de teste
+    if (!builder.Environment.IsEnvironment("Test"))
+    {
+        options.Filters.Add(new AuthenticationFilterAttribute());
+    }
 });
 
 // Add session services
@@ -40,3 +53,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+public partial class Program { }

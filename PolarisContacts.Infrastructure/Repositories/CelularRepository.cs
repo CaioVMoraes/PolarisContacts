@@ -3,8 +3,8 @@ using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PolarisContacts.Infrastructure.Repositories
 {
@@ -30,9 +30,23 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<int> AddCelular(Celular celular, IDbConnection connection, IDbTransaction transaction)
         {
-            string query = @"INSERT INTO Celulares (IdRegiao, IdContato, NumeroCelular, Ativo) 
+            string query;
+            var isSqlServer = connection.GetType() == typeof(SqlConnection);
+
+            if (isSqlServer)
+            {
+                // SQL Server
+                query = @"INSERT INTO Celulares (IdRegiao, IdContato, NumeroCelular, Ativo) 
                              OUTPUT INSERTED.Id
                              VALUES (@IdRegiao, @IdContato, @NumeroCelular, @Ativo)";
+            }
+            else
+            {
+                // SQLite
+                query = @"INSERT INTO Celulares (IdRegiao, IdContato, NumeroCelular, Ativo) 
+                            VALUES (@IdRegiao, @IdContato, @NumeroCelular, @Ativo);
+                            SELECT last_insert_rowid();";
+            }
 
             return await connection.QuerySingleAsync<int>(query, celular, transaction);
         }

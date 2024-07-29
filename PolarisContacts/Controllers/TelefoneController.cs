@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PolarisContacts.Application.Interfaces.Services;
-using PolarisContacts.Application.Services;
 using PolarisContacts.Domain;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 

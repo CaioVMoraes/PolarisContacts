@@ -1,15 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using NSubstitute;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Application.Services;
 using PolarisContacts.Domain;
-using PolarisContacts.CrossCutting.Helpers.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
-using System;
 
 namespace PolarisContacts.Tests.Services
 {
@@ -21,7 +20,7 @@ namespace PolarisContacts.Tests.Services
         private readonly CelularService _celularService;
 
         public CelularTest()
-        {                      
+        {
             _celularService = new CelularService(_celularRepository, _contatoService, _regiaoService);
         }
 

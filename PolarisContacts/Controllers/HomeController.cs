@@ -2,10 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Domain;
 using PolarisContacts.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
 
 namespace PolarisContacts.Controllers
@@ -81,11 +77,14 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertContato(Contato contato)
+        public async Task<IActionResult> InsertContato([FromBody] Contato contato)
         {
             try
             {
-                contato.IdUsuario = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                if (contato.IdUsuario == 0)
+                {
+                    contato.IdUsuario = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                }
 
                 if (ModelState.IsValid)
                 {
@@ -133,7 +132,7 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteContato(int id)
+        public async Task<IActionResult> DeleteContato([FromQuery] int id)
         {
             try
             {

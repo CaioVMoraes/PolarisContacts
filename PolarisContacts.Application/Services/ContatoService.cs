@@ -5,6 +5,7 @@ using PolarisContacts.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using static PolarisContacts.CrossCutting.Helpers.Exceptions.CustomExceptions;
@@ -108,9 +109,16 @@ namespace PolarisContacts.Application.Services
 
             bool isSucesso = false;
             using IDbConnection connection = _dbConnection.AbrirConexao();
-            using IDbTransaction transaction = connection.BeginTransaction();
+
+            IDbTransaction transaction = null;
             try
             {
+                if (connection is SqlConnection)
+                {
+                    // Apenas inicie uma transação se estiver usando SQL Server
+                    transaction = connection.BeginTransaction();
+                }
+
                 contato.Ativo = true;
                 contato.Id = await _contatoRepository.AddContato(contato, connection, transaction);
 
@@ -133,7 +141,7 @@ namespace PolarisContacts.Application.Services
                     foreach (var celular in contato.Celulares)
                     {
                         if (!Validacoes.IsValidCelular(celular.NumeroCelular))
-                            throw new TelefoneInvalidoException();
+                            throw new CelularInvalidoException();
 
                         celular.IdContato = contato.Id;
                         celular.Ativo = true;
@@ -170,16 +178,19 @@ namespace PolarisContacts.Application.Services
                     }
                 }
 
-                transaction.Commit();
-                isSucesso = true;
+                if (transaction != null)
+                {
+                    transaction.Commit();
+                }
 
+                isSucesso = true;
                 return isSucesso;
             }
             catch (Exception)
             {
-                if (connection.State == ConnectionState.Open)
+                if (transaction != null)
                 {
-                    connection.Close();
+                    transaction.Rollback();
                 }
                 throw;
             }
@@ -191,6 +202,7 @@ namespace PolarisContacts.Application.Services
                 }
             }
         }
+
 
         public async Task<bool> UpdateContato(Contato contato)
         {
