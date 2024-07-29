@@ -3,10 +3,11 @@ name: .NET Core CI
 on:
   push:
     branches:
-      - main
+      - Add-IntegrationTests
   pull_request:
     branches:
-      - main
+      - Add-IntegrationTests
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        dotnet-version: ['8.0.x'] # Usando a versão 8.0 do .NET
+        dotnet-version: ['8.0.x']
 
     steps:
     - name: Checkout code
@@ -31,12 +32,15 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    - name: Run Unit Tests
-      run: dotnet test --configuration Release --no-restore --logger "trx;LogFileName=TestResults/TestResults.trx" --collect:"XPlat Code Coverage"
+    - name: Install SQLite
+      run: sudo apt-get install -y sqlite3 libsqlite3-dev    
 
-    - name: Run Integration Tests
-      run: dotnet test --project PolarisContacts.IntegrationTests/PolarisContacts.IntegrationTests.csproj --configuration Release --no-restore --logger "trx;LogFileName=IntegrationTestResults/IntegrationTestResults.trx" --collect:"XPlat Code Coverage"
+    - name: Run Unit Tests     
+      run: dotnet test PolarisContacts.TST/PolarisContacts.Test.csproj --configuration Release --no-restore --logger "trx;LogFileName=IntegrationTestResults/IntegrationTestResults.trx" --collect:"XPlat Code Coverage"
 
+    - name: Run Integration Tests     
+      run: dotnet test PolarisContacts.IntegrationTests/PolarisContacts.IntegrationTests.csproj --configuration Release --no-restore --logger "trx;LogFileName=IntegrationTestResults/IntegrationTestResults.trx" --collect:"XPlat Code Coverage"
+                       
     - name: Publish Unit Test Results
       uses: actions/upload-artifact@v2
       if: always()
