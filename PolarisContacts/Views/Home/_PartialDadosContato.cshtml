@@ -16,6 +16,7 @@
                 @using (Html.BeginForm((Model.Id == 0) ? "InsertContato" : "UpdateContato", "Home", FormMethod.Post, new { id = "ContatoForm" }))
                 {
                     @Html.HiddenFor(e => e.Id)
+                    @Html.HiddenFor(e => e.Ativo)
                     <section id="cadastrarContato" style="position:relative">
                         <div class="row g-3">
                             <div class="col-md-4">
