@@ -22,7 +22,7 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateEmail(Email email)
+        public async Task<IActionResult> UpdateEmail([FromBody] Email email)
         {
             if (ModelState.IsValid)
             {
