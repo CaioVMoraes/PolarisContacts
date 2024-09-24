@@ -4,7 +4,7 @@ using PolarisContacts.DatabaseConnection;
 using PolarisContacts.Domain.Settings;
 using PolarisContacts.Infrastructure.Repositories;
 
-namespace Job.ReguaCobrancaDocumentos.CrossCutting.DependencyInjection.Extensions.AddInfrastructureLayer;
+namespace PolarisContacts.CrossCutting.DependencyInjection.Extensions.AddInfrastructureLayer;
 
 public static partial class AddInfrastructureLayerExtensions
 {
@@ -19,7 +19,7 @@ public static partial class AddInfrastructureLayerExtensions
                 .AddTransient<IEmailRepository, EmailRepository>()
                 .AddTransient<IRegiaoRepository, RegiaoRepository>()
                 .AddTransient<IEnderecoRepository, EnderecoRepository>()
-                .AddTransient<IDatabaseConnection, DatabaseConnection>();
+                .AddTransient<IDatabaseConnection, PolarisContacts.DatabaseConnection.DatabaseConnection>();
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services) =>
         services
