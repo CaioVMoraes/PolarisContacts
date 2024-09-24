@@ -22,7 +22,7 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateEndereco(Endereco endereco)
+        public async Task<IActionResult> UpdateEndereco([FromBody] Endereco endereco)
         {
             if (ModelState.IsValid)
             {

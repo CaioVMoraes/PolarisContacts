@@ -50,7 +50,7 @@ namespace PolarisContacts.Infrastructure.Repositories
                     Ativo BOOLEAN
                 );
 
-                INSERT INTO Usuarios (Login, Senha, Ativo) VALUES ('Login Teste', 1, 1);
+                INSERT INTO Usuarios (Login, Senha, Ativo) VALUES ('Login Teste', '6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b', 1);
                 INSERT INTO Usuarios (Login, Senha, Ativo) VALUES ('Login Teste2', 2, 1);
 
                 CREATE TABLE Contatos (
@@ -178,6 +178,9 @@ namespace PolarisContacts.Infrastructure.Repositories
                     Ativo BOOLEAN,
                     FOREIGN KEY (IdContato) REFERENCES Contatos(Id)
                 );
+
+                INSERT INTO Celulares (IdRegiao, IdContato, NumeroCelular, Ativo) VALUES (1, 1, '99589-8478', 1);
+                INSERT INTO Celulares (IdRegiao, IdContato, NumeroCelular, Ativo) VALUES (1, 2, '95526-9799', 1);
             ";
                 command.ExecuteNonQuery();
             }

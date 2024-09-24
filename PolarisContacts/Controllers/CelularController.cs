@@ -27,7 +27,7 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateCelular(Celular celular)
+        public async Task<IActionResult> UpdateCelular([FromBody] Celular celular)
         {
             if (ModelState.IsValid)
             {
