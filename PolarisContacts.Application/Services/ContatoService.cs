@@ -1,6 +1,7 @@
 ﻿using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.CrossCutting.Helpers;
+using PolarisContacts.DatabaseConnection;
 using PolarisContacts.Domain;
 using System;
 using System.Collections.Generic;

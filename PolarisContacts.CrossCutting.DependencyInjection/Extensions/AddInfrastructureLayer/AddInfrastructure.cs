@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using PolarisContacts.Application.Interfaces.Repositories;
+using PolarisContacts.DatabaseConnection;
 using PolarisContacts.Domain.Settings;
 using PolarisContacts.Infrastructure.Repositories;
 

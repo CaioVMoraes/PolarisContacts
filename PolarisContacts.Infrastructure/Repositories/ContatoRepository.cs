@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using PolarisContacts.Application.Interfaces.Repositories;
+using PolarisContacts.DatabaseConnection;
 using PolarisContacts.Domain;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +14,6 @@ namespace PolarisContacts.Infrastructure.Repositories
     public class ContatoRepository(IDatabaseConnection dbConnection) : IContatoRepository
     {
         private readonly IDatabaseConnection _dbConnection = dbConnection;
-
 
         public async Task<IEnumerable<Contato>> GetAllContatosByIdUsuario(int idUsuario)
         {

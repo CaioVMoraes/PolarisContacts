@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using PolarisContacts.Application.Interfaces.Repositories;
+using PolarisContacts.DatabaseConnection;
 using PolarisContacts.Domain;
 using System.Collections.Generic;
 using System.Data;
