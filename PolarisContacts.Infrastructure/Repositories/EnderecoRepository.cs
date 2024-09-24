@@ -4,6 +4,8 @@ using PolarisContacts.Domain;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
@@ -17,20 +19,34 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<IEnumerable<Endereco>> GetEnderecosByIdContato(int idContato)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var client = new HttpClient();
 
-            string query = "SELECT * FROM Enderecos WHERE IdContato = @IdContato  AND Ativo = 1";
+            var response = await client.GetAsync($"https://localhost:7048/Endereco/GetEnderecosByIdContato/{idContato}");
 
-            return await conn.QueryAsync<Endereco>(query, new { IdContato = idContato });
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<IEnumerable<Endereco>>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter endereços: {response.StatusCode}");
+            }
         }
 
         public async Task<Endereco> GetEnderecoById(int id)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var client = new HttpClient();
 
-            string query = "SELECT * FROM Enderecos WHERE Id = @Id  AND Ativo = 1";
+            var response = await client.GetAsync($"https://localhost:7048/Endereco/GetEnderecoById/{id}");
 
-            return await conn.QueryFirstOrDefaultAsync<Endereco>(query, new { Id = id });
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Endereco>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter endereço: {response.StatusCode}");
+            }
         }
 
         public async Task<int> AddEndereco(Endereco endereco, IDbConnection connection, IDbTransaction transaction)

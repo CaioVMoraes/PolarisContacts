@@ -4,6 +4,8 @@ using PolarisContacts.Domain;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
@@ -15,53 +17,49 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<IEnumerable<Contato>> GetAllContatosByIdUsuario(int idUsuario)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var client = new HttpClient();
 
-            string query = "SELECT * FROM Contatos WHERE IdUsuario = @IdUsuario  AND Ativo = 1 ORDER BY Nome";
+            var response = await client.GetAsync($"https://localhost:7048/Contato/GetAllContatosByIdUsuario/{idUsuario}");
 
-            return await conn.QueryAsync<Contato>(query, new { IdUsuario = idUsuario });
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<IEnumerable<Contato>>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter contatos: {response.StatusCode}");
+            }
         }
 
         public async Task<Contato> GetContatoById(int idContato)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var client = new HttpClient();
 
-            string query = "SELECT * FROM Contatos WHERE Id = @Id  AND Ativo = 1";
-            return await conn.QueryFirstOrDefaultAsync<Contato>(query, new { Id = idContato });
+            var response = await client.GetAsync($"https://localhost:7048/Contato/GetContatoById/{idContato}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Contato>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter contato: {response.StatusCode}");
+            }
         }
 
         public async Task<IEnumerable<Contato>> SearchByUsuarioIdAndTerm(int idUsuario, string searchTerm)
         {
-            using (var connection = _dbConnection.AbrirConexao())
-            {
-                var query = @"
-                            SELECT DISTINCT c.*
-                            FROM Contatos c
-                            LEFT JOIN Telefones t ON c.Id = t.IdContato
-                            LEFT JOIN Celulares cl ON c.Id = cl.IdContato
-                            LEFT JOIN Emails e ON c.Id = e.IdContato
-                            LEFT JOIN Enderecos en ON c.Id = en.IdContato
-                            LEFT JOIN Regioes rt ON t.IdRegiao = rt.Id
-                            LEFT JOIN Regioes rcl ON cl.IdRegiao = rcl.Id
-                            WHERE c.IdUsuario = @IdUsuario
-                                AND (
-                                    c.Nome LIKE @SearchTerm OR
-                                    t.NumeroTelefone LIKE @SearchTerm OR
-                                    cl.NumeroCelular LIKE @SearchTerm OR
-                                    e.EnderecoEmail LIKE @SearchTerm OR
-                                    en.Logradouro LIKE @SearchTerm OR
-                                    en.CEP LIKE @SearchTerm OR
-                                    en.Cidade LIKE @SearchTerm OR
-                                    en.Estado LIKE @SearchTerm OR
-                                    rt.DDD + t.NumeroTelefone LIKE @SearchTerm OR
-                                    rcl.DDD + cl.NumeroCelular LIKE @SearchTerm OR
-                                    REPLACE(REPLACE(REPLACE(t.NumeroTelefone, '(', ''), ')', ''), '-', '') LIKE '%' + REPLACE(REPLACE(REPLACE(@SearchTerm, '(', ''), ')', ''), '-', '') + '%' OR
-                                    REPLACE(REPLACE(REPLACE(cl.NumeroCelular, '(', ''), ')', ''), '-', '') LIKE '%' + REPLACE(REPLACE(REPLACE(@SearchTerm, '(', ''), ')', ''), '-', '') + '%'
-                                )
-                            ORDER BY
-                                c.Nome";
+            using var client = new HttpClient();
 
-                return await connection.QueryAsync<Contato>(query, new { SearchTerm = "%" + searchTerm + "%", IdUsuario = idUsuario });
+            var response = await client.GetAsync($"https://localhost:7048/Celular/SearchByUsuarioIdAndTerm/{idUsuario}?searchTerm={searchTerm}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<IEnumerable<Contato>>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter resultados: {response.StatusCode}");
             }
         }
 

@@ -1,7 +1,10 @@
 ﻿using Dapper;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain;
+using System.Collections.Generic;
 using System.Data;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
@@ -12,11 +15,18 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<Usuario> GetUserByPasswordAsync(string login, string senha)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var client = new HttpClient();
 
-            string query = "SELECT * FROM Usuarios WHERE [Login] = @Login AND Senha = @Senha AND Ativo = 1";
+            var response = await client.GetAsync($"https://localhost:7048/Usuario/GetUserByPasswordAsync?login={login}&senha={senha}");
 
-            return await conn.QueryFirstOrDefaultAsync<Usuario>(query, new { Login = login, Senha = senha });
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Usuario>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter usuário: {response.StatusCode}");
+            }
         }
 
         public async Task<bool> CreateUserAsync(string login, string senha)

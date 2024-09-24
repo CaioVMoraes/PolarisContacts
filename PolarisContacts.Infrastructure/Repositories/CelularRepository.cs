@@ -1,9 +1,13 @@
 ﻿using Dapper;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
@@ -14,18 +18,34 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<IEnumerable<Celular>> GetCelularesByIdContato(int idContato)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var client = new HttpClient();
 
-            string query = "SELECT * FROM Celulares WHERE IdContato = @IdContato AND Ativo = 1";
-            return await conn.QueryAsync<Celular>(query, new { IdContato = idContato });
+            var response = await client.GetAsync($"https://localhost:7048/Celular/GetCelularesByIdContato/{idContato}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<IEnumerable<Celular>>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter celulares: {response.StatusCode}");
+            }
         }
 
         public async Task<Celular> GetCelularById(int id)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var client = new HttpClient();
 
-            string query = "SELECT * FROM Celulares WHERE Id = @Id AND Ativo = 1";
-            return await conn.QueryFirstOrDefaultAsync<Celular>(query, new { Id = id });
+            var response = await client.GetAsync($"https://localhost:7048/Celular/GetCelularById/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Celular>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter celular: {response.StatusCode}");
+            }
         }
 
         public async Task<int> AddCelular(Celular celular, IDbConnection connection, IDbTransaction transaction)

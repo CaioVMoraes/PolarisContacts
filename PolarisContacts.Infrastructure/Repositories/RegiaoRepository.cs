@@ -3,6 +3,8 @@ using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain;
 using System.Collections.Generic;
 using System.Data;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
@@ -13,18 +15,34 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<IEnumerable<Regiao>> GetAll()
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var client = new HttpClient();
 
-            var query = "SELECT * FROM Regioes WHERE Ativo = 1";
-            return await conn.QueryAsync<Regiao>(query);
+            var response = await client.GetAsync($"https://localhost:7048/Regiao/GetAll");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<IEnumerable<Regiao>>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter regiões: {response.StatusCode}");
+            }
         }
 
         public async Task<Regiao> GetById(int idRegiao)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var client = new HttpClient();
 
-            var query = "SELECT * FROM Regioes WHERE Ativo = 1 AND Id = @IdRegiao";
-            return await conn.QueryFirstOrDefaultAsync<Regiao>(query, new { @IdRegiao = idRegiao });
+            var response = await client.GetAsync($"https://localhost:7048/Regiao/GetById/{idRegiao}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Regiao>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter região: {response.StatusCode}");
+            }
         }
     }
 }
