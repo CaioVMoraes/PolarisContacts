@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: Trigger CreateService workflow
       run: |
-         sleep 10s
+         sleep 1s
     - uses: convictional/trigger-workflow-and-wait@v1.3.0
       with:
           owner: CaioVMoraes
