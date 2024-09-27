@@ -15,37 +15,15 @@ jobs:
 
     steps:
     - name: Trigger CreateService workflow
-      uses: actions/github-script@v6
+      run: |
+         sleep 10s
+    - uses: convictional/trigger-workflow-and-wait@v1.3.0
       with:
-        github-token: ${{ secrets.PAT_TOKEN }}
-        script: |
-          try {
-            const { data: workflows } = await github.actions.listRepoWorkflows({
-              owner: 'CaioVMoraes',
-              repo: 'PolarisContacts.CreateService',
-            });
-    
-            if (!workflows || !workflows.workflows) {
-              throw new Error('No workflows found.');
-            }
-    
-            const workflowId = workflows.workflows.find(w => w.path === 'CreateService.yml')?.id;
-    
-            if (!workflowId) {
-              throw new Error('Workflow ID not found.');
-            }
-    
-            await github.actions.createWorkflowDispatch({
-              owner: 'CaioVMoraes',
-              repo: 'PolarisContacts.CreateService',
-              workflow_id: workflowId,
-              ref: 'main',
-            });
-    
-          } catch (error) {
-            console.error('Error triggering workflow:', error);
-            throw error;
-          }
+          owner: CaioVMoraes
+          repo: PolarisContacts.CreateService
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: CreateService.yml
+        
 
   integration-tests:
     needs: trigger-create-service
