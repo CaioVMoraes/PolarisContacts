@@ -16,10 +16,9 @@ jobs:
     steps:
     - name: Trigger CreateService workflow
       run: |
-        curl -X POST \
-          -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/CaioVMoraes/PolarisContacts.CreateService/actions/workflows/.github/workflows/CreateService.yml/dispatches
+        curl -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+             -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/CaioVMoraes/PolarisContacts.CreateService/actions/workflows/.github/workflows
 
           -d '{"ref":"main"}'
 
