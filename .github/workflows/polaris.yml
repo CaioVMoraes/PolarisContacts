@@ -22,6 +22,7 @@ jobs:
           owner: CaioVMoraes
           repo: PolarisContacts.CreateService
           github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: CreateService.yml
         
 
   integration-tests:
