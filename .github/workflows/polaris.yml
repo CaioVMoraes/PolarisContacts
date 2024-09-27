@@ -16,8 +16,8 @@ jobs:
     steps:
     - name: Trigger CreateService workflow
       run: |
-         sleep 10s
-    - uses: convictional/trigger-workflow-and-wait@v1.3.0
+         
+    - uses: convictional/trigger-workflow@v1.3.0
       with:
           owner: CaioVMoraes
           repo: PolarisContacts.CreateService
