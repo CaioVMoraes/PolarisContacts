@@ -1,4 +1,4 @@
-name: .NET Core CI
+name: PolarisContacts Integration Workflow
 
 on:
   push:
@@ -10,12 +10,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  trigger-create-service:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Trigger CreateService workflow
+      run: |
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/YourUsername/PolarisContacts.CreateService/actions/workflows/your_workflow_file.yml/dispatches \
+          -d '{"ref":"main"}'
+
+  integration-tests:
+    needs: trigger-create-service
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        dotnet-version: ['8.0.x'] # Usando a versão 8.0 do .NET
+        dotnet-version: ['8.0.x']
 
     steps:
     - name: Checkout code
@@ -29,21 +42,8 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
 
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-
-    - name: Run Unit Tests
-      run: dotnet test --configuration Release --no-restore --logger "trx;LogFileName=TestResults/TestResults.trx" --collect:"XPlat Code Coverage"
-
     - name: Run Integration Tests
       run: dotnet test PolarisContacts.IntegrationTests/PolarisContacts.IntegrationTests.csproj --configuration Release --no-restore --logger "trx;LogFileName=IntegrationTestResults/IntegrationTestResults.trx" --collect:"XPlat Code Coverage"
-
-    - name: Publish Unit Test Results
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: UnitTestResults
-        path: '**/TestResults/TestResults.trx'
 
     - name: Publish Integration Test Results
       uses: actions/upload-artifact@v3
