@@ -19,18 +19,33 @@ jobs:
       with:
         github-token: ${{ secrets.PAT_TOKEN }}
         script: |
-          const { data: workflows } = await github.actions.listRepoWorkflows({
-            owner: 'CaioVMoraes',
-            repo: 'PolarisContacts.CreateService',
-          });
-          const workflowId = workflows.workflows.find(w => w.path === 'CreateService.yml').id;
-
-          await github.actions.createWorkflowDispatch({
-            owner: 'CaioVMoraes',
-            repo: 'PolarisContacts.CreateService',
-            workflow_id: workflowId,
-            ref: 'main',
-          });
+          try {
+            const { data: workflows } = await github.actions.listRepoWorkflows({
+              owner: 'CaioVMoraes',
+              repo: 'PolarisContacts.CreateService',
+            });
+    
+            if (!workflows || !workflows.workflows) {
+              throw new Error('No workflows found.');
+            }
+    
+            const workflowId = workflows.workflows.find(w => w.path === 'CreateService.yml')?.id;
+    
+            if (!workflowId) {
+              throw new Error('Workflow ID not found.');
+            }
+    
+            await github.actions.createWorkflowDispatch({
+              owner: 'CaioVMoraes',
+              repo: 'PolarisContacts.CreateService',
+              workflow_id: workflowId,
+              ref: 'main',
+            });
+    
+          } catch (error) {
+            console.error('Error triggering workflow:', error);
+            throw error;
+          }
 
   integration-tests:
     needs: trigger-create-service
