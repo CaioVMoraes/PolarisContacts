@@ -19,7 +19,7 @@ jobs:
         curl -X POST \
           -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/CaioVMoraes/PolarisContacts.CreateService/.github/workflows/CreateService.yml/dispatches
+          https://api.github.com/repos/CaioVMoraes/PolarisContacts.CreateService/actions/workflows/.github/workflows/CreateService.yml/dispatches
 
           -d '{"ref":"main"}'
 
