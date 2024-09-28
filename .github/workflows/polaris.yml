@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  trigger-create-service:
+  triggers-services:
     runs-on: ubuntu-latest
 
     steps:
