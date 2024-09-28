@@ -24,6 +24,18 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           workflow_file_name: CreateService.yml
           wait_interval: 0
+          wait_workflow: false         
+
+    - name: Trigger UpdateService workflow
+      run: |
+         sleep 1s
+    - uses: convictional/trigger-workflow-and-wait@v1.3.0
+      with:
+          owner: CaioVMoraes
+          repo: PolarisContacts.UpdateService
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: UpdateService.yml
+          wait_interval: 0
           wait_workflow: false          
         
 
