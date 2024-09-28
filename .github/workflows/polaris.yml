@@ -40,7 +40,7 @@ jobs:
         
 
   integration-tests:
-    needs: trigger-create-service
+    needs: triggers-services
     runs-on: ubuntu-latest
 
     strategy:
