@@ -34,13 +34,13 @@ jobs:
           wait_interval: 0
           wait_workflow: false       
 
-    - name: Trigger CostumerService workflow      
+    - name: Trigger ConsumerService workflow      
       uses: convictional/trigger-workflow-and-wait@v1.3.0
       with:
           owner: CaioVMoraes
-          repo: PolarisContacts.CostumerService
+          repo: PolarisContacts.ConsumerService
           github_token: ${{ secrets.PAT_TOKEN }}
-          workflow_file_name: CostumerService.yml
+          workflow_file_name: ConsumerService.yml
           wait_interval: 0
           wait_workflow: false       
         
