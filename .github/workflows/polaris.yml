@@ -32,7 +32,17 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           workflow_file_name: UpdateService.yml
           wait_interval: 0
-          wait_workflow: false          
+          wait_workflow: false       
+
+    - name: Trigger CostumerService workflow      
+      uses: convictional/trigger-workflow-and-wait@v1.3.0
+      with:
+          owner: CaioVMoraes
+          repo: PolarisContacts.CostumerService
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: CostumerService.yml
+          wait_interval: 0
+          wait_workflow: false       
         
 
   integration-tests:
