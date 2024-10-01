@@ -35,7 +35,7 @@ namespace PolarisContacts.Application.Services
                 throw new SenhaVaziaException();
             }
 
-            return await _usuarioRepository.CreateUserAsync(login, senha);
+            return await _usuarioRepository.CreateUserAsync( new Usuario { Login = login, Senha = senha });
         }
 
         public async Task<bool> ChangeUserPasswordAsync(string login, string oldPassword, string newPassword)

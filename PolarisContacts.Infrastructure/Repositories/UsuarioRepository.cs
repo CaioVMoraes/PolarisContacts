@@ -36,7 +36,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> CreateUserAsync(string login, string senha)
+        public async Task<bool> CreateUserAsync(Usuario usuario)
         {
             using var handler = new HttpClientHandler
             {
@@ -45,19 +45,12 @@ namespace PolarisContacts.Infrastructure.Repositories
 
             using var client = new HttpClient(handler);
 
-            var jsonContent = JsonSerializer.Serialize(new { login, senha });
+            var jsonContent = JsonSerializer.Serialize(usuario);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.CreateService}/Contato/AddContato/", content);
+            var response = await client.PostAsync($"{_urlApis.CreateService}/Usuario/CreateUser/", content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            else
-            {
-                throw new HttpRequestException($"Erro ao atualizar o usuário!");
-            }
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> ChangeUserPasswordAsync(string login, string oldPassword, string newPassword)
@@ -69,10 +62,10 @@ namespace PolarisContacts.Infrastructure.Repositories
 
             using var client = new HttpClient(handler);
 
-            var jsonContent = JsonSerializer.Serialize(new { login, oldPassword, newPassword });
+            var jsonContent = JsonSerializer.Serialize(new Usuario { Login = login, Senha = oldPassword, NovaSenha = newPassword });
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.UpdateService}/Usuario/ChangeUserPasswordAsync/", content);
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Usuario/ChangeUserPasswordAsync/", content);
 
             if (response.IsSuccessStatusCode)
             {

@@ -93,7 +93,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             var jsonContent = JsonSerializer.Serialize(endereco);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.UpdateService}/Endereco/UpdateEndereco/", content);
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Endereco/UpdateEndereco/", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -117,7 +117,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             var jsonContent = JsonSerializer.Serialize(id);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.UpdateService}/Endereco/InativaEndereco/", content);
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Endereco/InativaEndereco/", content);
 
             if (response.IsSuccessStatusCode)
             {

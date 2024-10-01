@@ -93,7 +93,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             var jsonContent = JsonSerializer.Serialize(telefone);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.UpdateService}/Contato/UpdateTelefone/", content);
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Telefone/UpdateTelefone/", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -101,7 +101,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             }
             else
             {
-                throw new HttpRequestException($"Erro ao atualizar o contato!");
+                throw new HttpRequestException($"Erro ao atualizar o telefone!");
             }
         }
 
@@ -117,7 +117,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             var jsonContent = JsonSerializer.Serialize(id);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.UpdateService}/Telefone/InativaTelefone/", content);
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Telefone/InativaTelefone/", content);
 
             if (response.IsSuccessStatusCode)
             {

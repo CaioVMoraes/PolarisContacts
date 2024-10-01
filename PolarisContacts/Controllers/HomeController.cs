@@ -77,7 +77,7 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertContato([FromBody] Contato contato)
+        public async Task<JsonResult> InsertContato(Contato contato)
         {
             try
             {
@@ -86,23 +86,13 @@ namespace PolarisContacts.Controllers
                     contato.IdUsuario = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                 }
 
-                if (ModelState.IsValid)
-                {
-                    await _contatoService.AddContato(contato);
-                }
-                else
-                {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors);
-                    return BadRequest(new { Errors = errors });
-                }
+                await _contatoService.AddContato(contato);
 
-                return RedirectToAction("Index");
+                return Json(new { Sucesso = true, Mensagem = "Contato cadastrado com sucesso!" });
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = true;
-                TempData["Message"] = ex.Message;
-                return View("../Shared/TelaErro");
+                return Json(new { Sucesso = false, Mensagem = ex.Message });
             }
         }
 

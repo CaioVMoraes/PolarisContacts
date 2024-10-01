@@ -78,7 +78,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             }
         }
 
-        public async Task<int> AddContato(Contato contato)
+        public async Task<bool> AddContato(Contato contato)
         {
             using var handler = new HttpClientHandler
             {
@@ -92,14 +92,7 @@ namespace PolarisContacts.Infrastructure.Repositories
 
             var response = await client.PostAsync($"{_urlApis.CreateService}/Contato/AddContato/", content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return 1;
-            }
-            else
-            {
-                throw new HttpRequestException($"Erro ao cadastrar o contato!");
-            }
+            return response.IsSuccessStatusCode;
         }
 
 
@@ -115,7 +108,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             var jsonContent = JsonSerializer.Serialize(contato);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.UpdateService}/Contato/UpdateContato/", content);
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Contato/UpdateContato/", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -139,7 +132,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             var jsonContent = JsonSerializer.Serialize(idContato);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.UpdateService}/Contato/InativaContato/", content);
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Contato/InativaContato/", content);
 
             if (response.IsSuccessStatusCode)
             {

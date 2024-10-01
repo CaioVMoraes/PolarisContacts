@@ -93,7 +93,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             var jsonContent = JsonSerializer.Serialize(email);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.UpdateService}/Contato/UpdateEmail/", content);
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Email/UpdateEmail/", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -117,7 +117,7 @@ namespace PolarisContacts.Infrastructure.Repositories
             var jsonContent = JsonSerializer.Serialize(id);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{_urlApis.UpdateService}/Email/InativaEmail/", content);
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Email/InativaEmail/", content);
 
             if (response.IsSuccessStatusCode)
             {

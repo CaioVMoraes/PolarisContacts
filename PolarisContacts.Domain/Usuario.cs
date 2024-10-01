@@ -15,8 +15,11 @@ namespace PolarisContacts.Domain
 
         [Display(Name = "Senha")]
         [Required(ErrorMessage = "A senha é obrigatória.")]
-        [StringLength(20, ErrorMessage = "A senha não pode exceder 20 caracteres.")]
         public string Senha { get; set; }
+
+        public string NovaSenha { get; set; }
+
+        public string ConfirmSenha { get; set; }
 
         public bool Ativo { get; set; }
 

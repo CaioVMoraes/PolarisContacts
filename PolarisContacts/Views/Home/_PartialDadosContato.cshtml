@@ -1,5 +1,75 @@
 ﻿@model PolarisContacts.Domain.Contato
 
+<style>
+    .modal-header {
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #dee2e6;
+        padding-top: 10px;
+    }
+
+    .i-modal-color {
+        color: #333;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: .25rem;
+    }
+
+    .telefone-item, .celular-item, .email-item, .endereco-item {
+        border: 1px solid #dee2e6;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+    }
+
+    .modal-lg {
+        max-width: 80%;
+    }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+</style>
+
 @{
     var regioes = ViewBag.Regioes as IEnumerable<PolarisContacts.Domain.Regiao>;
 }
@@ -157,7 +227,7 @@
                         </div>
                     </section>
                     <div class="text-end">
-                        <button id="btnSalvar" class="btn btn-success" onclick="LoadingCadastrarContato()">Salvar</button>
+                        <button id="btnSalvar" class="btn btn-success">Salvar</button>
                     </div>
                 }
             </div>
@@ -184,6 +254,41 @@
             }
         });
     });
+
+    $('#btnSalvar').click(function (e) {
+        e.preventDefault(); // Previne o comportamento padrão do botão
+        SalvarContato(); // Função AJAX para enviar o formulário
+    });
+
+
+    function SalvarContato() {
+        $('#loaderCadastrarContato').show();
+
+        // Serializar o formulário para obter os dados
+        var formData = $('#ContatoForm').serialize();
+
+        // Fazer a requisição AJAX
+        $.ajax({
+            url: '@Url.Action("InsertContato", "Home")', // URL da ação InsertContato
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.sucesso) {
+                    setTimeout(function () {
+                        location.reload()
+                    }, 3000);
+                } else {
+                    $('#loaderCadastrarContato').hide();
+                    alert('Erro ao salvar o contato: ' + response.mensagem);
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#loaderCadastrarContato').hide();
+                alert('Ocorreu um erro: ' + error);
+            }
+        });
+    }
+
 
     let telefoneIndex = @(Model.Telefones?.Count() ?? 0);
     let celularIndex = @(Model.Celulares?.Count() ?? 0);
@@ -335,82 +440,4 @@
         const id = $(element).attr('id').split('_')[1];
         $(`#DDDCelular_${id}`).text(`(${ddd})`);
     }
-
-
-
-
-
-    function LoadingCadastrarContato() {
-        $("#loaderCadastrarContato").fadeIn();
-    }
 </script>
-
-<style>
-    .modal-header {
-        border-bottom: 1px solid #dee2e6;
-        padding-bottom: 10px;
-    }
-
-    .modal-footer {
-        border-top: 1px solid #dee2e6;
-        padding-top: 10px;
-    }
-
-    .i-modal-color {
-        color: #333;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-
-    .btn-outline-primary {
-        color: #007bff;
-        border-color: #007bff;
-    }
-
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-    .btn-outline-danger {
-        color: #dc3545;
-        border-color: #dc3545;
-    }
-
-        .btn-outline-danger:hover {
-            background-color: #dc3545;
-            color: #fff;
-        }
-
-    .btn-success {
-        background-color: #28a745;
-        border-color: #28a745;
-    }
-
-    .form-label {
-        font-weight: bold;
-    }
-
-    .form-control {
-        border-radius: .25rem;
-    }
-
-    .telefone-item, .celular-item, .email-item, .endereco-item {
-        border: 1px solid #dee2e6;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        background-color: #f8f9fa;
-    }
-
-    .modal-lg {
-        max-width: 80%;
-    }
-
-    .text-primary {
-        color: #007bff !important;
-    }
-</style>
