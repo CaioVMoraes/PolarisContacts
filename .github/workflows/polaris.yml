@@ -42,7 +42,17 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           workflow_file_name: ConsumerService.yml
           wait_interval: 0
-          wait_workflow: false       
+          wait_workflow: false 
+
+    - name: Trigger ReadService workflow      
+      uses: convictional/trigger-workflow-and-wait@v1.3.0
+      with:
+          owner: CaioVMoraes
+          repo: PolarisContacts.ReadService
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: ReadService.yml
+          wait_interval: 0
+          wait_workflow: false 
         
 
   integration-tests:
