@@ -62,7 +62,7 @@ namespace PolarisContacts.Application.Services
             await _celularRepository.UpdateCelular(celular);
         }
 
-        public async Task DeleteCelular(int id)
+        public async Task InativaCelular(int id)
         {
             if (id <= 0)
             {
@@ -76,7 +76,7 @@ namespace PolarisContacts.Application.Services
                 throw new CelularNotFoundException();
             }
 
-            await _celularRepository.DeleteCelular(id);
+            await _celularRepository.InativaCelular(id);
         }
     }
 }

@@ -246,7 +246,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/Home/ModalDadosContato",
+            url: '@Url.Action("ModalDadosContato", "Home")',
             data: { idContato: idContato },
             success: function (data) {
                 $("#loaderHome").fadeOut();
@@ -264,7 +264,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/Telefone/ModalEditTelefone",
+            url: '@Url.Action("ModalEditTelefone", "Telefone")',
             data: {
                 idTelefone
             },
@@ -284,7 +284,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/Celular/ModalEditCelular",
+            url: '@Url.Action("ModalEditCelular", "Celular")',
             data: { idCelular: idCelular },
             success: function (data) {
                 $("#loaderHome").fadeOut()
@@ -305,7 +305,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/Email/ModalEditEmail",
+            url: '@Url.Action("ModalEditEmail", "Email")',
             data: {
                 idEmail
             },
@@ -325,7 +325,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/Endereco/ModalEditEndereco",
+            url: '@Url.Action("ModalEditEndereco", "Endereco")',
             data: {
                 idEndereco
             },

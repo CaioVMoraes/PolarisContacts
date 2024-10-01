@@ -59,14 +59,14 @@ namespace PolarisContacts.Application.Services
             await _enderecoRepository.UpdateEndereco(endereco);
         }
 
-        public async Task DeleteEndereco(int id)
+        public async Task InativaEndereco(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            await _enderecoRepository.DeleteEndereco(id);
+            await _enderecoRepository.InativaEndereco(id);
         }
     }
 }

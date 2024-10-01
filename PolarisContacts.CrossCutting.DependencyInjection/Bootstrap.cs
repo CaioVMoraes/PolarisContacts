@@ -1,6 +1,6 @@
-using PolarisContacts.CrossCutting.DependencyInjection.Extensions.AddInfrastructureLayer;
 using Microsoft.Extensions.DependencyInjection;
 using PolarisContacts.CrossCutting.DependencyInjection.Extensions.AddApplicationLayer;
+using PolarisContacts.CrossCutting.DependencyInjection.Extensions.AddInfrastructureLayer;
 
 namespace PolarisContacts.CrossCutting.DependencyInjection;
 

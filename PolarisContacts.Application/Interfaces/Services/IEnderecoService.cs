@@ -10,6 +10,6 @@ namespace PolarisContacts.Application.Interfaces.Services
         Task<Endereco> GetEnderecoById(int id);
         //Task AddEndereco(Endereco endereco);
         Task UpdateEndereco(Endereco endereco);
-        Task DeleteEndereco(int id);
+        Task InativaEndereco(int id);
     }
 }

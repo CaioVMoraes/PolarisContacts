@@ -1,25 +1,30 @@
-﻿using Dapper;
+﻿using Microsoft.Extensions.Options;
 using PolarisContacts.Application.Interfaces.Repositories;
-using PolarisContacts.DatabaseConnection;
 using PolarisContacts.Domain;
+using PolarisContacts.Domain.Settings;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
 {
-    public class TelefoneRepository(IDatabaseConnection dbConnection) : ITelefoneRepository
+    public class TelefoneRepository(IOptions<UrlApis> urlApis) : ITelefoneRepository
     {
-        private readonly IDatabaseConnection _dbConnection = dbConnection;
+        private readonly UrlApis _urlApis = urlApis.Value;
 
         public async Task<IEnumerable<Telefone>> GetTelefonesByIdContato(int idContato)
         {
-            using var client = new HttpClient();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            var response = await client.GetAsync($"https://localhost:7048/Telefone/GetTelefonesByIdContato/{idContato}");
+            using var client = new HttpClient(handler);
+
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Telefone/GetTelefonesByIdContato/{idContato}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -33,9 +38,14 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<Telefone> GetTelefoneById(int id)
         {
-            using var client = new HttpClient();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            var response = await client.GetAsync($"https://localhost:7048/Telefone/GetTelefoneById/{id}");
+            using var client = new HttpClient(handler);
+
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Telefone/GetTelefoneById/{id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -47,47 +57,76 @@ namespace PolarisContacts.Infrastructure.Repositories
             }
         }
 
-        public async Task<int> AddTelefone(Telefone telefone, IDbConnection connection, IDbTransaction transaction)
+        public async Task<int> AddTelefone(Telefone telefone)
         {
-            string query;
-            var isSqlServer = connection.GetType() == typeof(SqlConnection);
-
-            if (isSqlServer)
+            using var handler = new HttpClientHandler
             {
-                // SQL Server
-                query = @"INSERT INTO Telefones (IdRegiao, IdContato, NumeroTelefone, Ativo) 
-                             OUTPUT INSERTED.Id
-                             VALUES (@IdRegiao, @IdContato, @NumeroTelefone, @Ativo)";
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
+
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(telefone);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"{_urlApis.CreateService}/Telefone/AddTelefone/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return 1;
             }
             else
             {
-                // SQLite
-                query = @"INSERT INTO Telefones (IdRegiao, IdContato, NumeroTelefone, Ativo) 
-                            VALUES (@IdRegiao, @IdContato, @NumeroTelefone, @Ativo);
-                            SELECT last_insert_rowid();";
+                throw new HttpRequestException($"Erro ao cadastrar o telefone!");
             }
-
-            return await connection.QuerySingleAsync<int>(query, telefone, transaction);
         }
 
         public async Task<bool> UpdateTelefone(Telefone telefone)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = @"UPDATE Telefones SET 
-                             IdRegiao = @IdRegiao, NumeroTelefone = @NumeroTelefone
-                             WHERE Id = @Id";
-            return await conn.ExecuteAsync(query, telefone) > 0;
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(telefone);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"{_urlApis.UpdateService}/Contato/UpdateTelefone/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao atualizar o contato!");
+            }
         }
 
-        public async Task<bool> DeleteTelefone(int id)
+        public async Task<bool> InativaTelefone(int id)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = @"UPDATE Telefones SET 
-                             Ativo = 0
-                             WHERE Id = @Id";
-            return await conn.ExecuteAsync(query, new { Id = id }) > 0;
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(id);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"{_urlApis.UpdateService}/Telefone/InativaTelefone/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao inativar o telefone!");
+            }
         }
     }
 }

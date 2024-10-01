@@ -132,11 +132,11 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteContato([FromQuery] int id)
+        public async Task<IActionResult> InativaContato([FromQuery] int id)
         {
             try
             {
-                await _contatoService.DeleteContato(id);
+                await _contatoService.InativaContato(id);
                 return Ok();
             }
             catch (Exception ex)

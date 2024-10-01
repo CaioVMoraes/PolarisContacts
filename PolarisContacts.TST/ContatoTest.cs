@@ -2,7 +2,6 @@
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Application.Interfaces.Services;
 using PolarisContacts.Application.Services;
-using PolarisContacts.DatabaseConnection;
 using PolarisContacts.Domain;
 using System.Collections.Generic;
 using System.Data;

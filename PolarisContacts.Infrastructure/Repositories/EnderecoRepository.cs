@@ -1,28 +1,30 @@
-﻿using Dapper;
+﻿using Microsoft.Extensions.Options;
 using PolarisContacts.Application.Interfaces.Repositories;
-using PolarisContacts.DatabaseConnection;
 using PolarisContacts.Domain;
+using PolarisContacts.Domain.Settings;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
 {
-
-
-    public class EnderecoRepository(IDatabaseConnection dbConnection) : IEnderecoRepository
+    public class EnderecoRepository(IOptions<UrlApis> urlApis) : IEnderecoRepository
     {
-        private readonly IDatabaseConnection _dbConnection = dbConnection;
-
+        private readonly UrlApis _urlApis = urlApis.Value;
 
         public async Task<IEnumerable<Endereco>> GetEnderecosByIdContato(int idContato)
         {
-            using var client = new HttpClient();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            var response = await client.GetAsync($"https://localhost:7048/Endereco/GetEnderecosByIdContato/{idContato}");
+            using var client = new HttpClient(handler);
+
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Endereco/GetEnderecosByIdContato/{idContato}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -36,9 +38,14 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<Endereco> GetEnderecoById(int id)
         {
-            using var client = new HttpClient();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            var response = await client.GetAsync($"https://localhost:7048/Endereco/GetEnderecoById/{id}");
+            using var client = new HttpClient(handler);
+
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Endereco/GetEnderecoById/{id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -50,53 +57,76 @@ namespace PolarisContacts.Infrastructure.Repositories
             }
         }
 
-        public async Task<int> AddEndereco(Endereco endereco, IDbConnection connection, IDbTransaction transaction)
+        public async Task<int> AddEndereco(Endereco endereco)
         {
-            string query;
-            var isSqlServer = connection.GetType() == typeof(SqlConnection);
-
-            if (isSqlServer)
+            using var handler = new HttpClientHandler
             {
-                // SQL Server
-                query = @"INSERT INTO Enderecos (IdContato, Logradouro, Numero, Cidade, Estado, Bairro, Complemento, CEP, Ativo) 
-                             OUTPUT INSERTED.Id
-                             VALUES (@IdContato, @Logradouro, @Numero, @Cidade, @Estado, @Bairro, @Complemento, @CEP, @Ativo)";
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
+
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(endereco);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"{_urlApis.CreateService}/Endereco/AddEndereco/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return 1;
             }
             else
             {
-                // SQLite
-                query = @"INSERT INTO Enderecos (IdContato, Logradouro, Numero, Cidade, Estado, Bairro, Complemento, CEP, Ativo) 
-                            VALUES (@IdContato, @Logradouro, @Numero, @Cidade, @Estado, @Bairro, @Complemento, @CEP, @Ativo);
-                            SELECT last_insert_rowid();";
+                throw new HttpRequestException($"Erro ao cadastrar o endereço!");
             }
-
-            return await connection.QuerySingleAsync<int>(query, endereco, transaction);
-
         }
 
         public async Task<bool> UpdateEndereco(Endereco endereco)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = @"UPDATE Enderecos SET 
-                                Logradouro = @Logradouro, Numero = @Numero, Cidade = @Cidade, Estado = @Estado, 
-                                Bairro = @Bairro, Complemento = @Complemento, CEP = @CEP 
-                                WHERE Id = @Id";
+            using var client = new HttpClient(handler);
 
-            return await conn.ExecuteAsync(query, endereco) > 0;
+            var jsonContent = JsonSerializer.Serialize(endereco);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
+            var response = await client.PostAsync($"{_urlApis.UpdateService}/Endereco/UpdateEndereco/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao atualizar o endereço!");
+            }
         }
 
-        public async Task<bool> DeleteEndereco(int id)
+        public async Task<bool> InativaEndereco(int id)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = @"UPDATE Enderecos SET 
-                             Ativo = 0
-                             WHERE Id = @Id";
+            using var client = new HttpClient(handler);
 
-            return await conn.ExecuteAsync(query, new { Id = id }) > 0;
+            var jsonContent = JsonSerializer.Serialize(id);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
+            var response = await client.PostAsync($"{_urlApis.UpdateService}/Endereco/InativaEndereco/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao inativar o endereço!");
+            }
         }
     }
 }

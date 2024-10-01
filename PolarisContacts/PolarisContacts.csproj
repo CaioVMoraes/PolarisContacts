@@ -14,8 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PolarisContacts.Domain" Version="1.0.0" />
-    <PackageReference Include="PolarisContacts.Helpers" Version="1.0.0" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
   </ItemGroup>
 
@@ -30,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PolarisContacts.Application\PolarisContacts.Application.csproj" />
     <ProjectReference Include="..\PolarisContacts.CrossCutting.DependencyInjection\PolarisContacts.CrossCutting.DependencyInjection.csproj" />
+    <ProjectReference Include="..\PolarisContacts.Domain\PolarisContacts.Domain.csproj" />
   </ItemGroup>
 
 </Project>

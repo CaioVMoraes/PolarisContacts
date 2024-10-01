@@ -1,37 +1,37 @@
-﻿var idToDelete;
-var typeToDelete;
+﻿var idToInativa;
+var typeToInativa;
 
-function confirmDeleteItem(id, type) {
-    idToDelete = id;
-    typeToDelete = type;
+function confirmInativaItem(id, type) {
+    idToInativa = id;
+    typeToInativa = type;
     document.getElementById('itemType').innerText = type.toLowerCase();
-    document.getElementById('confirmDeleteMessage').style.display = 'block';
-    document.getElementById('deleteSuccessMessage').style.display = 'none';
-    document.getElementById('confirmDeleteButton').disabled = false;
+    document.getElementById('confirmInativaMessage').style.display = 'block';
+    document.getElementById('inativaSuccessMessage').style.display = 'none';
+    document.getElementById('confirmInativaButton').disabled = false;
     document.getElementById('cancelButton').disabled = false;
-    var myModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+    var myModal = new bootstrap.Modal(document.getElementById('confirmInativaModal'));
     myModal.show();
 }
 
-document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-    deleteItem(idToDelete, typeToDelete);
+document.getElementById('confirmInativaButton').addEventListener('click', function () {
+    inativaItem(idToInativa, typeToInativa);
 });
 
-function deleteItem(id, type) {
+function inativaItem(id, type) {
     $("#loaderHome").fadeIn()
 
     $.ajax({
         type: "POST",
-        url: `/${type}/Delete${type}`,
+        url: `/${type}/Inativa${type}`,
         data: { id: id },
         success: function () {
             $(`#${type.toLowerCase()}-${id}`).remove();
-            document.getElementById('confirmDeleteMessage').style.display = 'none';
-            document.getElementById('deleteSuccessMessage').style.display = 'block';
-            document.getElementById('confirmDeleteButton').disabled = true;
+            document.getElementById('confirmInativaMessage').style.display = 'none';
+            document.getElementById('inativaSuccessMessage').style.display = 'block';
+            document.getElementById('confirmInativaButton').disabled = true;
             document.getElementById('cancelButton').disabled = true;
             setTimeout(() => {
-                var myModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+                var myModal = bootstrap.Modal.getInstance(document.getElementById('confirmInativaModal'));
                 myModal.hide();
             }, 2000); // Esconde a modal após 2 segundos
         },

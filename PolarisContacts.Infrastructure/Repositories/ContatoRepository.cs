@@ -1,25 +1,30 @@
-﻿using Dapper;
+﻿using Microsoft.Extensions.Options;
 using PolarisContacts.Application.Interfaces.Repositories;
-using PolarisContacts.DatabaseConnection;
 using PolarisContacts.Domain;
+using PolarisContacts.Domain.Settings;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
 {
-    public class ContatoRepository(IDatabaseConnection dbConnection) : IContatoRepository
+    public class ContatoRepository(IOptions<UrlApis> urlApis) : IContatoRepository
     {
-        private readonly IDatabaseConnection _dbConnection = dbConnection;
+        private readonly UrlApis _urlApis = urlApis.Value;
 
         public async Task<IEnumerable<Contato>> GetAllContatosByIdUsuario(int idUsuario)
         {
-            using var client = new HttpClient();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            var response = await client.GetAsync($"https://localhost:7048/Contato/GetAllContatosByIdUsuario/{idUsuario}");
+            using var client = new HttpClient(handler);
+
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Contato/GetAllContatosByIdUsuario/{idUsuario}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -33,9 +38,14 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<Contato> GetContatoById(int idContato)
         {
-            using var client = new HttpClient();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            var response = await client.GetAsync($"https://localhost:7048/Contato/GetContatoById/{idContato}");
+            using var client = new HttpClient(handler);
+
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Contato/GetContatoById/{idContato}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -49,9 +59,14 @@ namespace PolarisContacts.Infrastructure.Repositories
 
         public async Task<IEnumerable<Contato>> SearchByUsuarioIdAndTerm(int idUsuario, string searchTerm)
         {
-            using var client = new HttpClient();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            var response = await client.GetAsync($"https://localhost:7048/Celular/SearchByUsuarioIdAndTerm/{idUsuario}?searchTerm={searchTerm}");
+            using var client = new HttpClient(handler);
+
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Celular/SearchByUsuarioIdAndTerm/{idUsuario}?searchTerm={searchTerm}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -63,48 +78,77 @@ namespace PolarisContacts.Infrastructure.Repositories
             }
         }
 
-        public async Task<int> AddContato(Contato contato, IDbConnection connection, IDbTransaction transaction)
+        public async Task<int> AddContato(Contato contato)
         {
-            string query;
-            var isSqlServer = connection.GetType() == typeof(SqlConnection);
-
-            if (isSqlServer)
+            using var handler = new HttpClientHandler
             {
-                // SQL Server
-                query = @"INSERT INTO Contatos (Nome, IdUsuario, Ativo)
-                          OUTPUT INSERTED.Id
-                          VALUES (@Nome, @IdUsuario, @Ativo)";
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
+
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(contato);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"{_urlApis.CreateService}/Contato/AddContato/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return 1;
             }
             else
             {
-                // SQLite
-                query = @"INSERT INTO Contatos (Nome, IdUsuario, Ativo)
-                          VALUES (@Nome, @IdUsuario, @Ativo);
-                          SELECT last_insert_rowid();";
+                throw new HttpRequestException($"Erro ao cadastrar o contato!");
             }
-
-            return await connection.QuerySingleAsync<int>(query, contato, transaction);
         }
 
 
         public async Task<bool> UpdateContato(Contato contato)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = @"UPDATE Contatos SET 
-                             Nome = @Nome, Ativo = @Ativo 
-                             WHERE Id = @Id";
-            return await conn.ExecuteAsync(query, contato) > 0;
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(contato);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"{_urlApis.UpdateService}/Contato/UpdateContato/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao atualizar o contato!");
+            }
         }
 
-        public async Task<bool> DeleteContato(int idContato)
+        public async Task<bool> InativaContato(int idContato)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = @"UPDATE Contatos SET 
-                             Ativo = 0
-                             WHERE Id = @Id";
-            return await conn.ExecuteAsync(query, new { Id = idContato }) > 0;
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(idContato);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"{_urlApis.UpdateService}/Contato/InativaContato/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao inativar o contato!");
+            }
         }
     }
 }

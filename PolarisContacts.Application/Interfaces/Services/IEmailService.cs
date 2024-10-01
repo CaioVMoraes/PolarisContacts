@@ -10,6 +10,6 @@ namespace PolarisContacts.Application.Interfaces.Services
         Task<Email> GetEmailById(int id);
         //Task AddEmail(Email email);
         Task UpdateEmail(Email email);
-        Task DeleteEmail(int id);
+        Task InativaEmail(int id);
     }
 }
