@@ -1,5 +1,5 @@
-name: .NET Core CI
-
+name: PolarisContacts Integration Workflow
+ 
 on:
   push:
     branches:
@@ -8,45 +8,78 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+ 
 jobs:
-  build:
+  triggers-services:
     runs-on: ubuntu-latest
+ 
+    steps:
+    - name: Trigger CreateService workflow      
+      uses: convictional/trigger-workflow-and-wait@v1.3.0
+      with:
+          owner: CaioVMoraes
+          repo: PolarisContacts.CreateService
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: CreateService.yml
+          wait_interval: 0
+          wait_workflow: false         
+ 
+    - name: Trigger UpdateService workflow      
+      uses: convictional/trigger-workflow-and-wait@v1.3.0
+      with:
+          owner: CaioVMoraes
+          repo: PolarisContacts.UpdateService
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: UpdateService.yml
+          wait_interval: 0
+          wait_workflow: false       
+ 
+    - name: Trigger ConsumerService workflow      
+      uses: convictional/trigger-workflow-and-wait@v1.3.0
+      with:
+          owner: CaioVMoraes
+          repo: PolarisContacts.ConsumerService
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: ConsumerService.yml
+          wait_interval: 0
+          wait_workflow: false
+ 
+    - name: Trigger ReadService workflow      
+      uses: convictional/trigger-workflow-and-wait@v1.3.0
+      with:
+          owner: CaioVMoraes
+          repo: PolarisContacts.ReadService
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: ReadService.yml
+          wait_interval: 0
+          wait_workflow: false 
 
+ 
+  integration-tests:
+    needs: triggers-services
+    runs-on: ubuntu-latest
+ 
     strategy:
       matrix:
-        dotnet-version: ['8.0.x'] # Usando a versão 8.0 do .NET
-
+        dotnet-version: ['8.0.x']
+ 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
+ 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
-
+ 
     - name: Install dependencies
       run: dotnet restore
-
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-
-    - name: Run Unit Tests
-      run: dotnet test --configuration Release --no-restore --logger "trx;LogFileName=TestResults/TestResults.trx" --collect:"XPlat Code Coverage"
-
+ 
     - name: Run Integration Tests
-      run: dotnet test --project PolarisContacts.IntegrationTests/PolarisContacts.IntegrationTests.csproj --configuration Release --no-restore --logger "trx;LogFileName=IntegrationTestResults/IntegrationTestResults.trx" --collect:"XPlat Code Coverage"
-
-    - name: Publish Unit Test Results
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: UnitTestResults
-        path: '**/TestResults/TestResults.trx'
-
+      run: dotnet test PolarisContacts.IntegrationTests/PolarisContacts.IntegrationTests.csproj --configuration Release --no-restore --logger "trx;LogFileName=IntegrationTestResults/IntegrationTestResults.trx" --collect:"XPlat Code Coverage"
+ 
     - name: Publish Integration Test Results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: IntegrationTestResults
