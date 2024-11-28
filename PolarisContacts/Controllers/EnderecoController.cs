@@ -34,11 +34,11 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteEndereco(int id)
+        public async Task<IActionResult> InativaEndereco(int id)
         {
             try
             {
-                await _enderecoService.DeleteEndereco(id);
+                await _enderecoService.InativaEndereco(id);
                 return Json(new { success = true });
             }
             catch (Exception ex)

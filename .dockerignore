@@ -1,0 +1,30 @@
+# Ignorar arquivos de build
+bin/
+obj/
+
+# Ignorar arquivos de configuração do Visual Studio
+.vs/
+*.user
+*.suo
+*.sln.ide
+
+# Ignorar arquivos de logs
+*.log
+
+# Ignorar arquivos temporários e de cache
+*.tmp
+*.temp
+*.cache
+
+# Ignorar pacotes do NuGet
+**/*.nupkg
+**/packages/*
+
+# Ignorar arquivos de documentação e arquivos não essenciais
+docs/
+*.md
+*.xml
+
+# Ignorar o diretório do Docker se estiver presente
+Dockerfile
+.dockerignore

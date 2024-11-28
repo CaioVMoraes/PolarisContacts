@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PolarisContacts.Application\PolarisContacts.Application.csproj" />
+    <ProjectReference Include="..\PolarisContacts.Domain\PolarisContacts.Domain.csproj" />
     <ProjectReference Include="..\PolarisContacts.Infrastructure\PolarisContacts.Infrastructure.csproj" />
   </ItemGroup>
 

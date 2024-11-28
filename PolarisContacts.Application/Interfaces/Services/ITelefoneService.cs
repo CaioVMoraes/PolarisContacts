@@ -10,6 +10,6 @@ namespace PolarisContacts.Application.Interfaces.Services
         Task<Telefone> GetTelefoneById(int id);
         //Task AddTelefone(Telefone telefone);
         Task UpdateTelefone(Telefone telefone);
-        Task DeleteTelefone(int id);
+        Task InativaTelefone(int id);
     }
 }

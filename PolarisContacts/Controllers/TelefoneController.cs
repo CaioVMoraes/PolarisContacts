@@ -38,11 +38,11 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteTelefone(int id)
+        public async Task<IActionResult> InativaTelefone(int id)
         {
             try
             {
-                await _telefoneService.DeleteTelefone(id);
+                await _telefoneService.InativaTelefone(id);
                 return Json(new { success = true });
             }
             catch (Exception ex)

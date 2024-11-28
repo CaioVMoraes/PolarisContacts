@@ -60,14 +60,14 @@ namespace PolarisContacts.Application.Services
             await _emailRepository.UpdateEmail(email);
         }
 
-        public async Task DeleteEmail(int id)
+        public async Task InativaEmail(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            await _emailRepository.DeleteEmail(id);
+            await _emailRepository.InativaEmail(id);
         }
     }
 }

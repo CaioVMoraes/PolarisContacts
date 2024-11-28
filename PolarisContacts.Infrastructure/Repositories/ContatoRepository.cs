@@ -1,112 +1,147 @@
-﻿using Dapper;
+﻿using Microsoft.Extensions.Options;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain;
+using PolarisContacts.Domain.Settings;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
 {
-    public class ContatoRepository(IDatabaseConnection dbConnection) : IContatoRepository
+    public class ContatoRepository(IOptions<UrlApis> urlApis) : IContatoRepository
     {
-        private readonly IDatabaseConnection _dbConnection = dbConnection;
-
+        private readonly UrlApis _urlApis = urlApis.Value;
 
         public async Task<IEnumerable<Contato>> GetAllContatosByIdUsuario(int idUsuario)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = "SELECT * FROM Contatos WHERE IdUsuario = @IdUsuario  AND Ativo = 1 ORDER BY Nome";
+            using var client = new HttpClient(handler);
 
-            return await conn.QueryAsync<Contato>(query, new { IdUsuario = idUsuario });
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Contato/GetAllContatosByIdUsuario/{idUsuario}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<IEnumerable<Contato>>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter contatos: {response.StatusCode}");
+            }
         }
 
         public async Task<Contato> GetContatoById(int idContato)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = "SELECT * FROM Contatos WHERE Id = @Id  AND Ativo = 1";
-            return await conn.QueryFirstOrDefaultAsync<Contato>(query, new { Id = idContato });
+            using var client = new HttpClient(handler);
+
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Contato/GetContatoById/{idContato}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Contato>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter contato: {response.StatusCode}");
+            }
         }
 
         public async Task<IEnumerable<Contato>> SearchByUsuarioIdAndTerm(int idUsuario, string searchTerm)
         {
-            using (var connection = _dbConnection.AbrirConexao())
+            using var handler = new HttpClientHandler
             {
-                var query = @"
-                            SELECT DISTINCT c.*
-                            FROM Contatos c
-                            LEFT JOIN Telefones t ON c.Id = t.IdContato
-                            LEFT JOIN Celulares cl ON c.Id = cl.IdContato
-                            LEFT JOIN Emails e ON c.Id = e.IdContato
-                            LEFT JOIN Enderecos en ON c.Id = en.IdContato
-                            LEFT JOIN Regioes rt ON t.IdRegiao = rt.Id
-                            LEFT JOIN Regioes rcl ON cl.IdRegiao = rcl.Id
-                            WHERE c.IdUsuario = @IdUsuario
-                                AND (
-                                    c.Nome LIKE @SearchTerm OR
-                                    t.NumeroTelefone LIKE @SearchTerm OR
-                                    cl.NumeroCelular LIKE @SearchTerm OR
-                                    e.EnderecoEmail LIKE @SearchTerm OR
-                                    en.Logradouro LIKE @SearchTerm OR
-                                    en.CEP LIKE @SearchTerm OR
-                                    en.Cidade LIKE @SearchTerm OR
-                                    en.Estado LIKE @SearchTerm OR
-                                    rt.DDD + t.NumeroTelefone LIKE @SearchTerm OR
-                                    rcl.DDD + cl.NumeroCelular LIKE @SearchTerm OR
-                                    REPLACE(REPLACE(REPLACE(t.NumeroTelefone, '(', ''), ')', ''), '-', '') LIKE '%' + REPLACE(REPLACE(REPLACE(@SearchTerm, '(', ''), ')', ''), '-', '') + '%' OR
-                                    REPLACE(REPLACE(REPLACE(cl.NumeroCelular, '(', ''), ')', ''), '-', '') LIKE '%' + REPLACE(REPLACE(REPLACE(@SearchTerm, '(', ''), ')', ''), '-', '') + '%'
-                                )
-                            ORDER BY
-                                c.Nome";
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-                return await connection.QueryAsync<Contato>(query, new { SearchTerm = "%" + searchTerm + "%", IdUsuario = idUsuario });
-            }
-        }
+            using var client = new HttpClient(handler);
 
-        public async Task<int> AddContato(Contato contato, IDbConnection connection, IDbTransaction transaction)
-        {
-            string query;
-            var isSqlServer = connection.GetType() == typeof(SqlConnection);
+            var response = await client.GetAsync($"{_urlApis.ReadService}/Celular/SearchByUsuarioIdAndTerm/{idUsuario}?searchTerm={searchTerm}");
 
-            if (isSqlServer)
+            if (response.IsSuccessStatusCode)
             {
-                // SQL Server
-                query = @"INSERT INTO Contatos (Nome, IdUsuario, Ativo)
-                          OUTPUT INSERTED.Id
-                          VALUES (@Nome, @IdUsuario, @Ativo)";
+                return await response.Content.ReadFromJsonAsync<IEnumerable<Contato>>();
             }
             else
             {
-                // SQLite
-                query = @"INSERT INTO Contatos (Nome, IdUsuario, Ativo)
-                          VALUES (@Nome, @IdUsuario, @Ativo);
-                          SELECT last_insert_rowid();";
+                throw new HttpRequestException($"Erro ao obter resultados: {response.StatusCode}");
             }
+        }
 
-            return await connection.QuerySingleAsync<int>(query, contato, transaction);
+        public async Task<bool> AddContato(Contato contato)
+        {
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
+
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(contato);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"{_urlApis.CreateService}/Contato/AddContato/", content);
+
+            return response.IsSuccessStatusCode;
         }
 
 
         public async Task<bool> UpdateContato(Contato contato)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = @"UPDATE Contatos SET 
-                             Nome = @Nome, Ativo = @Ativo 
-                             WHERE Id = @Id";
-            return await conn.ExecuteAsync(query, contato) > 0;
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(contato);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Contato/UpdateContato/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao atualizar o contato!");
+            }
         }
 
-        public async Task<bool> DeleteContato(int idContato)
+        public async Task<bool> InativaContato(int idContato)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = @"UPDATE Contatos SET 
-                             Ativo = 0
-                             WHERE Id = @Id";
-            return await conn.ExecuteAsync(query, new { Id = idContato }) > 0;
+            using var client = new HttpClient(handler);
+
+            var jsonContent = JsonSerializer.Serialize(idContato);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Contato/InativaContato/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao inativar o contato!");
+            }
         }
     }
 }

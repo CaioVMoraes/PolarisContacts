@@ -33,11 +33,11 @@ namespace PolarisContacts.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteEmail(int id)
+        public async Task<IActionResult> InativaEmail(int id)
         {
             try
             {
-                await _emailService.DeleteEmail(id);
+                await _emailService.InativaEmail(id);
                 return Json(new { success = true });
             }
             catch (Exception ex)

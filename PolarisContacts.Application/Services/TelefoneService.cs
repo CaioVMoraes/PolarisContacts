@@ -61,14 +61,14 @@ namespace PolarisContacts.Application.Services
             await _telefoneRepository.UpdateTelefone(telefone);
         }
 
-        public async Task DeleteTelefone(int id)
+        public async Task InativaTelefone(int id)
         {
             if (id <= 0)
             {
                 throw new InvalidIdException();
             }
 
-            await _telefoneRepository.DeleteTelefone(id);
+            await _telefoneRepository.InativaTelefone(id);
         }
     }
 }

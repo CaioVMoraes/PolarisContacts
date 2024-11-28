@@ -1,40 +1,80 @@
-﻿using Dapper;
+﻿using Microsoft.Extensions.Options;
 using PolarisContacts.Application.Interfaces.Repositories;
 using PolarisContacts.Domain;
-using System.Data;
+using PolarisContacts.Domain.Settings;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PolarisContacts.Infrastructure.Repositories
 {
-    public class UsuarioRepository(IDatabaseConnection dbConnection) : IUsuarioRepository
+    public class UsuarioRepository(IOptions<UrlApis> urlApis) : IUsuarioRepository
     {
-        private readonly IDatabaseConnection _dbConnection = dbConnection;
+        private readonly UrlApis _urlApis = urlApis.Value;
 
         public async Task<Usuario> GetUserByPasswordAsync(string login, string senha)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = "SELECT * FROM Usuarios WHERE [Login] = @Login AND Senha = @Senha AND Ativo = 1";
+            using var client = new HttpClient(handler);
 
-            return await conn.QueryFirstOrDefaultAsync<Usuario>(query, new { Login = login, Senha = senha });
+            string url = $"{_urlApis.ReadService}/Usuario/GetUserByPasswordAsync?login={login}&senha={senha}";
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Usuario>();
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao obter usuário: {response.StatusCode}");
+            }
         }
 
-        public async Task<bool> CreateUserAsync(string login, string senha)
+        public async Task<bool> CreateUserAsync(Usuario usuario)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = "INSERT INTO Usuarios ([Login], Senha, Ativo) VALUES (@Login, @Senha, 1)";
+            using var client = new HttpClient(handler);
 
-            return await conn.ExecuteAsync(query, new { Login = login, Senha = senha }) > 0;
+            var jsonContent = JsonSerializer.Serialize(usuario);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"{_urlApis.CreateService}/Usuario/CreateUser/", content);
+
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> ChangeUserPasswordAsync(string login, string oldPassword, string newPassword)
         {
-            using IDbConnection conn = _dbConnection.AbrirConexao();
+            using var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true // Ignora erros de certificado
+            };
 
-            string query = "UPDATE Usuarios SET Senha = @NewPassword WHERE [Login] = @Login AND Senha = @OldPassword AND Ativo = 1";
+            using var client = new HttpClient(handler);
 
-            return await conn.ExecuteAsync(query, new { Login = login, OldPassword = oldPassword, NewPassword = newPassword }) > 0;
+            var jsonContent = JsonSerializer.Serialize(new Usuario { Login = login, Senha = oldPassword, NovaSenha = newPassword });
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"{_urlApis.UpdateService}/Usuario/ChangeUserPasswordAsync/", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpRequestException($"Erro ao alterar a senha!");
+            }
         }
     }
 }

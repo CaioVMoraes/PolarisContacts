@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Job.ReguaCobrancaDocumentos.CrossCutting.DependencyInjection.Extensions;
+namespace PolarisContacts.CrossCutting.DependencyInjection.Extensions;
 
 public static partial class DependencyInjectionExtensions
 {
