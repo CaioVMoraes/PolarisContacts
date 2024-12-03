@@ -19,3 +19,10 @@ spec:
           image: caiovsk/polarisfront:latest  # Certifique-se de que a imagem está no Docker Hub
           ports:
             - containerPort: 8083  # Porta exposta no contêiner
+          env:
+            - name: UrlApis__CreateService
+              value: "http://polaris-createservice:8082/Create"
+            - name: UrlApis__UpdateService
+              value: "http://polaris-updateservice:8084/Update"
+            - name: UrlApis__ReadService
+              value: "http://polaris-readservice:8081/Read"
