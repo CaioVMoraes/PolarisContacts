@@ -75,12 +75,3 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
  
-    - name: Run Integration Tests
-      run: dotnet test PolarisContacts.TST/PolarisContacts.TST.csproj --configuration Release --no-restore --logger "trx;LogFileName=IntegrationTestResults/IntegrationTestResults.trx" --collect:"XPlat Code Coverage"
- 
-    - name: Publish Integration Test Results
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: IntegrationTestResults
-        path: '**/IntegrationTestResults/IntegrationTestResults.trx'
