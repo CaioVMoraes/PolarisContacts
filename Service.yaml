@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: polaris-front
+spec:
+  selector:
+    app: polaris-front
+  ports:
+    - protocol: TCP
+      port: 8083       # Porta exposta pelo serviço
+      targetPort: 8083 # Porta do contêiner
+      nodePort: 30083 # Porta externa
+  type: LoadBalancer
